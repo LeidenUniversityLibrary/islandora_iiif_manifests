@@ -132,15 +132,21 @@ function islandora_iiif_sequence_generator(AbstractObject $object) {
           "@type" => "oa:Annotation",
           "motivation" => "sc:painting",
           "resource" => array(
-          "@id" => urldecode(url("islandora_iiif/{$canvas_info['PID']}/full/max/default.jp2", array(
+          "@id" => url("http://localhost:8182/iiif/2/hdl:1887.1%2F{$canvas_info['PID']}/full/full/0/default.jpg", array(
             'absolute' => TRUE,
             'language' => (object) array('language' => FALSE),
-            ))
-            ),
+            )),
             "@type" => "dctypes:Image",
             "height" => $height,
             "width" => $width,
+            "service" => array(
+              "@context"=> "http://iiif.io/api/image/2/context.json",
+              "@id"=> "http://localhost:8182/iiif/2/hdl:1887.1%2F{$canvas_info['PID']}",
+              "profile"=> "http://iiif.io/api/image/2/level2.json"
+            )
+            
           ),
+
           "on" => $id,
         ),
       ),

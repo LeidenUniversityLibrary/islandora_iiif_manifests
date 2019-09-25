@@ -1,5 +1,5 @@
-name = Islandora IIIF
-description = "An IIIF solution for a Vanilla (skim milk) islandora"
+name = Islandora IIIF Manifest
+description = "Generate IIIF manifests"
 package = Islandora
 dependencies[] = islandora
 dependencies[] = islandora_basic_collection

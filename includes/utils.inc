@@ -43,25 +43,6 @@ function islandora_iiif_safefile($filename, $allowedExtensions = array('jpg')) {
   return array($basename, $extension);
 }
 
-/**
- *
- */
-function islandora_iiif_adoredjatoka_info_json($image_info) {
-
-  // Note: Adore-djatoka tiles work on 96px multipliers.
-  $info = array(
-    "@context" => "http://iiif.io/api/image/2/context.json",
-    "@embed" => "true",
-    "protocol" => "http://iiif.io/api/image",
-    "width" => (int) $image_info["width"],
-    "height" => (int) $image_info["height"],
-    "tiles" => array(
-      array("width" => 256, "scaleFactors" => range(1, $image_info['levels'])),
-    ),
-    "profile" => array("http://iiif.io/api/image/2/level2.json"),
-  );
-  return $info;
-}
 
 /**
  *
@@ -228,12 +209,12 @@ function islandora_iiif_djatoka_metadata_request($pid) {
   );
 
   $djatoka_server_url = variable_get('islandora_iiif_djatoka_url', 'http://localhost:8080/adore-djatoka/resolver');
-  $djatoka_url = url($djatoka_server_url, array(
+  $image_server_url = url($djatoka_server_url, array(
     'absolute' => TRUE,
     'language' => (object) array('language' => FALSE),
     'query' => $djatoka_metadata_params,
   ));
-  return drupal_http_request($djatoka_url);
+  return drupal_http_request($image_server_url);
 }
 
 /**
@@ -272,10 +253,10 @@ function islandora_iiif_djatoka_image_request_url($pid, $djatoka_params_translat
   }
 
   $djatoka_server_url = variable_get('islandora_iiif_djatoka_url', 'http://localhost:8080/adore-djatoka/resolver');
-  $djatoka_url = url($djatoka_server_url, array(
+  $image_server_url = url($djatoka_server_url, array(
     'absolute' => TRUE,
     'language' => (object) array('language' => FALSE),
     'query' => $djatoka_metadata_params,
   ));
-  return $djatoka_url;
+  return $image_server_url;
 }
