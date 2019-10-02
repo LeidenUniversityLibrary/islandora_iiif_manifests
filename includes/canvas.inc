@@ -82,7 +82,7 @@ function islandora_iiif_canvas_callback(AbstractObject $object) {
       "@type" => "oa:Annotation",
       "motivation" => "sc:painting",
       "resource" => array(
-        "@id" => url("http://localhost:8182/iiif/2/hdl:1887.1%2F{$object->id}/full/full/0/default.jpg", array(
+        "@id" => url("https://iiif-a.issc.leidenuniv.nl/iiif/2/hdl:1887.1%2F{$object->id}/full/full/0/default.jpg", array(
           'absolute' => TRUE,
           'language' => (object) array('language' => FALSE),
         ))

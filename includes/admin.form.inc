@@ -22,7 +22,7 @@ function islandora_iiif_admin_settings_form(array $form, array &$form_state) {
     return isset($form_state['values'][$name]) ? $form_state['values'][$name] : variable_get($name, $default);
   };
   $solr_enabled = module_exists('islandora_solr');
-  $image_server_url = $get_default_value('islandora_iiif_image_server', 'http://localhost:8182/iiif/2/');
+  $image_server_url = $get_default_value('islandora_iiif_image_server', 'https://iiif-a.issc.leidenuniv.nl/iiif/2/');
   $image_server_available_message = islandora_iiif_admin_settings_form_image_server_available_message($image_server_url);
   $form = array(
     'islandora_iiif_images_server_url' => array(

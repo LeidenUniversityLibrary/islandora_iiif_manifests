@@ -119,7 +119,7 @@ function islandora_iiif_manifest_callback(AbstractObject $object) {
   // The use of url() also allows for further altering via outgoing and incomming
   // alterhooks.
   $manifest->thumbnail = array(
-    "@id" => url("http://localhost:8182/iiif/2/hdl:1887.1%2F{$object->id}/full/50,/0/default.jpg", array(
+    "@id" => url("https://iiif-a.issc.leidenuniv.nl/iiif/2/hdl:1887.1%2F{$object->id}/full/50,/0/default.jpg", array(
       'absolute' => TRUE,
       'language' => (object) array('language' => FALSE),
     ))
