@@ -29,7 +29,7 @@ function islandora_iiif_admin_settings_form(array $form, array &$form_state) {
       '#type' => 'textfield',
       '#prefix' => '<div id="imgs-path-wrapper">',
       '#suffix' => '</div>',
-      '#title' => t('Adore-djatoka URL'),
+      '#title' => t('Image server URL'),
       '#description' => filter_xss(t('<strong>Server accessible</strong>  <br/>!msg', array('!msg' => $image_server_available_message))),
       '#default_value' => $image_server_url,
       '#ajax' => array(
