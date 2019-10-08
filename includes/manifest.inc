@@ -61,7 +61,15 @@ function islandora_iiif_manifest_callback(AbstractObject $object) {
 
   $separator = variable_get('islandora_solr_metadata_field_value_separator', "\n");
 
-  echo "<pre> test"; print_r($object->models);die;
+
+  $objectModels = $object->models;
+
+
+
+  $pieces = explode(":", $objectModels[0]);
+
+  echo "<pre> test"; print_r($object->models);
+  echo $pieces[1]; die;
 
   if (empty($separator)) {
     $separator = "\n";
