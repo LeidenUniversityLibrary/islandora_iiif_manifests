@@ -2,7 +2,7 @@
 
 	function __generate_sc_manifest($object_pid, $from_drush = FALSE, $trial = FALSE) {
 
-		require_once ("SharedCanvasManifest.inc");
+		require_once ("BookManifest.inc");
 		require_once ("Canvas.inc");
 		require_once ("utlfedoraobject.inc");
 
@@ -81,3 +81,5 @@
 
 		drupal_set_message(t('SC Manifest created'));
 	}
+
+

@@ -57,6 +57,10 @@ function islandora_iiif_manifest_callback(AbstractObject $object) {
   module_load_include('inc', 'islandora_solr_metadata', 'theme/theme');
   module_load_include('inc', 'islandora_iiif', 'includes/sequence');
 
+  require_once ("includes/utilities.inc");
+
+  global $base_url;
+
   $associations = islandora_solr_metadata_get_associations_by_cmodels($object->models);
 
   $separator = variable_get('islandora_solr_metadata_field_value_separator', "\n");
@@ -64,13 +68,15 @@ function islandora_iiif_manifest_callback(AbstractObject $object) {
 
   $objectModels = $object->models;
 
+  $islandora_sc_manifest_image_uri = variable_get('islandora_sc_manifest_image_uri', 'https://iiif.library.utoronto.ca/image/v2/');
+  $islandora_sc_manifest_presentation_uri = variable_get('islandora_sc_manifest_image_uri', 'https://iiif.library.utoronto.ca/presentation/v2/');
+
 
 
   $models = explode(":", $objectModels[0]);
 
   echo "<pre> test"; print_r($object->models);
   $model =  $models[1];
-  echo "Found ".$model;
   switch($model){
 
       case 'collectionCModel':
@@ -99,6 +105,9 @@ function islandora_iiif_manifest_callback(AbstractObject $object) {
 
       case 'bookCModel':
           echo "Found ".$model;
+
+            //$manifest = new BookManifest($islandora_sc_manifest_presentation_uri.$object->id.'/manifest.json', $object->label, "$base_url/islandora/object/$object->id/datastream/MODS");
+          __generate_sc_manifest($object->id, False,TRUE);
           break;
 
       case 'pageCModel':
