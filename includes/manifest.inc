@@ -61,6 +61,8 @@ function islandora_iiif_manifest_callback(AbstractObject $object) {
 
   $separator = variable_get('islandora_solr_metadata_field_value_separator', "\n");
 
+  echo "<pre> test"; print_r($object->models);die;
+
   if (empty($separator)) {
     $separator = "\n";
   }
@@ -139,7 +141,8 @@ function islandora_iiif_manifest_callback(AbstractObject $object) {
 
   drupal_add_http_header('Content-Type', 'application/json; charset=utf-8');
   drupal_add_http_header('access-control-allow-origin', '*');
-  echo json_encode($manifest, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
+  //echo json_encode($manifest, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
+
   drupal_page_footer();
 
 }
