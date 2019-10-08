@@ -66,11 +66,94 @@ function islandora_iiif_manifest_callback(AbstractObject $object) {
 
 
 
-  $pieces = explode(":", $objectModels[0]);
+  $models = explode(":", $objectModels[0]);
 
   echo "<pre> test"; print_r($object->models);
-  echo $pieces[1]; die;
+  $model =  $models[1];
+  echo "Found ".$model;
+  switch($model){
 
+      case 'collectionCModel':
+          echo "Found ".$model;
+      break;
+
+      case 'sp_basic_image':
+          echo "Found ".$model;
+          break;
+
+      case 'sp_large_image_cmodel':
+          echo "Found ".$model;
+          break;
+
+      case 'sp_pdf':
+          echo "Found ".$model;
+          break;
+
+      case 'sp-audioCModel':
+          echo "Found ".$model;
+          break;
+
+      case 'sp_videoCModel':
+          echo "Found ".$model;
+          break;
+
+      case 'bookCModel':
+          echo "Found ".$model;
+          break;
+
+      case 'pageCModel':
+          echo "Found ".$model;
+          break;
+
+      case 'newspaperCModel':
+          echo "Found ".$model;
+          break;
+
+      case 'newspaperIssueCModel':
+          echo "Found ".$model;
+          break;
+
+      case 'compoundCModel':
+          echo "Found ".$model;
+          break;
+
+      case 'entityCModel':
+          echo "Found ".$model;
+          break;
+
+      case 'eventCModel':
+          echo "Found ".$model;
+          break;
+
+      case 'placeCModel':
+          echo "Found ".$model;
+          break;
+
+      case 'personCModel':
+          echo "Found ".$model;
+          break;
+
+      case 'organizationCModel':
+          echo "Found ".$model;
+          break;
+
+      case 'sp_disk_image':
+          echo "Found ".$model;
+          break;
+
+      case 'sp_web_archive':
+          echo "Found ".$model;
+          break;
+
+      case 'citationCModel':
+          echo "Found ".$model;
+          break;
+
+      case 'thesisCModel':
+          echo "Found ".$model;
+          break;
+  }
+  die;
   if (empty($separator)) {
     $separator = "\n";
   }
