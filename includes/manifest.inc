@@ -57,7 +57,7 @@ function islandora_iiif_manifest_callback(AbstractObject $object) {
   module_load_include('inc', 'islandora_solr_metadata', 'theme/theme');
   module_load_include('inc', 'islandora_iiif', 'includes/sequence');
 
-  require_once ("includes/utilities.inc");
+  //require_once ("includes/utilities.inc");
 
   global $base_url;
 
