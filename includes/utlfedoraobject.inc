@@ -13,7 +13,7 @@ class UTLFedoraObject {
     protected $repository;
     
     function __construct($user = NULL, $pass = NULL) {
-        $this->url = variable_get('islandora_base_url', 'http://localhost:8080/fedora'); 
+        $this->url = variable_get('islandora_base_url', 'http://localhost:8000/');
         $this->user = $user;
         $this->pass = $pass;
         $this->init_connection();
