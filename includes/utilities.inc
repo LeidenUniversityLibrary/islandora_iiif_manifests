@@ -70,7 +70,8 @@
 		$json = $manifest->getJson();
 
 	    if ($trial) {
-	        echo json_encode(json_decode($json), JSON_PRETTY_PRINT) . "\n";
+            echo json_encode($json, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK). "\n";;
+	        //echo json_encode(json_decode($json), JSON_PRETTY_PRINT) . "\n";
 	    }else {
 	        // For some reason, the previous SC datastream needs to be purged first. Otherwise add_datasteam() create multiple SC datastreams
 	        $object->purgeDatastream('SC');

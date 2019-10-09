@@ -75,91 +75,90 @@ function islandora_iiif_manifest_callback(AbstractObject $object) {
 
   $models = explode(":", $objectModels[0]);
 
-  echo "<pre> test"; print_r($object->models);
+  echo "<pre> test"; print_r($object->models). "\n";
   $model =  $models[1];
   switch($model){
 
       case 'collectionCModel':
-          echo "Found ".$model;
+          // generate manifest
       break;
 
       case 'sp_basic_image':
-          echo "Found ".$model;
+          // generate manifest
           break;
 
       case 'sp_large_image_cmodel':
-          echo "Found ".$model;
+          // generate manifest
           break;
 
       case 'sp_pdf':
-          echo "Found ".$model;
+          // generate manifest
           break;
 
       case 'sp-audioCModel':
-          echo "Found ".$model;
+          // generate manifest
           break;
 
       case 'sp_videoCModel':
-          echo "Found ".$model;
+          // generate manifest
           break;
 
       case 'bookCModel':
-          echo "Found ".$model;
 
             //$manifest = new BookManifest($islandora_sc_manifest_presentation_uri.$object->id.'/manifest.json', $object->label, "$base_url/islandora/object/$object->id/datastream/MODS");
           __generate_sc_manifest($object->id, False,TRUE);
           break;
 
       case 'pageCModel':
-          echo "Found ".$model;
+          // generate manifest
           break;
 
       case 'newspaperCModel':
-          echo "Found ".$model;
+          // generate manifest
           break;
 
       case 'newspaperIssueCModel':
-          echo "Found ".$model;
+          // generate manifest
           break;
 
       case 'compoundCModel':
-          echo "Found ".$model;
+          // generate manifest
           break;
 
       case 'entityCModel':
-          echo "Found ".$model;
+          // generate manifest
           break;
 
       case 'eventCModel':
-          echo "Found ".$model;
+          // generate manifest
           break;
 
       case 'placeCModel':
-          echo "Found ".$model;
+          // generate manifest
           break;
 
       case 'personCModel':
-          echo "Found ".$model;
+          // generate manifest
           break;
 
       case 'organizationCModel':
-          echo "Found ".$model;
+          // generate manifest
           break;
 
       case 'sp_disk_image':
-          echo "Found ".$model;
+          // generate manifest
           break;
 
       case 'sp_web_archive':
-          echo "Found ".$model;
+          // generate manifest
           break;
 
       case 'citationCModel':
-          echo "Found ".$model;
+          // generate manifest
           break;
 
       case 'thesisCModel':
-          echo "Found ".$model;
+          // generate manifest
           break;
   }
   die;
