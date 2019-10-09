@@ -11,7 +11,7 @@
  * @return array
  *   A renderable array representing the islandora_mirador_bookreader administration form.
  */
-function islandora_sc_manifest_admin_settings_form($form, &$form_state) {
+function islandora_iiif_admin_settings_form($form, &$form_state) {
   $get_default_value = function($name, $default) use($form_state) {
     return isset($form_state['values'][$name]) ? $form_state['values'][$name] : variable_get($name, $default);
   };
