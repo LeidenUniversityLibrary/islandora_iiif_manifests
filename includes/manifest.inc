@@ -71,7 +71,7 @@ function islandora_iiif_manifest_callback(AbstractObject $object) {
 
   $models = explode(":", $objectModels[0]);
 
-  //echo "<pre> test"; print_r($object->models). "\n";
+  echo "<pre> test"; print_r($object->models). "\n";
   $model =  $models[1];
   switch($model){
 
@@ -100,8 +100,6 @@ function islandora_iiif_manifest_callback(AbstractObject $object) {
           break;
 
       case 'bookCModel':
-            $id =
-            //$manifest = new BookManifest($islandora_sc_manifest_presentation_uri.$object->id.'/manifest.json', $object->label, "$base_url/islandora/object/$object->id/datastream/MODS");
           __generate_book_manifest($object->id, False,TRUE);
           break;
 
