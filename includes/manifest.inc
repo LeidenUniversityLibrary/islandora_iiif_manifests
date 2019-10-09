@@ -68,10 +68,6 @@ function islandora_iiif_manifest_callback(AbstractObject $object) {
 
   $objectModels = $object->models;
 
-  $islandora_sc_manifest_image_uri = "http://localhost:8182/iiif/2";//variable_get('islandora_sc_manifest_image_uri', 'https://iiif.library.utoronto.ca/image/v2/');
-  $islandora_sc_manifest_presentation_uri = "http://iiif.io/api/presentation/2/context.json";//variable_get('islandora_sc_manifest_image_uri', 'https://iiif.library.utoronto.ca/presentation/v2/');
-
-
 
   $models = explode(":", $objectModels[0]);
 

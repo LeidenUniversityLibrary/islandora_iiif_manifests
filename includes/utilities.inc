@@ -7,32 +7,27 @@
 		require_once ("utlfedoraobject.inc");
 
 		global $base_url;
-		$islandora_sc_manifest_image_uri = url(variable_get('islandora_sc_manifest_image_uri', 'https://iiif.library.utoronto.ca/image/v2/'),
+		$islandora_sc_manifest_image_uri = url(variable_get('islandora_sc_manifest_image_uri', 'https://iiif-a.issc.leidenuniv.nl/iiif/2'),
                     array(
                         'absolute' => TRUE,
                         'language' => (object) array('language' => FALSE),
                     )
             );
 		$islandora_sc_manifest_presentation_uri =
-            url(variable_get('islandora_sc_manifest_image_uri', 'https://iiif.library.utoronto.ca/presentation/v2/'),
-                array(
-                    'absolute' => TRUE,
-                    'language' => (object) array('language' => FALSE),
-                )
-            );;
+            urldecode(url(current_path(),
+                    array(
+                        'absolute' => TRUE,
+                        'language' => (object) array('language' => FALSE),
+                    ))
+            );
 
 		$user = user_load(1);
 		$fo = new UTLFedoraObject($user->name, $user->pass);
 
 		$object = $fo->get_object($object_pid);
 
-        $manifest_id = urldecode(url(current_path(),
-                array(
-                    'absolute' => TRUE,
-                    'language' => (object) array('language' => FALSE),
-                ))
-        );
-		$manifest = new BookManifest($manifest_id, $object->label, "$base_url/islandora/object/$object_pid/datastream/MODS");
+        $manifest_id =
+		$manifest = new BookManifest($islandora_sc_manifest_presentation_uri , $object->label, "$base_url/islandora/object/$object_pid/datastream/MODS");
 		
 		// Get the pages ordered by sequence number
 		module_load_include('inc', 'islandora_paged_content', 'includes/utilities');
