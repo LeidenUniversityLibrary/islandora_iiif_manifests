@@ -70,7 +70,7 @@ function islandora_iiif_menu() {
       'access arguments' => array(ISLANDORA_VIEW_OBJECTS, 2),
       'load arguments' => array(2),
     ),
-   /* 'admin/islandora/tools/internet_iiif_admin' => array(
+    'admin/islandora/tools/internet_iiif_admin' => array(
       'title' => 'IIIF Module configuration',
       'description' => 'Configure the IIIF Module.',
       'page callback' => 'drupal_get_form',
@@ -78,7 +78,7 @@ function islandora_iiif_menu() {
       'access arguments' => array('administer site configuration'),
       'file' => 'includes/admin.form.inc',
       'type' => MENU_NORMAL_ITEM,
-    ),*/
+    )/*,
    'admin/islandora/tools/sc_manifest' => array(
        'title' => 'Islandora ShardCanvas Manifest Generator',
        'description' => 'Configure settings for Islandora Manifest module',
@@ -87,7 +87,7 @@ function islandora_iiif_menu() {
        'access arguments' => array('administer site configuration'),
        'file' => 'includes/admin.form.inc',
        'type' => MENU_NORMAL_ITEM,
-      ),
+      ),*/
   );
 }
 
