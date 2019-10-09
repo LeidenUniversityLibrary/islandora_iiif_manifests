@@ -78,7 +78,7 @@ function islandora_iiif_menu() {
       'access arguments' => array('administer site configuration'),
       'file' => 'includes/admin.form.inc',
       'type' => MENU_NORMAL_ITEM,
-    )/*,
+    ),
    'admin/islandora/tools/sc_manifest' => array(
        'title' => 'Islandora ShardCanvas Manifest Generator',
        'description' => 'Configure settings for Islandora Manifest module',
@@ -87,7 +87,7 @@ function islandora_iiif_menu() {
        'access arguments' => array('administer site configuration'),
        'file' => 'includes/admin.form.inc',
        'type' => MENU_NORMAL_ITEM,
-      ),*/
+      )
   );
 }
 
