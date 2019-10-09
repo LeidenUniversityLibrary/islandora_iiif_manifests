@@ -71,7 +71,7 @@ function islandora_iiif_manifest_callback(AbstractObject $object) {
 
   $models = explode(":", $objectModels[0]);
 
-  echo "<pre> test"; print_r($object->models). "\n";
+  //echo "<pre> test"; print_r($object->models). "\n";
   $model =  $models[1];
   switch($model){
 
