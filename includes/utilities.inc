@@ -1,6 +1,6 @@
 <?php
 
-	function __generate_sc_manifest($object_pid, $from_drush = FALSE, $trial = FALSE) {
+	function __generate_book_manifest($object_pid, $from_drush = FALSE, $trial = FALSE) {
 
 		require_once ("BookManifest.inc");
 		require_once ("Canvas.inc");
@@ -26,8 +26,13 @@
 
 		$object = $fo->get_object($object_pid);
 
-
-		$manifest = new BookManifest($islandora_sc_manifest_presentation_uri.$object_pid.'/manifest.json', $object->label, "$base_url/islandora/object/$object_pid/datastream/MODS");
+        $manifest_id = urldecode(url(current_path(),
+                array(
+                    'absolute' => TRUE,
+                    'language' => (object) array('language' => FALSE),
+                ))
+        );
+		$manifest = new BookManifest($manifest_id, $object->label, "$base_url/islandora/object/$object_pid/datastream/MODS");
 		
 		// Get the pages ordered by sequence number
 		module_load_include('inc', 'islandora_paged_content', 'includes/utilities');

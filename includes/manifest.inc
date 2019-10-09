@@ -104,14 +104,9 @@ function islandora_iiif_manifest_callback(AbstractObject $object) {
           break;
 
       case 'bookCModel':
-            $id = urldecode(url(current_path(),
-                    array(
-                        'absolute' => TRUE,
-                        'language' => (object) array('language' => FALSE),
-                    ))
-            );
+            $id =
             //$manifest = new BookManifest($islandora_sc_manifest_presentation_uri.$object->id.'/manifest.json', $object->label, "$base_url/islandora/object/$object->id/datastream/MODS");
-          __generate_sc_manifest($id, False,TRUE);
+          __generate_book_manifest($object->id, False,TRUE);
           break;
 
       case 'pageCModel':
