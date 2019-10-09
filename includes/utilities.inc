@@ -13,13 +13,13 @@
                         'language' => (object) array('language' => FALSE),
                     )
             );
-		$islandora_sc_manifest_presentation_uri =
-            urldecode(url(current_path(),
+		$islandora_sc_manifest_presentation_uri = variable_get('islandora_sc_manifest_image_uri', 'https://iiif.library.utoronto.ca/presentation/v2/');
+            /*urldecode(url(current_path(),
                     array(
                         'absolute' => TRUE,
                         'language' => (object) array('language' => FALSE),
                     ))
-            );
+            );*/
 
 		$user = user_load(1);
 		$fo = new UTLFedoraObject($user->name, $user->pass);
