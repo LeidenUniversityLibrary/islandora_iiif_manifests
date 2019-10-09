@@ -51,6 +51,7 @@ function islandora_iiif_canvas_callback(AbstractObject $object) {
   module_load_include('inc', 'islandora_solr_metadata', 'includes/db');
   module_load_include('inc', 'islandora_solr_metadata', 'theme/theme');
 
+
   $canvas_info = islandora_iiif_islandora_canvas_solr_backend_callable($object);
   $intwidth = isset($canvas_info['solr_doc']['RELS_INT_width_literal_s']) ? $canvas_info['solr_doc']['RELS_INT_width_literal_s'] : 640;
   $intheight = isset($canvas_info['solr_doc']['RELS_INT_height_literal_s']) ? $canvas_info['solr_doc']['RELS_INT_height_literal_s'] : 480;
@@ -82,7 +83,7 @@ function islandora_iiif_canvas_callback(AbstractObject $object) {
       "@type" => "oa:Annotation",
       "motivation" => "sc:painting",
       "resource" => array(
-        "@id" => url("https://iiif-a.issc.leidenuniv.nl/iiif/2/hdl:1887.1%2F{$object->id}/full/full/0/default.jpg", array(
+        "@id" => url(variable_get('islandora_sc_manifest_image_uri', 'https://iiif-a.issc.leidenuniv.nl/iiif/2/hdl:1887.1%2F')."{$object->id}/full/full/0/default.jpg", array(
           'absolute' => TRUE,
           'language' => (object) array('language' => FALSE),
         ))
@@ -98,6 +99,8 @@ function islandora_iiif_canvas_callback(AbstractObject $object) {
       ),
     ),
   );
+
+
 
   // And to make this legit we need a sequence with some canvases.
   drupal_add_http_header('Content-Type', 'application/json; charset=utf-8');

@@ -1,5 +1,5 @@
 <?php
-class Canvas {
+class createcanvas {
   protected $canvas_uri;
   protected $canvas_label;
   protected $thumbnail_uri;

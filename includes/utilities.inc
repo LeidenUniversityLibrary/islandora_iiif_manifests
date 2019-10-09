@@ -7,27 +7,19 @@
 		require_once ("utlfedoraobject.inc");
 
 		global $base_url;
-		$islandora_sc_manifest_image_uri = url(variable_get('islandora_sc_manifest_image_uri', 'https://iiif-a.issc.leidenuniv.nl/iiif/2'),
+		$islandora_sc_manifest_image_uri = url(variable_get('islandora_sc_manifest_image_uri', 'https://iiif-a.issc.leidenuniv.nl/iiif/2/hdl:1887.1%2F'),
                     array(
                         'absolute' => TRUE,
                         'language' => (object) array('language' => FALSE),
                     )
             );
-		$islandora_sc_manifest_presentation_uri = variable_get('islandora_sc_manifest_image_uri', 'https://iiif.library.utoronto.ca/presentation/v2/');
-            /*urldecode(url(current_path(),
-                    array(
-                        'absolute' => TRUE,
-                        'language' => (object) array('language' => FALSE),
-                    ))
-            );*/
 
 		$user = user_load(1);
 		$fo = new UTLFedoraObject($user->name, $user->pass);
 
 		$object = $fo->get_object($object_pid);
 
-        $manifest_id =
-		$manifest = new BookManifest($islandora_sc_manifest_presentation_uri , $object->label, "$base_url/islandora/object/$object_pid/datastream/MODS");
+		$manifest = new BookManifest($object->label, "$base_url/islandora/object/$object_pid/datastream/MODS");
 		
 		// Get the pages ordered by sequence number
 		module_load_include('inc', 'islandora_paged_content', 'includes/utilities');
@@ -59,18 +51,18 @@
 		    //$mimetype = $page_object[$dsid]->mimetype;
             $mimetype = "image/jpg";
 		    
-		    //echo $mimetype . "\n";
-		    //echo $width . "\n";
-		    //echo $height . "\n";
-		    //https://iiif.library.utoronto.ca/v2/paleography%3A2071/full/2000,/0/default.jpg
 
-			$canvas_uri = $islandora_sc_manifest_presentation_uri."$object_pid/canvas/$page_pid";
+			//$canvas_uri = $islandora_sc_manifest_presentation_uri."$object_pid/canvas/$page_pid";
+			$canvas_uri = urldecode(url("islandora_iiif/{$object_pid}/canvas/default", array(
+                'absolute' => TRUE,
+                'language' => (object) array('language' => FALSE),
+            )));
 			//$thumbnail_uri = $page_uri . "/datastream/TN/view";
 			$thumbnail_uri = $islandora_sc_manifest_image_uri."$page_pid/full/80,/0/default.jpg";
 			$resource_uri = $islandora_sc_manifest_image_uri."$page_pid/full/full/0/default.jpg";
 			$service_uri = $islandora_sc_manifest_image_uri."$page_pid";
 
-			$canvas = new Canvas($canvas_uri, $page_object->label, $thumbnail_uri);
+			$canvas = new createcanvas($canvas_uri, $page_object->label, $thumbnail_uri);
 			$canvas->setResource($resource_uri, $service_uri, $mimetype, $width, $height);
 			$manifest->addCanvas($canvas);
 

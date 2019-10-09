@@ -11,8 +11,8 @@ class BookManifest {
    * @param unknown $metadata_uri
    * @param string $object_label
    */
-  function __construct($id, $label, $meta_uri) {
-    $this->id = $id;
+  function __construct(/*$id,*/ $label, $meta_uri) {
+    //$this->id = $id;
     $this->object_label = $label;
     $this->metadata_uri = $meta_uri;
   }
@@ -32,9 +32,17 @@ class BookManifest {
    * Build and return a json string based on what we have in the class
    */
   function getJson() {
+
+    $id = urldecode(url(current_path(),
+            array(
+                'absolute' => TRUE,
+                'language' => (object) array('language' => FALSE),
+            )
+        )
+    );
     $scManifest = array (
         '@context' => 'http://iiif.io/api/presentation/2/context.json',
-        '@id' => $this->id,
+        '@id' => $id,//$this->id,
         '@type' => 'sc:Manifest',
         'label' => $this->object_label,
         //'attribution' => 'For rights and reproduction information please contact collections@library.utoronto.ca',
