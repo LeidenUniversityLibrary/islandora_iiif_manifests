@@ -7,13 +7,19 @@
 		require_once ("utlfedoraobject.inc");
 
 		global $base_url;
-		$islandora_sc_manifest_image_uri = urldecode(url(variable_get('islandora_sc_manifest_image_uri', 'https://iiif.library.utoronto.ca/image/v2/'),
+		$islandora_sc_manifest_image_uri = url(variable_get('islandora_sc_manifest_image_uri', 'https://iiif.library.utoronto.ca/image/v2/'),
                     array(
                         'absolute' => TRUE,
                         'language' => (object) array('language' => FALSE),
-                    ))
+                    )
             );
-		$islandora_sc_manifest_presentation_uri = variable_get('islandora_sc_manifest_image_uri', 'https://iiif.library.utoronto.ca/presentation/v2/'); 
+		$islandora_sc_manifest_presentation_uri =
+            url(variable_get('islandora_sc_manifest_image_uri', 'https://iiif.library.utoronto.ca/presentation/v2/'),
+                array(
+                    'absolute' => TRUE,
+                    'language' => (object) array('language' => FALSE),
+                )
+            );;
 
 		$user = user_load(1);
 		$fo = new UTLFedoraObject($user->name, $user->pass);
@@ -79,7 +85,7 @@
             drupal_add_http_header('Content-Type', 'application/json; charset=utf-8');
             drupal_add_http_header('access-control-allow-origin', '*');
             //echo json_encode($json, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK). "\n";;
-	        echo json_encode($json, JSON_PRETTY_PRINT) . "\n";
+	        echo json_encode(json_decode($json), JSON_PRETTY_PRINT) . "\n";
 	    }else {
 	        // For some reason, the previous SC datastream needs to be purged first. Otherwise add_datasteam() create multiple SC datastreams
 	        $object->purgeDatastream('SC');
