@@ -148,12 +148,96 @@ function islandora_iiif_manifest_callback(AbstractObject $object) {
       case 'thesisCModel':
           // generate manifest
           break;*/
-
-      default:
-          echo "No manifest code found for:".$model;
-
-          break;
+  }
+  die;
+  if (empty($separator)) {
+    $separator = "\n";
   }
 
+
+    global $base_url;
+
+    $associations = islandora_solr_metadata_get_associations_by_cmodels($object->models);
+
+    $separator = variable_get('islandora_solr_metadata_field_value_separator', "\n");
+
+
+    $descriptions = array();
+  $db_fields = array();
+  $solr_fields = array();
+  $metadata = array();
+  $finaldescription = '';
+
+  foreach ($associations as $configuration_id) {
+    $field = islandora_solr_metadata_get_fields($configuration_id['configuration_id']);
+    $db_fields = array_merge($db_fields, $field);
+    $description = islandora_solr_metadata_retrieve_description($configuration_id['configuration_id']);
+    if ($description['description_field'] !== NULL) {
+      //dpm($db_fields);
+      //dpm($description);
+      // $db_fields  = array_merge($db_fields, $description);.
+      $finaldescription = $description['description_field'];
+    }
+  }
+
+  foreach ($db_fields as $solr_field => $value) {
+    if (isset($solr_fields[$solr_field])) {
+      continue;
+    }
+    // Make an array for use later on.
+    $solr_fields[$solr_field] = $value + array(
+      'value' => array(),
+    );
+  }
+  $separator = variable_get('islandora_solr_metadata_field_value_separator', "\n");
+  if (islandora_solr_metadata_query_fields($object, $solr_fields)) {
+    foreach ($solr_fields as $key => $value) {
+      //dpm($value);
+      $metadata[] = array("label" => $value['display_label'], "value" => $value['value']);
+    }
+  }
+
+  $manifest = new \stdClass();
+  $manifest->{'@context'} = "http://iiif.io/api/presentation/2/context.json";
+  $manifest->{'@id'} = urldecode(url(current_path(),
+     array(
+       'absolute' => TRUE,
+       'language' => (object) array('language' => FALSE),
+     ))
+  );
+  $manifest->{'@type'} = "sc:Manifest";
+
+  $manifest->label = $object->label;
+
+  $manifest->metadata = $metadata;
+  $manifest->description = $finaldescription;
+  // The reason i went for current_path() is because someone could
+  // wants to serve this via an alias.
+  // The use of url() also allows for further altering via outgoing and incomming
+  // alterhooks.
+  $manifest->thumbnail = array(
+    "@id" => url("https://iiif-a.issc.leidenuniv.nl/iiif/2/hdl:1887.1%2F{$object->id}/full/50,/0/default.jpg", array(
+      'absolute' => TRUE,
+      'language' => (object) array('language' => FALSE),
+    ))
+    ,
+    "service" => array(
+      "@context" => "http://iiif.io/api/image/2/context.json",
+      "@id" => urldecode(url("islandora_iiif/{$object->id}/info.json", array(
+        'absolute' => TRUE,
+        'language' => (object) array('language' => FALSE),
+      ))),
+      "profile" => "http://iiif.io/api/image/2/level2.json",
+    ),
+  );
+
+  // And to make this legit we need a sequence with some canvases.
+  $manifest->sequences = array(islandora_iiif_sequence_generator($object));
+
+  drupal_add_http_header('Content-Type', 'application/json; charset=utf-8');
+  drupal_add_http_header('access-control-allow-origin', '*');
+  //echo json_encode($manifest, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
+
+  drupal_page_footer();
 
 }
