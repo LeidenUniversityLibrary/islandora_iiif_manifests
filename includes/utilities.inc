@@ -21,7 +21,7 @@
 
 		$manifest = new BookManifest($object->label, "$base_url/islandora/object/$object_pid/datastream/MODS");
 
-		echo "Base url: $base_url/islandora/object/$object_pid/datastream/MODS"; die;
+		//echo "Base url: $base_url/islandora/object/$object_pid/datastream/MODS"; die;
 		
 		// Get the pages ordered by sequence number
 		module_load_include('inc', 'islandora_paged_content', 'includes/utilities');
@@ -81,9 +81,11 @@
             echo json_encode(json_decode($json), JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES ). "\n";;
 	        //echo json_encode(json_decode($json), JSON_PRETTY_PRINT) . "\n";
 	    }else {
+
+	        echo "1<pre>";print_r($object);
 	        // For some reason, the previous SC datastream needs to be purged first. Otherwise add_datasteam() create multiple SC datastreams
 	        $object->purgeDatastream('SC');
-
+            echo "2<pre>";print_r($object);die;
 	        /// Create new datastream only if it doesn't already exist (or if the force flag is set)
 	        $fo->add_datastream($object, "SC", "SharedCanvas Manifest", "application/json", $json);
 	    }
