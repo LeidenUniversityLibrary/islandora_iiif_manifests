@@ -51,7 +51,7 @@
 		    //$width = 2000;
 		    
 		    //$mimetype = $page_object[$dsid]->mimetype;
-            $mimetype = "image/jpg";
+            $mimetype = "image/jp2";
 		    
 
 			//$canvas_uri = $islandora_sc_manifest_presentation_uri."$object_pid/canvas/$page_pid";
