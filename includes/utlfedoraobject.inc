@@ -13,14 +13,14 @@ class UTLFedoraObject {
     protected $repository;
     
     function __construct($user = NULL, $pass = NULL) {
-        $this->url = "https://scharrelaar-a3.leidenuniv.nl/"; variable_get('islandora_base_url', 'https://scharrelaar-a3.leidenuniv.nl/');
+        $this->url =  variable_get('islandora_base_url', 'https://scharrelaar-a3.leidenuniv.nl/');
         $this->user = $user;
         $this->pass = $pass;
         $this->init_connection();
     }
 
     private function init_connection() {
-        $connection = new RepositoryConnection($this->url, $this->user, $this->pass);
+        $connection = new RepositoryConnection('https://scharrelaar-a3.leidenuniv.nl/', $this->user, $this->pass);
         $connection->reuseConnection = TRUE;
         $this->repository = new FedoraRepository(
            new FedoraApi($connection),
@@ -80,7 +80,7 @@ class UTLFedoraObject {
             $datastream->setContentFromString($content);
             $api_a = $this->repository->api->a;
             $api_m = $this->repository->api->m;
-            //echo "Islandora base url:".$this->get_url();
+            echo "Islandora base url:".$this->get_url();die;
             echo "<pre>Repository info:".print_r($api_a->describeRepository());
             //echo "<pre>Repository object history:".print_r($api_a->getObjectHistory($pid));die;
 
