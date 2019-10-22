@@ -20,7 +20,7 @@ class UTLFedoraObject {
     }
 
     private function init_connection() {
-        $connection = new RepositoryConnection('https://scharrelaar-a3.leidenuniv.nl/', $this->user, $this->pass);
+        $connection = new RepositoryConnection($this->url, $this->user, $this->pass);
         $connection->reuseConnection = TRUE;
         $this->repository = new FedoraRepository(
            new FedoraApi($connection),
