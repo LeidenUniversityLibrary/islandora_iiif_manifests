@@ -89,4 +89,93 @@
 		drupal_set_message(t('SC Manifest created'));
 	}
 
+	function __generate_image_manifest($object_pid, $from_drush = FALSE, $trial = FALSE) {
+
+		require_once ("BookManifest.inc");
+		require_once ("createcanvas.inc");
+		require_once ("utlfedoraobject.inc");
+
+		global $base_url;
+		$islandora_sc_manifest_image_uri = url(variable_get('islandora_sc_manifest_image_uri', 'https://iiif-a.issc.leidenuniv.nl/iiif/2/hdl:1887.1%2F'),
+                    array(
+                        'absolute' => TRUE,
+                        'language' => (object) array('language' => FALSE),
+                    )
+            );
+
+		$user = user_load(1);
+		$fo = new UTLFedoraObject($user->name, $user->pass);
+
+		$object = $fo->get_object($object_pid);
+
+		$manifest = new BookManifest($object->label, "$base_url/islandora/object/$object_pid/datastream/MODS");
+
+		// Get the pages ordered by sequence number
+		module_load_include('inc', 'islandora_paged_content', 'includes/utilities');
+		$pages = islandora_paged_content_get_pages($object);
+
+		if ($from_drush) {
+			echo "Processing $object_pid\n";
+		}
+		foreach($pages as $page) {
+
+		    $page_pid = $page['pid'];
+
+		    if ($from_drush) {
+		    	echo "Processing Page: $page_pid\n";
+			}
+
+		    $page_object = $fo->get_object($page_pid);
+		    $page_object_rels = $page_object['JP2']->relationships;
+		    $width_rel = $page_object_rels->get('http://islandora.ca/ontology/relsext#', 'width');
+		    $height_rel = $page_object_rels->get('http://islandora.ca/ontology/relsext#', 'height');
+		    $width = $width_rel[0]['object']['value'];
+		    $height = $height_rel[0]['object']['value'];
+
+		    // this width and height is for the original JP2
+		    // recalculate width and height based on fixed height of 2000 (which is the case for JPGHIRES
+		    //$height = round($width * 2000/$height);
+		    //$width = 2000;
+
+		    //$mimetype = $page_object[$dsid]->mimetype;
+            $mimetype = "image/jpg";
+
+
+			//$canvas_uri = $islandora_sc_manifest_presentation_uri."$object_pid/canvas/$page_pid";
+			$canvas_uri = urldecode(url("islandora_iiif/{$object_pid}/canvas/default", array(
+                'absolute' => TRUE,
+                'language' => (object) array('language' => FALSE),
+            )));
+			//$thumbnail_uri = $page_uri . "/datastream/TN/view";
+			$thumbnail_uri = $islandora_sc_manifest_image_uri."$page_pid/full/80,/0/default.jpg";
+			$resource_uri = $islandora_sc_manifest_image_uri."$page_pid/full/full/0/default.jpg";
+			$service_uri = $islandora_sc_manifest_image_uri."$page_pid";
+
+			$canvas = new createcanvas($canvas_uri, $page_object->label, $thumbnail_uri);
+			$canvas->setResource($resource_uri, $service_uri, $mimetype, $width, $height);
+			$manifest->addCanvas($canvas);
+
+		    //print_r($canvas);
+		    //break;
+		}
+
+		$json = $manifest->getJson();
+
+	    if ($trial) {
+            //echo json_encode($json, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK). "\n";;
+            drupal_add_http_header('Content-Type', 'application/json; charset=utf-8');
+            drupal_add_http_header('access-control-allow-origin', '*');
+            echo json_encode(json_decode($json), JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES ). "\n";;
+	        //echo json_encode(json_decode($json), JSON_PRETTY_PRINT) . "\n";
+	    }else {
+	        // For some reason, the previous SC datastream needs to be purged first. Otherwise add_datasteam() create multiple SC datastreams
+	        $object->purgeDatastream('SC');
+
+	        /// Create new datastream only if it doesn't already exist (or if the force flag is set)
+	        $fo->add_datastream($object, "SC", "SharedCanvas Manifest", "application/json", $json);
+	    }
+
+		drupal_set_message(t('SC Manifest created'));
+	}
+
 

@@ -59,19 +59,13 @@ function islandora_iiif_manifest_callback(AbstractObject $object) {
 
   require_once ("utilities.inc");
 
-  global $base_url;
-
-  $associations = islandora_solr_metadata_get_associations_by_cmodels($object->models);
-
-  $separator = variable_get('islandora_solr_metadata_field_value_separator', "\n");
-
 
   $objectModels = $object->models;
 
 
   $models = explode(":", $objectModels[0]);
 
-  echo "<pre> test"; print_r($object->models). "\n";
+  //echo "<pre> test"; print_r($object->models). "\n";
   $model =  $models[1];
   switch($model){
 
@@ -160,7 +154,15 @@ function islandora_iiif_manifest_callback(AbstractObject $object) {
     $separator = "\n";
   }
 
-  $descriptions = array();
+
+    global $base_url;
+
+    $associations = islandora_solr_metadata_get_associations_by_cmodels($object->models);
+
+    $separator = variable_get('islandora_solr_metadata_field_value_separator', "\n");
+
+
+    $descriptions = array();
   $db_fields = array();
   $solr_fields = array();
   $metadata = array();
