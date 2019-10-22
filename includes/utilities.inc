@@ -83,9 +83,10 @@
 	    }else {
 
 	        // For some reason, the previous SC datastream needs to be purged first. Otherwise add_datasteam() create multiple SC datastreams
-	        $object->purgeDatastream('SC');
+	        $object->purgeDatastream('IIIF');
 	        /// Create new datastream only if it doesn't already exist (or if the force flag is set)
-	        $fo->add_datastream($object, "SC", "SharedCanvas Manifest", "application/json", $json);
+	        //$fo->add_datastream($object, "SC", "SharedCanvas Manifest", "application/json", $json);
+            $fo->add_datastream($object, "IIIF", $object_pid,"IIIF JSON Manifest", "application/json", $json);
 	    }
 
 		drupal_set_message(t('SC Manifest created'));
@@ -174,7 +175,7 @@
 	        $object->purgeDatastream('IIIF');
 
 	        /// Create new datastream only if it doesn't already exist (or if the force flag is set)
-	        $fo->add_datastream($object,$object_pid, "IIIF", "IIIF JSON Manifest", "application/json", $json);
+	        $fo->add_datastream($object, "IIIF", $object_pid,"IIIF JSON Manifest", "application/json", $json);
 	    }
 
 		drupal_set_message(t('IIIF JSON Manifest created'));
