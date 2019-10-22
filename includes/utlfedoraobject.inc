@@ -13,7 +13,7 @@ class UTLFedoraObject {
     protected $repository;
     
     function __construct($user = NULL, $pass = NULL) {
-        $this->url = variable_get('islandora_base_url', 'http://localhost:8000/');
+        $this->url = variable_get('islandora_base_url', 'http://localhost:8080/');
         $this->user = $user;
         $this->pass = $pass;
         $this->init_connection();
@@ -80,7 +80,7 @@ class UTLFedoraObject {
             $datastream->setContentFromString($content);
             $api_a = $this->repository->api->a;
             $api_m = $this->repository->api->m;
-            //echo "Repository info:".print_r($api_a->describeRepository());die;
+            echo "Repository info:".print_r($api_a->describeRepository());die;
 
             // There's no harm in doing this if the datastream is already ingested or if the object is only constructed.
             $api_m->ingest($object);
