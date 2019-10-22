@@ -72,23 +72,16 @@ class UTLFedoraObject {
     }
 
 	public function add_datastream(&$object, $dsid, $pid, $label, $mimetype, $content) {
-
+    echo "<pre>";print_r($object);die;
         if ($object) {
             $datastream = isset($object[$dsid]) ? $object[$dsid] : $object->constructDatastream($dsid);
             $datastream->label = $label;
             $datastream->mimeType = $mimetype;
             $datastream->setContentFromString($content);
-            $api_a = $this->repository->api->a;
-            $api_m = $this->repository->api->m;
-            echo "Islandora base url:".$this->get_url();
-            echo "Repository info:".print_r($api_a->describeRepository());
-            //echo "<pre>Repository object history:".print_r($api_a->getObjectHistory($pid));die;
+
 
             // There's no harm in doing this if the datastream is already ingested or if the object is only constructed.
-            //$api_m->ingest($object);
-            $added_stream = $api_m->addDatastream($pid, $dsid, $mimetype, $datastream, null);
-            echo "Repository info:".print_r($added_stream);die;
-            //$object->ingestDatastream($datastream);
+            $object->ingestDatastream($datastream);
 
             // If the object IS only constructed, ingesting it here also ingests the datastream.
             //$this->repository->ingestObject($object);
