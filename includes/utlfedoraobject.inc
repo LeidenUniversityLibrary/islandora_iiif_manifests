@@ -72,16 +72,17 @@ class UTLFedoraObject {
     }
 
 	public function add_datastream(&$object, $dsid, $pid, $label, $mimetype, $content) {
-    echo "<pre>";print_r($object);die;
+
         if ($object) {
             $datastream = isset($object[$dsid]) ? $object[$dsid] : $object->constructDatastream($dsid);
             $datastream->label = $label;
             $datastream->mimeType = $mimetype;
             $datastream->setContentFromString($content);
 
-
+            echo "<pre>datastream 1";print_r($datastream);
             // There's no harm in doing this if the datastream is already ingested or if the object is only constructed.
             $object->ingestDatastream($datastream);
+            echo "<pre> datastream 2";print_r($datastream);die;
 
             // If the object IS only constructed, ingesting it here also ingests the datastream.
             //$this->repository->ingestObject($object);
