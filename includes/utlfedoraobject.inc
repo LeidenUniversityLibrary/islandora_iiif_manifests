@@ -72,7 +72,7 @@ class UTLFedoraObject {
     }
 
 	public function add_datastream(&$object, $dsid, $label, $mimetype, $content) {
-	print_r($object);
+
         if ($object) {
             $datastream = isset($object[$dsid]) ? $object[$dsid] : $object->constructDatastream($dsid);
             $datastream->label = $label;

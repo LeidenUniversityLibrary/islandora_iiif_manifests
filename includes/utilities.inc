@@ -20,6 +20,8 @@
 		$object = $fo->get_object($object_pid);
 
 		$manifest = new BookManifest($object->label, "$base_url/islandora/object/$object_pid/datastream/MODS");
+
+		echo "Base url: $base_url/islandora/object/$object_pid/datastream/MODS"; die;
 		
 		// Get the pages ordered by sequence number
 		module_load_include('inc', 'islandora_paged_content', 'includes/utilities');
