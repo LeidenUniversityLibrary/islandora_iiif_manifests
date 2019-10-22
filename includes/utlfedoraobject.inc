@@ -80,6 +80,7 @@ class UTLFedoraObject {
             $datastream->setContentFromString($content);
             $api_a = $this->repository->api->a;
             $api_m = $this->repository->api->m;
+            echo "Islandora base url:".$this->get_url();
             echo "<pre>Repository info:".print_r($api_a->describeRepository());
             echo "<pre>Repository object history:".print_r($api_a->getObjectHistory($pid));die;
 
