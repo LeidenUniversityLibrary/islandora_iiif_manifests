@@ -40,10 +40,9 @@ class createcanvas {
         ),
         'images' => array ( // always contain only one
             array (
+                '@id' => $this->service_uri,
                 '@type' => 'oa:Annotation',
                 'motivation' => 'sc:Painting',
-                '@id' => $this->service_uri,
-                'on' => $this->canvas_uri,
                 'resource' => array (
                     '@id' => $this->resource_uri,
                     '@type' => 'dctypes:Image',
@@ -55,7 +54,8 @@ class createcanvas {
                         '@id' => $this->service_uri,
                         'profile' => 'http://iiif.io/api/image/2/level2.json'
                      )
-                )
+                ),
+                'on' => $this->canvas_uri,
             )
         )
     );

@@ -55,7 +55,7 @@
 		    
 
 			//$canvas_uri = $islandora_sc_manifest_presentation_uri."$object_pid/canvas/$page_pid";
-			$canvas_uri = urldecode(url("islandora_iiif/{$object_pid}/canvas/default", array(
+			$canvas_uri = urldecode(url("islandora_iiif/{$page_pid}/canvas/default", array(
                 'absolute' => TRUE,
                 'language' => (object) array('language' => FALSE),
             )));
