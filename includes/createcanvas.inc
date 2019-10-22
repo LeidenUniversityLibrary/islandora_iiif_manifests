@@ -42,6 +42,7 @@ class createcanvas {
             array (
                 '@type' => 'oa:Annotation',
                 'motivation' => 'sc:Painting',
+                '@id' => $this->service_uri,
                 'on' => $this->canvas_uri,
                 'resource' => array (
                     '@id' => $this->resource_uri,
