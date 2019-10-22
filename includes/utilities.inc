@@ -18,7 +18,7 @@
 		$fo = new UTLFedoraObject($user->name, $user->pass);
 
 		$object = $fo->get_object($object_pid);
-        echo "<pre>";print_r($object);die;
+        //echo "<pre>";print_r($object);die;
 		$manifest = new BookManifest($object->label, "$base_url/islandora/object/$object_pid/datastream/MODS");
 
 		//echo "Base url: $base_url/islandora/object/$object_pid/datastream/MODS"; die;
@@ -174,7 +174,7 @@
 	        $object->purgeDatastream('IIIF');
 
 	        /// Create new datastream only if it doesn't already exist (or if the force flag is set)
-	        $fo->add_datastream($object, "IIIF", "IIIF JSON Manifest", "application/json", $json);
+	        $fo->add_datastream($object,$object_pid, "IIIF", "IIIF JSON Manifest", "application/json", $json);
 	    }
 
 		drupal_set_message(t('IIIF JSON Manifest created'));
