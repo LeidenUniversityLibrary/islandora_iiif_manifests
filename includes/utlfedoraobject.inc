@@ -84,6 +84,7 @@ class UTLFedoraObject {
 
             // There's no harm in doing this if the datastream is already ingested or if the object is only constructed.
             $api_m->ingest($object);
+            $api_m->addDatastream($pid, $dsid, $type, $file, $params);
             //$object->ingestDatastream($datastream);
 
             // If the object IS only constructed, ingesting it here also ingests the datastream.
