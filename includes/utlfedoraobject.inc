@@ -78,9 +78,12 @@ class UTLFedoraObject {
             $datastream->label = $label;
             $datastream->mimeType = $mimetype;
             $datastream->setContentFromString($content);
-            echo "Repository info:".$this->repository->describeRepository();die;
+            $api_a = $this->repository->api->a;
+            $api_m = $this->repository->api->m;
+            echo "Repository info:".$api_a->describeRepository();die;
             //echo "<pre>";print_r($datastream);die;
             // There's no harm in doing this if the datastream is already ingested or if the object is only constructed.
+            $api_m->ingest($object);
             $object->ingestDatastream($datastream);
             // If the object IS only constructed, ingesting it here also ingests the datastream.
             //$this->repository->ingestObject($object);
