@@ -94,7 +94,7 @@ function islandora_iiif_manifest_callback(AbstractObject $object) {
           break;*/
 
       case 'bookCModel':
-          __generate_book_manifest($object->id, False,false);
+          __generate_book_manifest($object->id, False,true);
           break;
 
       /*case 'pageCModel':
