@@ -1,5 +1,5 @@
 <?php
-class BookManifest {
+class ManifestUtils {
   protected $id = '';
   protected $object_label = '';
   protected $metadata_uri = '';

@@ -94,7 +94,7 @@ function islandora_iiif_manifest_callback(AbstractObject $object) {
           break;*/
 
       case 'bookCModel':
-          __generate_book_manifest($object->id, False,true);
+          __generate_book_manifest($object->id, False,false);
           break;
 
       /*case 'pageCModel':
@@ -150,7 +150,7 @@ function islandora_iiif_manifest_callback(AbstractObject $object) {
           break;*/
 
       default:
-          echo "No manifest code found for:".$model;
+          echo "No manifest code found for: ".$model;
 
           break;
   }
