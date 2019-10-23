@@ -2,7 +2,7 @@
 
 	function __generate_book_manifest($object_pid, $from_drush = FALSE, $trial = FALSE) {
 
-		require_once ("BookManifest.inc");
+		require_once ("ManifestUtils.inc");
 		require_once ("createcanvas.inc");
 		require_once ("utlfedoraobject.inc");
 
