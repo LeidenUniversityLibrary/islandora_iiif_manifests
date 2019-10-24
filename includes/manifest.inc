@@ -65,7 +65,7 @@ function islandora_iiif_manifest_callback(AbstractObject $object) {
 
   $models = explode(":", $objectModels[0]);
 
-  //echo "<pre> test"; print_r($object->models). "\n";
+
   $model =  $models[1];
   switch($model){
 
@@ -92,6 +92,11 @@ function islandora_iiif_manifest_callback(AbstractObject $object) {
       case 'sp_videoCModel':
           // generate manifest
           break;*/
+
+      case 'sp_large_image_cmodel':
+          // generate manifest
+          echo "<pre> test"; print_r($object->models). "\n";
+          break;
 
       case 'bookCModel':
           __generate_book_manifest($object->id, False,true);
