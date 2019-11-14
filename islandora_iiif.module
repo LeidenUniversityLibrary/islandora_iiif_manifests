@@ -1,9 +1,13 @@
 <?php
 
+
+
 /**
  * @file
  * Main module file for islandora iiif.
  */
+
+define('ISLANDORA_VIEW_HOOK', 'islandora_view_object');
 
 /**
  * Implements hook_init().

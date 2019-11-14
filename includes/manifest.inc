@@ -61,8 +61,18 @@ function islandora_iiif_manifest_callback(AbstractObject $object) {
 
 
   $objectModels = $object->models;
+  $output = array();
+  $hooks = islandora_build_hook_list(ISLANDORA_VIEW_HOOK, $object->models);
 
+  foreach ($hooks as $hook) {
+        $temp = module_invoke_all($hook, $object);
+        islandora_as_renderable_array($temp);
+        if (!empty($temp)) {
+            $output = array_merge_recursive($output, $temp);
+        }
+  }
 
+  print_r($output);die;
   $models = explode(":", $objectModels[0]);
 
 
