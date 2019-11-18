@@ -101,9 +101,9 @@ function islandora_iiif_manifest_callback(AbstractObject $object) {
 
       case 'sp_videoCModel':
           // generate manifest
-          break;*/
+          break;
 
-      /*case 'sp_large_image_cmodel':
+      case 'sp_large_image_cmodel':
           // generate manifest
           echo "<pre> test"; print_r($object->models). "\n";
           break;*/
