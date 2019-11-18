@@ -103,10 +103,10 @@ function islandora_iiif_manifest_callback(AbstractObject $object) {
           // generate manifest
           break;*/
 
-      case 'sp_large_image_cmodel':
+      /*case 'sp_large_image_cmodel':
           // generate manifest
           echo "<pre> test"; print_r($object->models). "\n";
-          break;
+          break;*/
 
       case 'bookCModel':
           __generate_book_manifest($object->id, False,true);
@@ -165,8 +165,8 @@ function islandora_iiif_manifest_callback(AbstractObject $object) {
           break;*/
 
       default:
-          echo "No manifest code found for: ".$model;
-
+          echo "No manifest code found for: ".$model. "\n";
+          echo "<pre> Object"; print_r($object->models). "\n";
           break;
   }
 
