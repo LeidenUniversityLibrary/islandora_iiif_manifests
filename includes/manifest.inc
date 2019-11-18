@@ -61,7 +61,7 @@ function islandora_iiif_manifest_callback(AbstractObject $object) {
 
 
   $objectModels = $object->models;
-  $output = array();
+  /*$output = array();
   $hooks = islandora_build_hook_list(ISLANDORA_VIEW_HOOK, $objectModels);
 
   foreach ($hooks as $hook) {
@@ -72,7 +72,7 @@ function islandora_iiif_manifest_callback(AbstractObject $object) {
         }
   }
 
-  echo "<pre> out put "; print_r($output);die;
+  echo "<pre> out put "; print_r($output);die;*/
   $models = explode(":", $objectModels[0]);
 
 
