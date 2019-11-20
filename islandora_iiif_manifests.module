@@ -4,7 +4,7 @@
 
 /**
  * @file
- * Main module file for islandora iiif.
+ * Main module file for islandora iiif manifests.
  */
 
 define('ISLANDORA_IIIF_MANIFEST_HOOK', 'islandora_get_iiif_manifest');
