@@ -7,7 +7,7 @@
  * Main module file for islandora iiif.
  */
 
-define('ISLANDORA_VIEW_HOOK', 'islandora_view_object');
+define('ISLANDORA_IIIF_MANIFEST_HOOK', 'islandora_get_iiif_manifest');
 
 /**
  * Implements hook_init().
@@ -97,4 +97,23 @@ function islandora_iiif_rootcollection_access($op, $object, $user = NULL) {
     return islandora_object_access($op, $object, $user);
   }
   return FALSE;
+}
+
+
+/**
+ * Implements hook_islandora_derivative().
+ */
+function islandora_iiif_islandora_derivative() {
+
+    return array(
+        array(
+            'source_dsid' => 'MODS',
+            'destination_dsid' => 'MANIFEST',
+            'weight' => 0,
+            'function' => array(
+                'islandora_iiif_create_manifest',
+            ),
+            'file' => "includes/derivatives.inc",
+        )
+    );
 }
