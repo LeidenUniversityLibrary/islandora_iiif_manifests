@@ -54,7 +54,7 @@ function islandora_iiif_create_manifest_json(AbstractObject $object) {
             }
             else{
                 // Set the manifest canvases
-                $output['sequences'][0]['canvases'] = $temp;
+                $output['sequences'][0]['canvases'][] = $temp;
 
             }
 
@@ -72,6 +72,9 @@ function _islandora_iiif_create_manifest_response($status, $data = NULL) {
     drupal_add_http_header('Content-Type', 'application/json; charset=utf-8');
     drupal_add_http_header('access-control-allow-origin', '*');
     if ($data !== NULL) {
+        //echo json_encode($json, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK). "\n";;
+        //echo json_encode(json_decode($data), JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES ). "\n";;
+        //echo json_encode(json_decode($data), JSON_PRETTY_PRINT) . "\n";
         echo json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK). "\n";;
         //                                                                                                                                                                             print drupal_json_encode($data);
     }
