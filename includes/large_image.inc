@@ -28,9 +28,9 @@ function islandora_iiif_manifest_create_large_image_manifest(AbstractObject $obj
         'language' => (object) array('language' => FALSE),
     )));
 
-    $thumbnail_uri = $islandora_iiif_manifest_image_uri."hdl:1887.1%2F$object->id/full/80,/0/default.jpg";
-    $resource_uri = $islandora_iiif_manifest_image_uri."hdl:1887.1%2F$object->id/full/full/0/default.jpg";
-    $service_uri = $islandora_iiif_manifest_image_uri."hdl:1887.1%2F$object->id";
+    $thumbnail_uri = $islandora_iiif_manifest_image_uri."$object->id/full/80,/0/default.jpg";
+    $resource_uri = $islandora_iiif_manifest_image_uri."$object->id/full/full/0/default.jpg";
+    $service_uri = $islandora_iiif_manifest_image_uri."$object->id";
 
     // Create the basic image canvas
     $canvas = new createcanvas($canvas_uri, $object->label, $thumbnail_uri);
