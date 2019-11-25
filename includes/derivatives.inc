@@ -13,6 +13,7 @@
  *   The DSID to run the derivative function for.
  */
 function islandora_iiif_create_manifest(AbstractObject $object = NULL, $force = TRUE) {
+    module_load_include('inc', 'islandora', 'includes/utilities');
     dpm($object,"Going to create manifest!");
     $output = array();
     $hooks = islandora_build_hook_list(ISLANDORA_IIIF_MANIFEST_HOOK, $object->models);

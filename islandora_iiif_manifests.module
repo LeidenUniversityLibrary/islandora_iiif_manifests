@@ -75,7 +75,7 @@ function islandora_iiif_manifests_islandora_sp_basic_image_islandora_get_iiif_ma
     module_load_include('inc', 'islandora_iiif_manifests', 'includes/basic_image');
     $array = islandora_iiif_manifest_create_basic_image_manifest($object);
 
-    //dpm( $array,"sp_basic_image model");
+    dpm( $array,"sp_basic_image model");
     return $array;
 }
 
@@ -88,7 +88,8 @@ function islandora_iiif_manifests_islandora_sp_large_image_cmodel_islandora_get_
     module_load_include('inc', 'islandora_iiif_manifests', 'includes/large_image');
     $array = islandora_iiif_manifest_create_large_image_manifest($object);
 
-    //dpm( $array,"sp_basic_image model");
+    dpm( $array,"sp_basic_large model");
+
     return $array;
 }
 
@@ -97,7 +98,7 @@ function islandora_iiif_manifests_islandora_get_iiif_manifest($object) {
     module_load_include('inc', 'islandora_iiif_manifests', 'includes/manifest');
 
     $manifest_container = islandora_iiif_manifest_create_container_manifest($object);
-    //dpm($manifest_container,"Manifest container");
+    dpm($manifest_container,"Manifest container");
     return $manifest_container;
 }
 
