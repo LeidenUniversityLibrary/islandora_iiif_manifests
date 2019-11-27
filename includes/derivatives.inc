@@ -14,10 +14,10 @@
  */
 function islandora_iiif_create_manifest(AbstractObject $object = NULL, $force = TRUE) {
     module_load_include('inc', 'islandora', 'includes/utilities');
-    dpm($object,"Going to create manifest!");
+    //dpm($object,"Going to create manifest!");
     $output = array();
     $hooks = islandora_build_hook_list(ISLANDORA_IIIF_MANIFEST_HOOK, $object->models);
-    dpm($hooks,"hooks");
+    //dpm($hooks,"hooks");
     foreach ($hooks as $hook) {
         $temp = module_invoke_all($hook, $object);
         if (!empty($temp)) {
@@ -25,5 +25,5 @@ function islandora_iiif_create_manifest(AbstractObject $object = NULL, $force = 
             $output = array_merge_recursive($output, $temp);
         }
     }
-    dpm($output, "output");
+    //dpm($output, "output");
 }

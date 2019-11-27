@@ -38,10 +38,10 @@ function islandora_iiif_manifests_menu() {
           'load arguments' => array(1),
       ),
       'admin/islandora/tools/islandora_iiif_manifests_admin' => array(
-          'title' => 'IIIF Module configuration',
+          'title' => 'IIIF manifest module configuration',
           'description' => 'Configure the IIIF Module.',
           'page callback' => 'drupal_get_form',
-          'page arguments' => array('islandora_iiif_admin_settings_form'),
+          'page arguments' => array('islandora_iiif_manifests_admin_settings_form'),
           'access arguments' => array('administer site configuration'),
           'file' => 'includes/admin.form.inc',
           'type' => MENU_NORMAL_ITEM,
@@ -79,6 +79,18 @@ function islandora_iiif_manifests_islandora_sp_basic_image_islandora_get_iiif_ma
     return $array;
 }
 
+/**
+ * Implements hook_CMODEL_PID_islandora_get_iiif_manifest_alter().
+ */
+function islandora_iiif_manifests_islandora_sp_basic_image_islandora_get_iiif_manifest_alter($object) {
+
+    module_load_include('inc', 'islandora_iiif_manifests', 'includes/basic_image');
+    $array = islandora_iiif_manifest_create_basic_image_manifest($object);
+
+    dpm( $array,"sp_basic_image model");
+    return $array;
+}
+
 
 /**
  * Implements hook_CMODEL_PID_islandora_get_iiif_manifest().
@@ -88,7 +100,35 @@ function islandora_iiif_manifests_islandora_sp_large_image_cmodel_islandora_get_
     module_load_include('inc', 'islandora_iiif_manifests', 'includes/large_image');
     $array = islandora_iiif_manifest_create_large_image_manifest($object);
 
-    dpm( $array,"sp_basic_large model");
+    //dpm( $array,"sp_basic_large model");
+
+    return $array;
+}
+
+
+/**
+ * Implements hook_CMODEL_PID_islandora_get_iiif_manifest_alter().
+ */
+function islandora_iiif_manifests_islandora_sp_large_image_cmodel_islandora_get_iiif_manifest_alter($object) {
+
+    module_load_include('inc', 'islandora_iiif_manifests', 'includes/large_image');
+    $array = islandora_iiif_manifest_create_large_image_manifest($object);
+
+    //dpm( $array,"sp_basic_large model");
+
+    return $array;
+}
+
+
+/**
+ * Implements hook_CMODEL_PID_islandora_get_iiif_manifest().
+ */
+function islandora_iiif_manifests_islandora_compound_islandora_get_iiif_manifest($object) {
+
+    //module_load_include('inc', 'islandora_iiif_manifests', 'includes/large_image');
+    //$array = islandora_iiif_manifest_create_large_image_manifest($object);
+
+    dpm( $object,"compound model");
 
     return $array;
 }

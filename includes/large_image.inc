@@ -12,17 +12,23 @@ function islandora_iiif_manifest_create_large_image_manifest(AbstractObject $obj
 {
     module_load_include('inc', 'islandora_iiif_manifests', 'includes/createcanvas');
 
+    // Get the Handle
+    $handle = variable_get('islandora_iiif_manifests_object_handle', '1887.1');
+
     // Retrieve image width and height using the islandora_handled_access module
-    $full_image_size_url = url("islandora/handled_access/1887.1/{$object->id}/image/view", array('absolute' => TRUE));
+    $full_image_size_url = url("islandora/handled_access/{$handle}/{$object->id}/image/view", array('absolute' => TRUE));
     list($width, $height, $mimetype, $attr) = getimagesize($full_image_size_url);
 
-    $islandora_iiif_manifest_image_uri = url(variable_get('islandora_sc_manifest_image_uri', 'https://iiif-a.issc.leidenuniv.nl/iiif/2/hdl:1887.1%2F'),
+    // Set the handle ready for URL
+    $object_handle = "/".$handle."%2F";
+
+    $islandora_iiif_manifest_image_uri = url(variable_get('islandora_iiif_manifests_image_uri', 'https://iiif-a.issc.leidenuniv.nl/iiif/2').$object_handle,
         array(
             'absolute' => TRUE,
             'language' => (object) array('language' => FALSE),
         )
     );
-
+    //echo $islandora_iiif_manifest_image_uri;die;
     $canvas_uri = urldecode(url("islandora_iiif_manifests/{$object->id}/canvas/default", array(
         'absolute' => TRUE,
         'language' => (object) array('language' => FALSE),
