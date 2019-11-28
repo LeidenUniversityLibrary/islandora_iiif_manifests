@@ -10,7 +10,7 @@
 function islandora_iiif_manifest_create_container_manifest(AbstractObject $object) {
   module_load_include('inc', 'islandora_iiif_manifests', 'includes/ManifestUtils');
 
-  $container = new ManifestUtils($object->label);
+  $container = new ManifestUtils($object);
 
   return $container->getContainer();
 
@@ -32,7 +32,40 @@ function islandora_iiif_manifest_create_container_manifest(AbstractObject $objec
  *   A id of a (existing?) datastream.
  */
 
-function islandora_iiif_create_manifest_json(AbstractObject $object) {
+function islandora_iiif_manifests_create_manifest_json(AbstractObject $object) {
+
+    module_load_include('inc', 'islandora', 'includes/utilities');
+
+    $output = array();
+
+    $hooks = islandora_build_hook_list(ISLANDORA_IIIF_MANIFEST_HOOK, $object->models);
+    //echo "<pre>";print_r($object);die;
+    $manifest_set = false;
+    foreach ($hooks as $hook) {
+        $temp = module_invoke_all($hook, $object);
+
+        if (!empty($temp)) {
+            //arsort($temp);
+
+            // Check if the manifest container is set
+            if(!$manifest_set){
+                $output = array_merge_recursive($output, $temp);
+                $manifest_set = true;
+            }
+            else{
+                // Set the manifest canvases
+                $output['sequences'][0]['canvases'][] = $temp;
+
+            }
+
+        }
+    }
+
+    _islandora_iiif_create_manifest_response('200 OK', $output);
+}
+
+
+function islandora_iiif__manifests_model_check(AbstractObject $object) {
 
     module_load_include('inc', 'islandora', 'includes/utilities');
 
@@ -49,12 +82,12 @@ function islandora_iiif_create_manifest_json(AbstractObject $object) {
 
             // Check if the manifest container is set
             if(!$manifest_set){
-                $output = array_merge_recursive($output, $temp);
+                //$output = array_merge_recursive($output, $temp);
                 $manifest_set = true;
             }
             else{
                 // Set the manifest canvases
-                $output['sequences'][0]['canvases'][] = $temp;
+                $output = array_merge_recursive($output, $temp);
 
             }
 

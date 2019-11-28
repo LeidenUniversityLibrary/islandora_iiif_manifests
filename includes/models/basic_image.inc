@@ -8,9 +8,11 @@
 /**
  * This is the actual manifest building function.
  */
-function islandora_iiif_manifest_create_large_image_manifest(AbstractObject $object)
+function islandora_iiif_manifest_create_basic_image_canvas(AbstractObject $object)
 {
     module_load_include('inc', 'islandora_iiif_manifests', 'includes/createcanvas');
+
+    //TODO: Handle should be retrieved from the object. Currenty 1887.1 is the hard coded default
 
     // Get the Handle
     $handle = variable_get('islandora_iiif_manifests_object_handle', '1887.1');
@@ -28,7 +30,7 @@ function islandora_iiif_manifest_create_large_image_manifest(AbstractObject $obj
             'language' => (object) array('language' => FALSE),
         )
     );
-    //echo $islandora_iiif_manifest_image_uri;die;
+
     $canvas_uri = urldecode(url("islandora_iiif_manifests/{$object->id}/canvas/default", array(
         'absolute' => TRUE,
         'language' => (object) array('language' => FALSE),

@@ -8,7 +8,7 @@
 /**
  * This is the actual manifest building function.
  */
-function islandora_iiif_manifest_create_basic_image_manifest(AbstractObject $object)
+function islandora_iiif_manifest_create_page_canvas(AbstractObject $object)
 {
     module_load_include('inc', 'islandora_iiif_manifests', 'includes/createcanvas');
 

@@ -21,13 +21,20 @@ function islandora_iiif_init() {
  */
 function islandora_iiif_manifests_menu() {
   return array(
-    'islandora_iiif_manifests/%islandora_object/manifest' => array(
-      'page callback' => 'islandora_iiif_create_manifest_json',
+      'islandora_iiif_manifests/%islandora_object/manifest' => array(
+      'page callback' => 'islandora_iiif_manifests_create_manifest_json',
       'page arguments' => array(1),
       'file' => 'includes/manifest.inc',
       'type' => MENU_CALLBACK,
       'access callback' => TRUE,
-    ),
+      ),
+      'islandora_iiif_manifests/%islandora_object/model_check' => array(
+          'page callback' => 'islandora_iiif__manifests_model_check',
+          'page arguments' => array(1),
+          'file' => 'includes/manifest.inc',
+          'type' => MENU_CALLBACK,
+          'access callback' => TRUE,
+      ),
       'islandora_iiif_manifests/%islandora_object/canvas/%' => array(
           'page callback' => 'islandora_iiif_canvas_callback',
           'page arguments' => array(1),
@@ -85,7 +92,7 @@ function islandora_iiif_manifests_islandora_sp_basic_image_islandora_get_iiif_ma
 function islandora_iiif_manifests_islandora_sp_basic_image_islandora_get_iiif_manifest_alter($object) {
 
     module_load_include('inc', 'islandora_iiif_manifests', 'includes/basic_image');
-    $array = islandora_iiif_manifest_create_basic_image_manifest($object);
+    $array = islandora_iiif_manifest_create_basic_image_canvas($object);
 
     dpm( $array,"sp_basic_image model");
     return $array;
@@ -97,8 +104,8 @@ function islandora_iiif_manifests_islandora_sp_basic_image_islandora_get_iiif_ma
  */
 function islandora_iiif_manifests_islandora_sp_large_image_cmodel_islandora_get_iiif_manifest($object) {
 
-    module_load_include('inc', 'islandora_iiif_manifests', 'includes/large_image');
-    $array = islandora_iiif_manifest_create_large_image_manifest($object);
+    module_load_include('inc', 'islandora_iiif_manifests', 'includes/models/large_image');
+    $array = islandora_iiif_manifest_create_large_image_canvas($object);
 
     //dpm( $array,"sp_basic_large model");
 
@@ -111,8 +118,8 @@ function islandora_iiif_manifests_islandora_sp_large_image_cmodel_islandora_get_
  */
 function islandora_iiif_manifests_islandora_sp_large_image_cmodel_islandora_get_iiif_manifest_alter($object) {
 
-    module_load_include('inc', 'islandora_iiif_manifests', 'includes/large_image');
-    $array = islandora_iiif_manifest_create_large_image_manifest($object);
+    module_load_include('inc', 'islandora_iiif_manifests', 'includes/models/large_image');
+    $array = islandora_iiif_manifest_create_large_image_canvas($object);
 
     //dpm( $array,"sp_basic_large model");
 
@@ -123,12 +130,52 @@ function islandora_iiif_manifests_islandora_sp_large_image_cmodel_islandora_get_
 /**
  * Implements hook_CMODEL_PID_islandora_get_iiif_manifest().
  */
-function islandora_iiif_manifests_islandora_compound_islandora_get_iiif_manifest($object) {
+function islandora_iiif_manifests_islandora_compoundCModel_islandora_get_iiif_manifest($object) {
 
-    //module_load_include('inc', 'islandora_iiif_manifests', 'includes/large_image');
-    //$array = islandora_iiif_manifest_create_large_image_manifest($object);
+    module_load_include('inc', 'islandora_iiif_manifests', 'includes/models/compound');
+    $array = islandora_iiif_manifest_create_compound_manifest($object);
 
-    dpm( $object,"compound model");
+    //dpm( $object,"compound model");
+
+    return $array;
+}
+
+/**
+ * Implements hook_CMODEL_PID_islandora_get_iiif_manifest().
+ */
+function islandora_iiif_manifests_islandora_collectionCModel_islandora_get_iiif_manifest($object) {
+
+    //module_load_include('inc', 'islandora_iiif_manifests', 'includes/collection');
+    //$array = islandora_iiif_manifest_create_compound_manifest($object);
+
+    dpm( $object,"collection");
+
+    return array("Test"=>"Collection");
+}
+
+
+/**
+ * Implements hook_CMODEL_PID_islandora_get_iiif_manifest().
+ */
+function islandora_iiif_manifests_islandora_bookCModel_islandora_get_iiif_manifest($object) {
+
+    module_load_include('inc', 'islandora_iiif_manifests', 'includes/models/book');
+    $array = islandora_iiif_manifest_create_book_manifest($object);
+
+    //dpm( $object,"book");
+
+    return array("Book"=>"Collection");
+}
+
+/**
+ * Implements hook_CMODEL_PID_islandora_get_iiif_manifest().
+ */
+function islandora_iiif_manifests_islandora_pageCModel_islandora_get_iiif_manifest($object) {
+
+    module_load_include('inc', 'islandora_iiif_manifests', 'includes/models/page');
+    $array = islandora_iiif_manifest_create_page_canvas($object);
+
+    //dpm( $object,"book");
 
     return $array;
 }
@@ -136,9 +183,9 @@ function islandora_iiif_manifests_islandora_compound_islandora_get_iiif_manifest
 
 function islandora_iiif_manifests_islandora_get_iiif_manifest($object) {
     module_load_include('inc', 'islandora_iiif_manifests', 'includes/manifest');
-
+    //dmp($object,'object');
     $manifest_container = islandora_iiif_manifest_create_container_manifest($object);
-    dpm($manifest_container,"Manifest container");
+    //dpm($manifest_container,"Manifest container");
     return $manifest_container;
 }
 
