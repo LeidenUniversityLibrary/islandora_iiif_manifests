@@ -71,6 +71,10 @@ class ManifestUtils {
             'label' => $this->object->label,
             "attribution" => "This manifest was created from Islandora. Contact r.k.s.mwinyimbegu@library.leidenuniv.nl",
             "description" => $this->object->label,
+            "metadata" => array(
+                array ("label" =>"Source", "value" => "test"
+                )
+            ),
             'sequences' => array ( // an array but will always be a single object in our application
                 array (
                     '@type' => 'sc:Sequence',
