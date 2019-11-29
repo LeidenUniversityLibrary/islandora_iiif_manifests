@@ -11,6 +11,7 @@
 function islandora_iiif_manifest_create_compound_manifest(AbstractObject $object)
 {
     module_load_include('inc', 'islandora', 'includes/utilities');
+    module_load_include('inc', 'islandora_iiif_manifests', 'includes/utilities');
 
     // Manifest array
     $manifest = array();
@@ -32,12 +33,15 @@ function islandora_iiif_manifest_create_compound_manifest(AbstractObject $object
         }
     }
 
+    //echo "Manifest <pre>:";print_r($manifest);die;
 
     // Canvases
     $canvases = array();
 
     // Get compound parts
     $parts = islandora_compound_object_get_parts($object->id);
+
+
 
     // Don't create a manifest container for the compound parts
     $child_manifest_set = false;
@@ -53,6 +57,7 @@ function islandora_iiif_manifest_create_compound_manifest(AbstractObject $object
         foreach ($hooks as $part_hook) {
 
             $temp = module_invoke_all($part_hook, $part_object);
+
 
             if (!empty($temp)) {
                 // Check if the manifest container is set
@@ -80,21 +85,3 @@ function islandora_iiif_manifest_create_compound_manifest(AbstractObject $object
 
 }
 
-function canvasHook($hook){
-
-    switch($hook){
-
-        case 'islandora_get_iiif_manifest':
-            $canvas_hook = false;
-         break;
-
-        case 'fedora_system_FedoraObject_3_0_islandora_get_iiif_manifest':
-            $canvas_hook = false;
-         break;
-
-        default:
-            $canvas_hook = true;
-    }
-     return $canvas_hook;
-
-}
