@@ -204,3 +204,27 @@ function canvasHook($hook){
     return $canvas_hook;
 
 }
+
+function getImageInfo($object){
+
+
+    $imageWidth = 0;
+    $imageHeight = 0;
+
+    // Get Image info from TECHMD
+    $mods_datastream = $object['TECHMD']->content;
+
+    if($mods_datastream !=""){
+        $xml = simplexml_load_string($mods_datastream);
+        $json  = json_encode($xml);
+        $tech_md = json_decode($json, true);
+
+
+        // Set width and height
+        $imageWidth = $tech_md['metadata']['image']['imageWidth'];
+        $imageHeight = $tech_md['metadata']['image']['imageHeight'];
+    }
+
+
+    return array("width"=>$imageWidth,"height"=>$imageHeight);
+}

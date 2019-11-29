@@ -17,15 +17,11 @@ function islandora_iiif_manifest_create_basic_image_canvas(AbstractObject $objec
     // Get the Handle
     $handle = variable_get('islandora_iiif_manifests_object_handle', 'hdl:1887.1');
 
-    // Get Image info from TECHMD
-    $mods_datastream = $object['TECHMD']->content;
-    $xml = simplexml_load_string($mods_datastream);
-    $json  = json_encode($xml);
-    $tech_md = json_decode($json, true);
+    $image_info = getImageInfo($object);
 
     // Set width and height
-    $imageWidth = $tech_md['metadata']['image']['imageWidth'];
-    $imageHeight = $tech_md['metadata']['image']['imageHeight'];
+    $imageWidth = $image_info['imageWidth'];
+    $imageHeight = $image_info['imageHeight'];
 
     // Retrieve image width and height using the islandora_handled_access module
    /* $full_image_size_url = url("islandora/handled_access/{$handle}/{$object->id}/image/view", array('absolute' => TRUE));
