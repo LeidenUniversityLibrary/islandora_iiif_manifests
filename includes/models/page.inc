@@ -11,6 +11,7 @@
 function islandora_iiif_manifest_create_page_canvas(AbstractObject $object)
 {
     module_load_include('inc', 'islandora_iiif_manifests', 'includes/createcanvas');
+    module_load_include('inc', 'islandora_iiif_manifests', 'includes/utilities');
 
     //TODO: Handle should be retrieved from the object. Currenty 1887.1 is the hard coded default
 
@@ -20,8 +21,8 @@ function islandora_iiif_manifest_create_page_canvas(AbstractObject $object)
     $image_info = getImageInfo($object);
 
     // Set width and height
-    $imageWidth = $image_info['imageWidth'];
-    $imageHeight = $image_info['imageHeight'];
+    $imageWidth = $image_info['width'];
+    $imageHeight = $image_info['height'];
 
     // Set the handle ready for URL
     $object_handle = "/".$handle."%2F";
