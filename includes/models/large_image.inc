@@ -21,7 +21,7 @@ function islandora_iiif_manifest_create_large_image_canvas(AbstractObject $objec
     $json  = json_encode($xml);
     $tech_md = json_decode($json, true);
 
-    echo "<pre>";print_r($tech_md);die;
+    echo "<pre>";print_r($tech_md);die; 
     // Set width and height
     $imageWidth = $tech_md['metadata']['image']['imageWidth'];
     $imageHeight = $tech_md['metadata']['image']['imageHeight'];
