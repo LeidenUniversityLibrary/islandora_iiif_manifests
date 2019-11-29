@@ -16,17 +16,17 @@ function islandora_iiif_manifest_create_basic_image_canvas(AbstractObject $objec
     //TODO: Handle should be retrieved from the object. Currenty 1887.1 is the hard coded default
 
     // Get the Handle
-    $handle = variable_get('islandora_iiif_manifests_object_handle', 'hdl:1887.1');
+    $handle = variable_get('islandora_iiif_manifests_object_handle', 'hdl:1887.a');
 
-    $image_info = getImageInfo($object);
+    /*$image_info = getImageInfo($object);
 
     // Set width and height
     $imageWidth = $image_info['width'];
-    $imageHeight = $image_info['height'];
+    $imageHeight = $image_info['height'];*/
 
     // Retrieve image width and height using the islandora_handled_access module
-   /* $full_image_size_url = url("islandora/handled_access/{$handle}/{$object->id}/image/view", array('absolute' => TRUE));
-    list($width, $height, $mimetype, $attr) = getimagesize($full_image_size_url);*/
+    $full_image_size_url = url("islandora/handled_access/{$handle}/{$object->id}/image/view", array('absolute' => TRUE));
+    list($width, $height, $mimetype, $attr) = getimagesize($full_image_size_url);
 
     // Set the handle ready for URL
     $object_handle = "/".$handle."%2F";
@@ -49,7 +49,7 @@ function islandora_iiif_manifest_create_basic_image_canvas(AbstractObject $objec
 
     // Create the basic image canvas
     $canvas = new createcanvas($canvas_uri, $object->label, $thumbnail_uri);
-    $canvas->setResource($resource_uri, $service_uri, $imageWidth, $imageHeight);
+    $canvas->setResource($resource_uri, $service_uri, $width, $height);
 
 
     return $canvas->toArray();

@@ -79,10 +79,10 @@ function islandora_iiif_manifests_islandora_derivative() {
  */
 function islandora_iiif_manifests_islandora_sp_basic_image_islandora_get_iiif_manifest($object) {
 
-    module_load_include('inc', 'islandora_iiif_manifests', 'includes/basic_image');
-    $array = islandora_iiif_manifest_create_basic_image_manifest($object);
+    module_load_include('inc', 'islandora_iiif_manifests', 'includes/models/basic_image');
+    $array = islandora_iiif_manifest_create_basic_image_canvas($object);
 
-    dpm( $array,"sp_basic_image model");
+    //dpm( $array,"sp_basic_image model");
     return $array;
 }
 
@@ -91,10 +91,10 @@ function islandora_iiif_manifests_islandora_sp_basic_image_islandora_get_iiif_ma
  */
 function islandora_iiif_manifests_islandora_sp_basic_image_islandora_get_iiif_manifest_alter($object) {
 
-    module_load_include('inc', 'islandora_iiif_manifests', 'includes/basic_image');
+    module_load_include('inc', 'islandora_iiif_manifests', 'includes/models/basic_image');
     $array = islandora_iiif_manifest_create_basic_image_canvas($object);
 
-    dpm( $array,"sp_basic_image model");
+    //dpm( $array,"sp_basic_image model");
     return $array;
 }
 
