@@ -15,10 +15,10 @@ class createcanvas {
     $this->thumbnail_uri = $thumbnail_uri;
   }
 
-  function setResource($resource_uri, $service_uri, $format = 'image/jpeg', $width, $height) {
+  function setResource($resource_uri, $service_uri, /*$format = 'image/jpeg',*/ $width, $height) {
     $this->resource_uri = $resource_uri;
     $this->service_uri = $service_uri;
-    $this->image_format = $format;
+    /*$this->image_format = $format;*/
     $this->image_width = intval($width);
     $this->image_height = intval($height);
   }
@@ -46,7 +46,7 @@ class createcanvas {
                 'resource' => array (
                     '@id' => $this->resource_uri,
                     '@type' => 'dctypes:Image',
-                    'format' => $this->image_format,
+                    //'format' => $this->image_format,
                     'height' => $this->image_height,
                     'width' => $this->image_width,
                     'service' => array (

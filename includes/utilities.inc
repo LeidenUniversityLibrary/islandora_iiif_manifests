@@ -204,37 +204,3 @@ function canvasHook($hook){
     return $canvas_hook;
 
 }
-
-function getArray($node)
-{
-    $array = false;
-
-    if ($node->hasAttributes())
-    {
-        foreach ($node->attributes as $attr)
-        {
-            $array[$attr->nodeName] = $attr->nodeValue;
-        }
-    }
-
-    if ($node->hasChildNodes())
-    {
-        if ($node->childNodes->length == 1)
-        {
-            $array[$node->firstChild->nodeName] = $node->firstChild->nodeValue;
-        }
-        else
-        {
-            foreach ($node->childNodes as $childNode)
-            {
-                if ($childNode->nodeType != XML_TEXT_NODE)
-                {
-                    $array[$childNode->nodeName][] = $this->getArray($childNode);
-                }
-            }
-        }
-    }
-
-    return $array;
-}
-

@@ -15,11 +15,21 @@ function islandora_iiif_manifest_create_basic_image_canvas(AbstractObject $objec
     //TODO: Handle should be retrieved from the object. Currenty 1887.1 is the hard coded default
 
     // Get the Handle
-    $handle = variable_get('islandora_iiif_manifests_object_handle', '1887.1');
+    $handle = variable_get('islandora_iiif_manifests_object_handle', 'hdl:1887.1');
+
+    // Get Image info from TECHMD
+    $mods_datastream = $object['TECHMD']->content;
+    $xml = simplexml_load_string($mods_datastream);
+    $json  = json_encode($xml);
+    $tech_md = json_decode($json, true);
+
+    // Set width and height
+    $imageWidth = $tech_md['metadata']['image']['imageWidth'];
+    $imageHeight = $tech_md['metadata']['image']['imageHeight'];
 
     // Retrieve image width and height using the islandora_handled_access module
-    $full_image_size_url = url("islandora/handled_access/{$handle}/{$object->id}/image/view", array('absolute' => TRUE));
-    list($width, $height, $mimetype, $attr) = getimagesize($full_image_size_url);
+   /* $full_image_size_url = url("islandora/handled_access/{$handle}/{$object->id}/image/view", array('absolute' => TRUE));
+    list($width, $height, $mimetype, $attr) = getimagesize($full_image_size_url);*/
 
     // Set the handle ready for URL
     $object_handle = "/".$handle."%2F";
@@ -42,7 +52,7 @@ function islandora_iiif_manifest_create_basic_image_canvas(AbstractObject $objec
 
     // Create the basic image canvas
     $canvas = new createcanvas($canvas_uri, $object->label, $thumbnail_uri);
-    $canvas->setResource($resource_uri, $service_uri, $mimetype, $width, $height);
+    $canvas->setResource($resource_uri, $service_uri, $imageWidth, $imageHeight);
 
 
     return $canvas->toArray();

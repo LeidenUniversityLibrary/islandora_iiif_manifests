@@ -15,12 +15,7 @@ function islandora_iiif_manifest_create_book_manifest(AbstractObject $object)
     module_load_include('inc', 'islandora_paged_content', 'includes/utilities');
 
 
-    /*$mods_datastream = "<?xml version='1.0' standalone='yes'?>".$object['MODS']->content;
-    $dom = new DOMDocument();
-    $dom->loadXml($mods_datastream);
-    $books = $dom->getElementsByTagName('titleInfo')->item(0)->nodeValue;
-    print_r($books);die;*/
-    
+
     $viewingHint = islandora_paged_content_get_viewing_hint($object) !="" ?  islandora_paged_content_get_viewing_hint($object):"paged";
     $viewingDirection = getViewingDirection($object);
     // Manifest array
