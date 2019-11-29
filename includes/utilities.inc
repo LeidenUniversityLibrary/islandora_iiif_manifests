@@ -182,3 +182,59 @@
 	}
 
 
+
+/**
+ * Determine if the current hook is a canvas hook
+ */
+function canvasHook($hook){
+
+    switch($hook){
+
+        case 'islandora_get_iiif_manifest':
+            $canvas_hook = false;
+            break;
+
+        case 'fedora_system_FedoraObject_3_0_islandora_get_iiif_manifest':
+            $canvas_hook = false;
+            break;
+
+        default:
+            $canvas_hook = true;
+    }
+    return $canvas_hook;
+
+}
+
+function getArray($node)
+{
+    $array = false;
+
+    if ($node->hasAttributes())
+    {
+        foreach ($node->attributes as $attr)
+        {
+            $array[$attr->nodeName] = $attr->nodeValue;
+        }
+    }
+
+    if ($node->hasChildNodes())
+    {
+        if ($node->childNodes->length == 1)
+        {
+            $array[$node->firstChild->nodeName] = $node->firstChild->nodeValue;
+        }
+        else
+        {
+            foreach ($node->childNodes as $childNode)
+            {
+                if ($childNode->nodeType != XML_TEXT_NODE)
+                {
+                    $array[$childNode->nodeName][] = $this->getArray($childNode);
+                }
+            }
+        }
+    }
+
+    return $array;
+}
+

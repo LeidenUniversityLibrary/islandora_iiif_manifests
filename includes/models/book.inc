@@ -11,9 +11,16 @@
 function islandora_iiif_manifest_create_book_manifest(AbstractObject $object)
 {
     module_load_include('inc', 'islandora', 'includes/utilities');
+    module_load_include('inc', 'islandora_iiif_manifests', 'includes/utilities');
     module_load_include('inc', 'islandora_paged_content', 'includes/utilities');
 
 
+    /*$mods_datastream = "<?xml version='1.0' standalone='yes'?>".$object['MODS']->content;
+    $dom = new DOMDocument();
+    $dom->loadXml($mods_datastream);
+    $books = $dom->getElementsByTagName('titleInfo')->item(0)->nodeValue;
+    print_r($books);die;*/
+    
     $viewingHint = islandora_paged_content_get_viewing_hint($object) !="" ?  islandora_paged_content_get_viewing_hint($object):"paged";
     $viewingDirection = getViewingDirection($object);
     // Manifest array
@@ -87,27 +94,7 @@ function islandora_iiif_manifest_create_book_manifest(AbstractObject $object)
 }
 
 
-/**
- * Determine if the current hook is a canvas hook
- */
-function canvasHook($hook){
 
-    switch($hook){
-
-        case 'islandora_get_iiif_manifest':
-            $canvas_hook = false;
-         break;
-
-        case 'fedora_system_FedoraObject_3_0_islandora_get_iiif_manifest':
-            $canvas_hook = false;
-         break;
-
-        default:
-            $canvas_hook = true;
-    }
-     return $canvas_hook;
-
-}
 
 /**
  * Retrieve the view direction from the book
@@ -130,3 +117,5 @@ function getViewingDirection($object){
     return $viewingDirection;
 
 }
+
+
