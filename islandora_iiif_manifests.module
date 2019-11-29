@@ -145,12 +145,12 @@ function islandora_iiif_manifests_islandora_compoundCModel_islandora_get_iiif_ma
  */
 function islandora_iiif_manifests_islandora_collectionCModel_islandora_get_iiif_manifest($object) {
 
-    //module_load_include('inc', 'islandora_iiif_manifests', 'includes/collection');
-    //$array = islandora_iiif_manifest_create_compound_manifest($object);
+    module_load_include('inc', 'islandora_iiif_manifests', 'includes/models/collection');
+    $array = islandora_iiif_manifest_create_collection_manifest($object);
 
-    dpm( $object,"collection");
+    //dpm( $object,"collection");
 
-    return array("Test"=>"Collection");
+    return $array;
 }
 
 

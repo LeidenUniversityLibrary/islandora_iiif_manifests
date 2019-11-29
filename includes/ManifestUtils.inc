@@ -69,6 +69,7 @@ class ManifestUtils {
             '@id' => $id,//$this->id,
             '@type' => 'sc:Manifest',
             'label' => $this->object->label,
+            "logo" => "https://kerkuil-a.leidenuniv.nl/iiif/ubl_logo.png",
             "attribution" => "This manifest was created from Islandora. Contact r.k.s.mwinyimbegu@library.leidenuniv.nl",
             "description" => $this->object->label,
             "metadata" => array(
