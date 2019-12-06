@@ -73,7 +73,7 @@ class ManifestUtils {
             "attribution" => "This manifest was created from Islandora. Contact r.k.s.mwinyimbegu@library.leidenuniv.nl",
             "description" => $this->object->label,
             "metadata" => array(
-                array ("label" =>"Source", "value" => "test"
+                array ("label" =>"Source", "value" => url("/view/item/{$this->object->id}/", array('absolute' => TRUE)),
                 )
             ),
             'sequences' => array ( // an array but will always be a single object in our application

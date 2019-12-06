@@ -43,7 +43,8 @@ function islandora_iiif_manifest_create_large_image_canvas(AbstractObject $objec
     )));
 
     $thumbnail_uri = $islandora_iiif_manifest_image_uri."$object->id/full/80,/0/default.jpg";
-    $resource_uri = $islandora_iiif_manifest_image_uri."$object->id/full/full/0/default.jpg";
+    //$resource_uri = $islandora_iiif_manifest_image_uri."$object->id/full/full/0/default.jpg";
+    $resource_uri = $islandora_iiif_manifest_image_uri."$object->id/full/pct:50/0/default.jpg";
     $service_uri = $islandora_iiif_manifest_image_uri."$object->id";
 
     // Create the basic image canvas
