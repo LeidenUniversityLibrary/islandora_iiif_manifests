@@ -68,7 +68,7 @@ function islandora_iiif_manifest_create_newspaper_manifest(AbstractObject $objec
         // Get the hooks to create the canvases
         $issue_hooks = islandora_build_hook_list(ISLANDORA_IIIF_MANIFEST_HOOK, $issue_object->models);
 
-        foreach ($issue_hooks as $page_hook) {
+        foreach ($issue_hooks as $page_hook) { 
 
             $temp = module_invoke_all($page_hook, $issue_object);
 
