@@ -13,16 +13,9 @@ function islandora_iiif_manifest_create_basic_image_canvas(AbstractObject $objec
     module_load_include('inc', 'islandora_iiif_manifests', 'includes/createcanvas');
     module_load_include('inc', 'islandora_iiif_manifests', 'includes/utilities');
 
-    //TODO: Handle should be retrieved from the object. Currenty 1887.1 is the hard coded default
 
     // Get the Handle
     $handle = variable_get('islandora_iiif_manifests_object_handle', 'hdl:1887.a');
-
-    /*$image_info = getImageInfo($object);
-
-    // Set width and height
-    $imageWidth = $image_info['width'];
-    $imageHeight = $image_info['height'];*/
 
     // Retrieve image width and height using the islandora_handled_access module
     $full_image_size_url = url("islandora/handled_access/{$handle}/{$object->id}/image/view", array('absolute' => TRUE));

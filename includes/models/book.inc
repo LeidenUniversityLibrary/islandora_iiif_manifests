@@ -18,6 +18,8 @@ function islandora_iiif_manifest_create_book_manifest(AbstractObject $object)
 
     $viewingHint = islandora_paged_content_get_viewing_hint($object) !="" ?  islandora_paged_content_get_viewing_hint($object):"paged";
     $viewingDirection = getViewingDirection($object);
+
+  
     // Manifest array
     $manifest = array();
 
@@ -69,7 +71,7 @@ function islandora_iiif_manifest_create_book_manifest(AbstractObject $object)
                 else{
                     if(canvasHook($page_hook)){
                         // Add a canvas
-                        $canvases[] = $temp;//array_merge_recursive($children_output, $temp);
+                        $canvases[] = $temp;
                     }
                 }
             }
@@ -80,7 +82,6 @@ function islandora_iiif_manifest_create_book_manifest(AbstractObject $object)
     $manifest['viewingDirection'] = $viewingDirection;
     $manifest['viewingHint'] =  $viewingHint;
 
-    //echo "Canvases:<pre>";print_r($canvases);die;
     // Set the canvases
     $manifest['sequences'][0]['canvases'] = $canvases;
 

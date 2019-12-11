@@ -14,6 +14,12 @@ function islandora_iiif_manifest_create_collection_manifest(AbstractObject $obje
     module_load_include('inc', 'islandora_iiif_manifests', 'includes/utilities');
     module_load_include('module', 'islandora_basic_collection');
 
+    // Get the Handle
+    $handle = variable_get('islandora_iiif_manifests_object_handle', 'hdl:1887.a');
+
+    // Set the handle ready for URL
+    $object_handle = "/".$handle."%2F";
+
     $islandora_iiif_manifest_image_uri = url(variable_get('islandora_iiif_manifests_image_uri', 'https://iiif-a.issc.leidenuniv.nl/iiif/2').$object_handle,
         array(
             'absolute' => TRUE,
@@ -55,9 +61,6 @@ function islandora_iiif_manifest_create_collection_manifest(AbstractObject $obje
     // collection of the manifests
     $collection_members_manifests = array();
     $collection_members_collectons = array();
-
-    // Don't create a manifest container for the compound parts
-    $child_manifest_set = false;
 
     foreach ($collection_objects as $collection_object){
 
@@ -111,28 +114,6 @@ function islandora_iiif_manifest_create_collection_manifest(AbstractObject $obje
         );
 
 
-
-        /*  // Get the hooks to create the canvases
-         $hooks = islandora_build_hook_list(ISLANDORA_IIIF_MANIFEST_HOOK, $fedora_collection_object->models);
-         //echo "Hooks <pre>:";print_r($hooks);die;
-         foreach ($hooks as $part_hook) {
-
-             $temp = module_invoke_all($part_hook, $fedora_collection_object);
-
-
-             if (!empty($temp)) {
-                 // Check if the manifest container is set
-                 if(!$child_manifest_set){
-                     $child_manifest_set = true;
-                 }
-                 else{
-                     if(canvasHook($part_hook)){
-                         // Add a canvas
-                         $canvases[] = $temp;//array_merge_recursive($children_output, $temp);
-                     }
-                 }
-             }
-         }*/
     }
     if (!empty($collection_members_manifests)) {
         $manifest['manifests'] = $collection_members_manifests;
@@ -147,23 +128,4 @@ function islandora_iiif_manifest_create_collection_manifest(AbstractObject $obje
     _islandora_iiif_create_manifest_response('200 OK', $manifest);
 
 }
-/*
-function getCollectionMembers(){
-
-    $label = $children_info['object_label'];
-    $thumb = array(
-        "@id" => urldecode(url("islandora_iiif/{$object->id}/full/50,/0/default.jp2", array(
-            'absolute' => TRUE,
-            'language' => (object) array('language' => FALSE),
-        ))),
-        "service" => array(
-            "@context" => "http://iiif.io/api/image/2/context.json",
-            "@id" => urldecode(url("islandora_iiif/{$object->id}/info.json", array(
-                'absolute' => TRUE,
-                'language' => (object) array('language' => FALSE),
-            ))),
-            "profile" => "http://iiif.io/api/image/2/level2.json",
-        ),
-    );
-}*/
 

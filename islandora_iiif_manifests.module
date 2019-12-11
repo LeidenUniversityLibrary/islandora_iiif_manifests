@@ -181,6 +181,20 @@ function islandora_iiif_manifests_islandora_pageCModel_islandora_get_iiif_manife
 }
 
 
+/**
+ * Implements hook_CMODEL_PID_islandora_get_iiif_manifest().
+ */
+function islandora_iiif_manifests_islandora_newspaperCModel_islandora_get_iiif_manifest($object) {
+
+    module_load_include('inc', 'islandora_iiif_manifests', 'includes/models/page');
+    $array = islandora_iiif_manifest_create_page_canvas($object);
+
+    //dpm( $object,"book");
+
+    return $array;
+}
+
+
 function islandora_iiif_manifests_islandora_get_iiif_manifest($object) {
     module_load_include('inc', 'islandora_iiif_manifests', 'includes/manifest');
     //dmp($object,'object');
