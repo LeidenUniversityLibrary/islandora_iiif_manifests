@@ -8,11 +8,12 @@
 /**
  * This is the actual manifest building function.
  */
-function islandora_iiif_manifest_create_book_manifest(AbstractObject $object)
+function islandora_iiif_manifest_create_newspaper_manifest(AbstractObject $object)
 {
     module_load_include('inc', 'islandora', 'includes/utilities');
     module_load_include('inc', 'islandora_iiif_manifests', 'includes/utilities');
     module_load_include('inc', 'islandora_paged_content', 'includes/utilities');
+    module_load_include('inc', 'islandora_newspaper', 'includes/utilities');
 
 
 
@@ -44,24 +45,32 @@ function islandora_iiif_manifest_create_book_manifest(AbstractObject $object)
     // Canvases
     $canvases = array();
 
+
+    // Get issues
+    $issues = islandora_newspaper_get_issues($object);
+
+
+
     // Get pages
     $pages = islandora_paged_content_get_pages($object);
+
+
 
 
     // Don't create a manifest container for the compound parts
     $child_manifest_set = false;
 
-    foreach ($pages as $page){
+    foreach ($issues as $issue){
 
-        // Load page
-        $page_object = islandora_object_load($page['pid']);
+        // Load issue
+        $issue_object = islandora_object_load($issue['pid']);
 
         // Get the hooks to create the canvases
-        $page_hooks = islandora_build_hook_list(ISLANDORA_IIIF_MANIFEST_HOOK, $page_object->models);
+        $issue_hooks = islandora_build_hook_list(ISLANDORA_IIIF_MANIFEST_HOOK, $issue_object->models);
 
-        foreach ($page_hooks as $page_hook) {
+        foreach ($issue_hooks as $page_hook) {
 
-            $temp = module_invoke_all($page_hook, $page_object);
+            $temp = module_invoke_all($page_hook, $issue_object);
 
             if (!empty($temp)) {
                 // Check if the manifest container is set
