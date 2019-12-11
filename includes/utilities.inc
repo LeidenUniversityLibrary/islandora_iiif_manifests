@@ -31,10 +31,8 @@ function getImageInfo($object){
 
 
     if($object['TECHMD']){
-
         // Get Image info from TECHMD
         $mods_datastream = $object['TECHMD']->content;
-        
         $xml = simplexml_load_string($mods_datastream);
         $json  = json_encode($xml);
         $tech_md = json_decode($json, true);
