@@ -29,10 +29,6 @@ function islandora_iiif_manifest_create_newspaper_manifest(AbstractObject $objec
     );
 
 
-    $viewingHint = islandora_paged_content_get_viewing_hint($object) !="" ?  islandora_paged_content_get_viewing_hint($object):"paged";
-    $viewingDirection = getViewingDirection($object);
-
-
     // Manifest array
     $manifest = array();
 
@@ -127,8 +123,7 @@ function islandora_iiif_manifest_create_newspaper_manifest(AbstractObject $objec
     }
 
 
-
-    _islandora_iiif_create_manifest_response('200 OK', $manifest);
+    json_response('200 OK', $manifest);
 
 }
 

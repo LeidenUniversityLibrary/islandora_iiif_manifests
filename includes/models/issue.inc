@@ -24,7 +24,7 @@ function islandora_iiif_manifest_create_issue_manifest(AbstractObject $object)
 
     // Don't create a manifest container for the compound parts
     $child_manifest_set = false;
-    $count = 0;
+
     foreach ($pages as $page){
 
         // Load page
@@ -51,9 +51,7 @@ function islandora_iiif_manifest_create_issue_manifest(AbstractObject $object)
             }
         }
     }
-
     return $canvases;
-
 }
 
 

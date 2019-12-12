@@ -186,7 +186,12 @@ function islandora_iiif_manifests_islandora_pageCModel_islandora_get_iiif_manife
  */
 function islandora_iiif_manifests_islandora_newspaperCModel_islandora_get_iiif_manifest($object) {
 
+    // Display Newspaper as a colleciton. Each issue is a manifest with its pages
     module_load_include('inc', 'islandora_iiif_manifests', 'includes/models/newspaper_collection');
+
+    // Display Newspare with all the pages with the issue as a single manifest with all the pages
+    //module_load_include('inc', 'islandora_iiif_manifests', 'includes/models/newspaper');
+
     $array = islandora_iiif_manifest_create_newspaper_manifest($object);
 
     //dpm( $object,"book");

@@ -70,4 +70,17 @@ function getViewingDirection($object){
 
 }
 
+/**
+ * Helper function to write out a JSON response.
+ */
+function json_response($status, $data = NULL) {
+    drupal_add_http_header('Status', $status);
+    drupal_add_http_header('Content-Type', 'application/json; charset=utf-8');
+    drupal_add_http_header('access-control-allow-origin', '*');
+    if ($data !== NULL) {
+        echo json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK). "\n";;
+        //                                                                                                                                                                             print drupal_json_encode($data);
+    }
+    exit();
+}
 
