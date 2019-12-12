@@ -53,9 +53,16 @@ function islandora_iiif_manifests_create_manifest_json(AbstractObject $object) {
                 $manifest_set = true;
             }
             else{
-                // Set the manifest canvases
-                $output['sequences'][0]['canvases'][] = $temp;
 
+                // Set the manifest canvases ( Check whether $temp is multi dimensional array)
+                if($temp[0]){
+                    // Set the manifest canvases
+                    $output['sequences'][0]['canvases'] = $temp;
+                }
+                else{
+                    // Set the manifest canvases
+                    $output['sequences'][0]['canvases'][] = $temp;
+                }
             }
 
         }
@@ -72,7 +79,7 @@ function islandora_iiif__manifests_model_check(AbstractObject $object) {
     $output = array();
 
     $hooks = islandora_build_hook_list(ISLANDORA_IIIF_MANIFEST_HOOK, $object->models);
-    //echo "<pre>";print_r($hooks);die;
+
     $manifest_set = false;
     foreach ($hooks as $hook) {
         $temp = module_invoke_all($hook, $object);

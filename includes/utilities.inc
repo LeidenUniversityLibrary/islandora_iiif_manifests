@@ -47,3 +47,27 @@ function getImageInfo($object){
     return array("width"=>$imageWidth,"height"=>$imageHeight);
 }
 
+
+/**
+ * Retrieve the view direction from the book
+ */
+function getViewingDirection($object){
+
+    $page_progression = islandora_paged_content_get_page_progression($object);
+    $viewingDirection = "";
+    switch($page_progression){
+
+        case 'lr':
+            $viewingDirection = "left-to-right";
+            break;
+
+        case 'rl':
+            $viewingDirection = "right-to-left";
+            break;
+    }
+
+    return $viewingDirection;
+
+}
+
+

@@ -186,7 +186,7 @@ function islandora_iiif_manifests_islandora_pageCModel_islandora_get_iiif_manife
  */
 function islandora_iiif_manifests_islandora_newspaperCModel_islandora_get_iiif_manifest($object) {
 
-    module_load_include('inc', 'islandora_iiif_manifests', 'includes/models/newspaper');
+    module_load_include('inc', 'islandora_iiif_manifests', 'includes/models/newspaper_collection');
     $array = islandora_iiif_manifest_create_newspaper_manifest($object);
 
     //dpm( $object,"book");
@@ -198,6 +198,20 @@ function islandora_iiif_manifests_islandora_newspaperCModel_islandora_get_iiif_m
  * Implements hook_CMODEL_PID_islandora_get_iiif_manifest().
  */
 function islandora_iiif_manifests_islandora_newspaperIssueCModel_islandora_get_iiif_manifest($object) {
+
+    module_load_include('inc', 'islandora_iiif_manifests', 'includes/models/issue');
+    $array = islandora_iiif_manifest_create_issue_manifest($object);
+
+    //dpm( $object,"book");
+
+    return $array;
+}
+
+
+/**
+ * Implements hook_CMODEL_PID_islandora_get_iiif_manifest().
+ */
+function islandora_iiif_manifests_islandora_newspaperPageCModel_islandora_get_iiif_manifest($object) {
 
     module_load_include('inc', 'islandora_iiif_manifests', 'includes/models/page');
     $array = islandora_iiif_manifest_create_page_canvas($object);
