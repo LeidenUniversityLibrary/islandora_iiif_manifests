@@ -101,6 +101,7 @@ function islandora_iiif__manifests_model_check(AbstractObject $object) {
         }
     }
 
+
     _islandora_iiif_create_manifest_response('200 OK', $output);
 }
 

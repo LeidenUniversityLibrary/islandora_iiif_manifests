@@ -25,8 +25,8 @@ function canvasHook($hook){
 function getImageInfo($object){
 
 
-    $imageWidth = 0;
-    $imageHeight = 0;
+    $imageWidth = 2000;
+    $imageHeight = 2000;
 
 
 
@@ -79,7 +79,7 @@ function json_response($status, $data = NULL) {
     drupal_add_http_header('access-control-allow-origin', '*');
     if ($data !== NULL) {
         echo json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK). "\n";;
-        //                                                                                                                                                                             print drupal_json_encode($data);
+        print drupal_json_encode($data);
     }
     exit();
 }

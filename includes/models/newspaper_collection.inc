@@ -123,7 +123,7 @@ function islandora_iiif_manifest_create_newspaper_manifest(AbstractObject $objec
     }
 
 
-    json_response('200 OK', $manifest);
+    _islandora_iiif_create_manifest_response('200 OK', $manifest);
 
 }
 

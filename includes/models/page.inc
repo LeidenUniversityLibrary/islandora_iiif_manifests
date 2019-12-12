@@ -43,8 +43,15 @@ function islandora_iiif_manifest_create_page_canvas(AbstractObject $object)
     $resource_uri = $islandora_iiif_manifest_image_uri."$object->id/full/pct:50/0/default.jpg";
     $service_uri = $islandora_iiif_manifest_image_uri."$object->id";
 
+    if(is_numeric($object->label))
+    {
+        $label = "empty";
+    }
+    else{
+        $label = $object->label;
+    }
     // Create the basic image canvas
-    $canvas = new createcanvas($canvas_uri, $object->label, $thumbnail_uri);
+    $canvas = new createcanvas($canvas_uri, $label, $thumbnail_uri);
     $canvas->setResource($resource_uri, $service_uri, $imageWidth, $imageHeight);
 
 
