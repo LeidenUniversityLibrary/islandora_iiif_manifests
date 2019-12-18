@@ -65,7 +65,6 @@ function getViewingDirection($object){
             $viewingDirection = "right-to-left";
             break;
     }
-
     return $viewingDirection;
 
 }
@@ -83,4 +82,6 @@ function json_response($status, $data = NULL) {
     }
     exit();
 }
+
+
 
