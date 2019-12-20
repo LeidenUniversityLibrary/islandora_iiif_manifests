@@ -8,11 +8,9 @@
  * This is the actual manifest building function.
  */
 function islandora_iiif_manifest_create_container_manifest(AbstractObject $object) {
-  module_load_include('inc', 'islandora_iiif_manifests', 'includes/ManifestUtils');
+  module_load_include('inc', 'islandora_iiif_manifests', 'includes/utilities');
 
-  $container = new ManifestUtils($object);
-
-  return $container->getContainer();
+  return getContainer($object);
 
 }
 
@@ -39,7 +37,7 @@ function islandora_iiif_manifests_create_manifest_json(AbstractObject $object) {
     $output = array();
 
     $hooks = islandora_build_hook_list(ISLANDORA_IIIF_MANIFEST_HOOK, $object->models);
-    //echo "<pre>";print_r($hooks);die;
+
     $manifest_set = false;
     foreach ($hooks as $hook) {
         $temp = module_invoke_all($hook, $object);

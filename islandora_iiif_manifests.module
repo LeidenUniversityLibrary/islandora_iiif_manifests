@@ -10,13 +10,6 @@
 define('ISLANDORA_IIIF_MANIFEST_HOOK', 'islandora_get_iiif_manifest');
 
 /**
- * Implements hook_init().
- */
-function islandora_iiif_init() {
-  require_once __DIR__ . "/vendor/autoload.php";
-}
-
-/**
  * Implements hook_menu().
  */
 function islandora_iiif_manifests_menu() {
@@ -27,13 +20,6 @@ function islandora_iiif_manifests_menu() {
       'file' => 'includes/manifest.inc',
       'type' => MENU_CALLBACK,
       'access callback' => TRUE,
-      ),
-      'islandora_iiif_manifests/%islandora_object/model_check' => array(
-          'page callback' => 'islandora_iiif__manifests_model_check',
-          'page arguments' => array(1),
-          'file' => 'includes/manifest.inc',
-          'type' => MENU_CALLBACK,
-          'access callback' => TRUE,
       ),
       'islandora_iiif_manifests/%islandora_object/canvas/%' => array(
           'page callback' => 'islandora_iiif_canvas_callback',
