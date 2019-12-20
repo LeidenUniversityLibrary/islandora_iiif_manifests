@@ -105,6 +105,7 @@ function getContainer($object) {
         "logo" => "https://kerkuil-a.leidenuniv.nl/iiif/ubl_logo.png",
         "attribution" => "This manifest was created from Islandora. Contact r.k.s.mwinyimbegu@library.leidenuniv.nl",
         "description" => $object->label,
+        'metadata' => array(),
         'sequences' => array ( // an array but will always be a single object in our application
             array (
                 '@type' => 'sc:Sequence',
@@ -115,12 +116,11 @@ function getContainer($object) {
     );
 
     $metadata = getMetadata($object);
-    //echo "<pre>";print_r(getMetadata($object));die;
     if (isset($metadata['manifest'])) {
+
         $scManifest = array_merge_recursive($scManifest, $metadata['manifest']);
     }
 
-    //return json_encode ( $scManifest );
     return $scManifest;
 }
 
@@ -132,59 +132,54 @@ function getMetadata($object) {
         $modsxml = $object['MODS']->content;
         $xslpath = drupal_get_path('module', 'islandora_iiif_manifests') . '/xsl/mods2manifest.xsl';
         $xsl = new DOMDocument();
-        //echo $xslpath;die;
+
         $xsl->load($xslpath);
         $mods = new DOMDocument();
         $mods->loadXML($modsxml);
         $processor = new XSLTProcessor();
         $processor->importStylesheet($xsl);
         $manifest = $processor->transformToDoc($mods);
-        $metadata = $this->xml_to_array($manifest);
+        $metadata = xml_to_array($manifest);
 
-        //echo "here";die;
     }
     return $metadata;
 }
 
 function xml_to_array($root) {
     $result = array();
-    try{
 
-        if ($root->hasAttributes()) {
-            $attrs = $root->attributes;
-            foreach ($attrs as $attr) {
-                $result['@' . $attr->name] = $attr->value;
-            }
+    if ($root->hasAttributes()) {
+        $attrs = $root->attributes;
+        foreach ($attrs as $attr) {
+            $result['@' . $attr->name] = $attr->value;
         }
-
-        if ($root->hasChildNodes()) {
-            $children = $root->childNodes;
-            if ($children->length == 1) {
-                $child = $children->item(0);
-                if ($child->nodeType == XML_TEXT_NODE) {
-                    $result['_value'] = $child->textContent;
-                    return count($result) == 1
-                        ? $result['_value']
-                        : $result;
-                }
-            }
-            $groups = array();
-            foreach ($children as $child) {
-                if (!isset($result[$child->nodeName])) {
-                    $result[$child->nodeName] = $this->xml_to_array($child);
-                } else {
-                    if (!isset($groups[$child->nodeName])) {
-                        $result[$child->nodeName] = array($result[$child->nodeName]);
-                        $groups[$child->nodeName] = 1;
-                    }
-                    $result[$child->nodeName][] = $this->xml_to_array($child);
-                }
-            }
-        }
-
-    }catch (Exception $e){
-        echo $e->getMessage(); die;
     }
+
+    if ($root->hasChildNodes()) {
+        $children = $root->childNodes;
+        if ($children->length == 1) {
+            $child = $children->item(0);
+            if ($child->nodeType == XML_TEXT_NODE) {
+                $result['_value'] = $child->textContent;
+                return count($result) == 1
+                    ? $result['_value']
+                    : $result;
+            }
+        }
+        $groups = array();
+        foreach ($children as $child) {
+            if (!isset($result[$child->nodeName])) {
+                $result[$child->nodeName] = xml_to_array($child);
+            } else {
+                if (!isset($groups[$child->nodeName])) {
+                    $result[$child->nodeName] = array($result[$child->nodeName]);
+                    $groups[$child->nodeName] = 1;
+                }
+                $result[$child->nodeName][] = xml_to_array($child);
+            }
+        }
+    }
+
 
     return $result;
 }
