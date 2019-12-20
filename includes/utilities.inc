@@ -104,7 +104,6 @@ function getContainer($object) {
         'label' => $object->label,
         "logo" => "https://kerkuil-a.leidenuniv.nl/iiif/ubl_logo.png",
         "attribution" => "This manifest was created from Islandora. Contact r.k.s.mwinyimbegu@library.leidenuniv.nl",
-        "description" => $object->label,
         'metadata' => array(),
         'sequences' => array ( // an array but will always be a single object in our application
             array (

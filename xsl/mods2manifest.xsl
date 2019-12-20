@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0"
-	xmlns:xlink="http://www.w3.org/1999/xlink" 
+	xmlns:xlink="http://www.w3.org/1999/xlink"
 	xmlns:mods="http://www.loc.gov/mods/v3"	
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 	exclude-result-prefixes="mods xlink">
@@ -120,11 +120,11 @@
     </xsl:call-template>
   </xsl:template>
 
-  <xsl:template match="/mods:mods/mods:abstract[1]">
+  <xsl:template match="/mods:mods/mods:abstract[not(@type='Scope and content')][not(@type='Abstract')][1]">
     <xsl:call-template name="metadata">
       <xsl:with-param name="label">Abstract</xsl:with-param>
       <xsl:with-param name="firstvalue" select="."/>
-      <xsl:with-param name="values" select="../mods:abstract"/>
+      <xsl:with-param name="values" select="../mods:abstract[not(@type='Scope and content')]"/>
     </xsl:call-template>
   </xsl:template>
 
@@ -240,6 +240,15 @@
     </xsl:call-template>
   </xsl:template>
 
+  <xsl:template match="/mods:mods/mods:abstract[@type='Abstract'][1]">
+    <description>
+      <xsl:for-each select="../mods:abstract[@type='Abstract']">
+        <xsl:value-of select="normalize-space(text())"/>
+        <xsl:value-of select="' '"/>
+      </xsl:for-each>
+    </description>
+  </xsl:template>
+
   <xsl:template match="/mods:mods/mods:accessCondition[@type='use and reproduction']">
     <license><xsl:value-of select="@xlink:href"/></license>
   </xsl:template>
@@ -296,6 +305,6 @@
           </xsl:otherwise>
         </xsl:choose>
       </metadata>
-    </xsl:if> 
+    </xsl:if>
   </xsl:template>
 </xsl:stylesheet>
