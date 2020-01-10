@@ -244,8 +244,9 @@ function islandora_iiif_manifests_detail_tools_block_view() {
       drupal_add_css($modpath . '/css/iiif_menu.css');
       drupal_add_js($modpath . '/js/iiif_menu.js');
 
+      $manifestkey = (count(array_intersect($obj->models, array('islandora:newspaperCModel', 'islandora:collectionCModel'))) > 0) ? "collection" : "manifest";
       $manifest_url = url('/islandora_iiif_manifests/' . $obj->id . '/manifest', array('absolute' => TRUE));
-      $mirador_url = url('https://kerkuil-a.leidenuniv.nl/mirador/', array('external' => TRUE, 'query' => array('manifest' => $manifest_url)));
+      $mirador_url = url('https://kerkuil-a.leidenuniv.nl/mirador/', array('external' => TRUE, 'query' => array($manifestkey => $manifest_url)));
 
       $additional = '<DIV class="iiif-additional">';
       $additional .= '<DIV class="menu">';
