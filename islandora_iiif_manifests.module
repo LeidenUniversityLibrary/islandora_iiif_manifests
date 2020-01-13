@@ -230,9 +230,9 @@ function islandora_iiif_manifests_detail_tools_block_view() {
 
   if (arg(1) == 'object' && islandora_is_valid_pid(arg(2))) {
     $obj = islandora_object_load(arg(2));
-
+    
     $show_menu = FALSE;
-    $cmodels = array('islandora:sp_basic_image', 'islandora:sp_large_image_cmodel', 'islandora:bookCModel', 'islandora:newspaperCModel', 'islandora:collectionCModel');
+    $cmodels = array('islandora:sp_basic_image', 'islandora:sp_large_image_cmodel', 'islandora:bookCModel', 'islandora:newspaperCModel', 'islandora:collectionCModel','islandora:newspaperIssueCModel');
     if (count(array_intersect($obj->models, $cmodels)) > 0) {
       if (islandora_object_access(ISLANDORA_VIEW_OBJECTS, $obj)) {
         $show_menu = TRUE;
