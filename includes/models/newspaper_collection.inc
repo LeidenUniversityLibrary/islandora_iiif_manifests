@@ -95,7 +95,7 @@ function islandora_iiif_manifest_create_newspaper_manifest(AbstractObject $objec
         );
 
         $type = "sc:Manifest";
-        $collection_members_collectons[] = array(
+        $collection_members_manifests[] = array(
             "@id" => $manifest_uri,
             "@type" => $type,
             "label" => $label,

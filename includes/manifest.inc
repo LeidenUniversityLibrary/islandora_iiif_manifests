@@ -10,9 +10,7 @@
 function islandora_iiif_manifest_create_container_manifest(AbstractObject $object) {
   module_load_include('inc', 'islandora_iiif_manifests', 'includes/utilities');
 
-  $container = new ManifestUtils($object);
-
-  return $container->getContainer();
+  return getContainer($object);
 
 }
 
