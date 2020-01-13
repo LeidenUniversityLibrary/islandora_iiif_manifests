@@ -119,7 +119,7 @@ function getContainer($object) {
 
         $scManifest = array_merge_recursive($scManifest, $metadata['manifest']);
     }
- 
+
     return $scManifest;
 }
 

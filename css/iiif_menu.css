@@ -1,0 +1,30 @@
+
+.item-list UL.ubl-detail-tools LI {
+  margin: 0;
+}
+DIV.iiif-additional {
+  display: none;
+  padding: 5px;
+  position: absolute;
+  min-width:300px;
+  max-width:450px;
+  background-color: #7f88ab;
+  z-index: 500;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
+}
+DIV.iiif-additional DIV.menu {
+  padding: 0 10px 0 20px;
+  margin-bottom: 30px;
+  color:white;
+}
+DIV.iiif-additional DIV.menu H3 {
+  color: white;
+  margin-top: 0.6em;
+  margin-bottom: 0.6em;
+}
+.iiifmanifest {
+  cursor: move;
+  cursor: -webkit-move;
+}

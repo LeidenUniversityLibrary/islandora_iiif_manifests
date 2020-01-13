@@ -222,3 +222,67 @@ function islandora_iiif_manifests_islandora_get_iiif_manifest($object) {
 }
 
 
+/**
+ * Implements hook_detail_tools_block_view().
+ */
+function islandora_iiif_manifests_detail_tools_block_view() {
+  $block = array();
+
+  if (arg(1) == 'object' && islandora_is_valid_pid(arg(2))) {
+    $obj = islandora_object_load(arg(2));
+
+    $show_menu = FALSE;
+    $cmodels = array('islandora:sp_basic_image', 'islandora:sp_large_image_cmodel', 'islandora:bookCModel', 'islandora:newspaperCModel', 'islandora:collectionCModel');
+    if (count(array_intersect($obj->models, $cmodels)) > 0) {
+      if (islandora_object_access(ISLANDORA_VIEW_OBJECTS, $obj)) {
+        $show_menu = TRUE;
+      }
+    }
+
+    if ($show_menu) {
+      $modpath = drupal_get_path('module', 'islandora_iiif_manifests');
+      drupal_add_css($modpath . '/css/iiif_menu.css');
+      drupal_add_js($modpath . '/js/iiif_menu.js');
+
+      $manifestkey = (count(array_intersect($obj->models, array('islandora:newspaperCModel', 'islandora:collectionCModel'))) > 0) ? "collection" : "manifest";
+      $manifest_url = url('/islandora_iiif_manifests/' . $obj->id . '/manifest', array('absolute' => TRUE));
+      $mirador_url = url('https://kerkuil-a.leidenuniv.nl/mirador/', array('external' => TRUE, 'query' => array($manifestkey => $manifest_url)));
+
+      $additional = '<DIV class="iiif-additional">';
+      $additional .= '<DIV class="menu">';
+      $additional .= '<H3>IIIF</H3>';
+      $additional .= '<DIV class="explain">';
+      $additional .= t('View and use this object outside of this site using:');
+      $additional .= '</DIV>';
+      $additional .= '<A class="iiifmanifest" href="' . $manifest_url . '" target="_blank">';
+      $additional .= '<IMG src="/' . $modpath . '/images/manifest3.png"/></A>';
+      $additional .= '&nbsp;';
+      $additional .= '<A href="' . $mirador_url . '" target="_blank"><IMG src="/' . $modpath . '/images/mirador.png"/></A>';
+      $additional .= '</DIV>';
+      $additional .= '</DIV>';
+
+      // Put this in a item list.
+      $block['list'] = array(
+        '#type' => 'ul',
+        '#attributes' => array('class' => array('dc-detail-tools', 'ubl-detail-tools')),
+        '#items' => array(
+          array(
+            'data' => l(
+              '<span>link</span><i class="fa fa-eye" aria-hidden="true"></i>',
+              $url,
+              array('attributes' => array('title' => 'IIIF'),'html' => TRUE)
+            ),
+            'weight' => 999,
+          ),
+        ),
+        '#theme' => 'item_list',
+      );
+      $block['iiifadditional'] = array(
+        '#type' => 'markup',
+        '#markup' => $additional,
+      );
+    }
+  }
+  return $block;
+}
+

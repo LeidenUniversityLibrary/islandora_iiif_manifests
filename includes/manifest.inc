@@ -114,5 +114,5 @@ function _islandora_iiif_create_manifest_response($status, $data = NULL) {
         echo json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK). "\n";;
         //                                                                                                                                                                             print drupal_json_encode($data);
     }
-    exit();
+    exit(); 
 }
