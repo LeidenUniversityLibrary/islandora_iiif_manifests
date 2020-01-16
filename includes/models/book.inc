@@ -15,31 +15,11 @@ function islandora_iiif_manifest_create_book_manifest(AbstractObject $object)
     module_load_include('inc', 'islandora_paged_content', 'includes/utilities');
 
 
-
     $viewingHint = islandora_paged_content_get_viewing_hint($object) !="" ?  islandora_paged_content_get_viewing_hint($object):"paged";
     $viewingDirection = getViewingDirection($object);
 
-
     // Manifest array
     $manifest = array();
-
-    $hooks = islandora_build_hook_list(ISLANDORA_IIIF_MANIFEST_HOOK, $object->models);
-
-    $manifest_set = false;
-    foreach ($hooks as $hook) {
-        $temp = module_invoke_all($hook, $object);
-
-        if (!empty($temp) ) {
-
-            // Check if the manifest container is set
-            if(!$manifest_set){
-                $manifest = array_merge_recursive($manifest, $temp);
-                break;
-            }
-
-        }
-    }
-
 
     // Canvases
     $canvases = array();
@@ -47,45 +27,29 @@ function islandora_iiif_manifest_create_book_manifest(AbstractObject $object)
     // Get pages
     $pages = islandora_paged_content_get_pages($object);
 
-
-    // Don't create a manifest container for the compound parts
-    $child_manifest_set = false;
-
     foreach ($pages as $page){
 
-        // Load page
+        // Get page object
         $page_object = islandora_object_load($page['pid']);
 
-        // Get the hooks to create the canvases
-        $page_hooks = islandora_build_hook_list(ISLANDORA_IIIF_MANIFEST_HOOK, $page_object->models);
-
-        foreach ($page_hooks as $page_hook) {
-
-            $temp = module_invoke_all($page_hook, $page_object);
-
-            if (!empty($temp)) {
-                // Check if the manifest container is set
-                if(!$child_manifest_set){
-                    $child_manifest_set = true;
-                }
-                else{
-                    if(canvasHook($page_hook)){
-                        // Add a canvas
-                        $canvases[] = $temp;
-                    }
-                }
-            }
-        }
+        // Add page to canvases
+        $canvases[] = getObjectCanvas($page_object);
     }
 
     //Set Presentation information
     $manifest['viewingDirection'] = $viewingDirection;
     $manifest['viewingHint'] =  $viewingHint;
 
-    // Set the canvases
-    $manifest['sequences'][0]['canvases'] = $canvases;
+    $label = convertLabel($object);
 
-    _islandora_iiif_create_manifest_response('200 OK', $manifest);
+    // Set the canvases
+    $manifest['sequences'][] = array (
+        '@type' => 'sc:Sequence',
+        'label' => $label,
+        'canvases' => $canvases
+    );
+
+    return $manifest;
 
 }
 

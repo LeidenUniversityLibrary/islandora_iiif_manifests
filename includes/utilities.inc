@@ -1,32 +1,207 @@
 <?php
 
+
 /**
- * Determine if the current hook is a canvas hook
+ * Build the manifest container
  */
-function canvasHook($hook){
+function createManifest($object) {
 
-    switch($hook){
+    $id = urldecode(url(current_path(),
+            array(
+                'absolute' => TRUE,
+                'language' => (object) array('language' => FALSE),
+            )
+        )
+    );
 
-        case 'islandora_get_iiif_manifest':
-            $canvas_hook = false;
-            break;
+    // Set manifest type
+    $manifest_type = (count(array_intersect($object->models, array('islandora:newspaperCModel', 'islandora:collectionCModel','islandora:compoundCModel'))) > 0) ? "sc:Collection" : "sc:Manifest";
 
-        case 'fedora_system_FedoraObject_3_0_islandora_get_iiif_manifest':
-            $canvas_hook = false;
-            break;
+    $label = convertLabel($object);
 
-        default:
-            $canvas_hook = true;
+    $scManifest = array (
+        '@context' => 'http://iiif.io/api/presentation/2/context.json',
+        '@id' => $id,//$this->id,
+        '@type' => $manifest_type,
+        'label' => $label,
+        "logo" => "https://kerkuil-a.leidenuniv.nl/iiif/ubl_logo.png",
+        "attribution" => "This manifest was created from Islandora. Contact r.k.s.mwinyimbegu@library.leidenuniv.nl",
+        'metadata' => array()
+    );
+
+    $metadata = getMetadata($object);
+    if (isset($metadata['manifest'])) {
+
+        $scManifest = array_merge_recursive($scManifest, $metadata['manifest']);
     }
-    return $canvas_hook;
 
+    return $scManifest;
 }
 
+/**
+ * Build the default canvas object
+ */
+function createDefaultCanvas($canvas_object){
+
+    $CanvasArray = array (
+        '@type' => 'sc:Canvas',
+        '@id' => $canvas_object['id'],
+        'label' => $canvas_object['label'] ,
+        'height' => $canvas_object['imageHeight'],
+        'width' => $canvas_object['imageWidth'],
+        'thumbnail' => array (
+            '@id' => $canvas_object['thumbnail_uri'],
+            'service' => array (
+                '@context' => 'http://iiif.io/api/image/2/context.json',
+                '@id' => $canvas_object['service_uri'] ,
+                'profile' => 'http://iiif.io/api/image/2/level2.json'
+            )
+        ),
+        'images' => array ( // always contain only one
+            array (
+                '@id' => $canvas_object['service_uri'] ,
+                '@type' => 'oa:Annotation',
+                'motivation' => 'sc:Painting',
+                'resource' => array (
+                    '@id' => $canvas_object['resource_uri'],
+                    '@type' => 'dctypes:Image',
+                    //'format' => $this->image_format,
+                    'height' => $canvas_object['imageHeight'],
+                    'width' => $canvas_object['imageWidth'],
+                    'service' => array (
+                        '@context' => 'http://iiif.io/api/image/2/context.json',
+                        '@id' => $canvas_object['service_uri'] ,
+                        'profile' => 'http://iiif.io/api/image/2/level2.json'
+                    )
+                ),
+                'on' =>$canvas_object['id'],
+            )
+        )
+    );
+
+    return $CanvasArray;
+}
+
+/**
+ * Build the page specific canvas object
+ */
+function getObjectCanvas($object){
+
+    $image_info = getImageInfo($object);
+
+    $id = urldecode(url("islandora_iiif_manifests/{$object->id}/canvas/default", array(
+        'absolute' => TRUE,
+        'language' => (object) array('language' => FALSE),
+    )));
+
+    $label = convertLabel($object);
+
+    $canvas_object = array();
+    $canvas_object['id'] = $id;
+    $canvas_object['label'] = $label;
+    $canvas_object['thumbnail_uri'] = $image_info['thumbnail_uri'];
+    $canvas_object['resource_uri'] = $image_info['resource_uri'];
+    $canvas_object['service_uri'] = $image_info['service_uri'];
+    $canvas_object['imageWidth']  = $image_info['imageWidth'];
+    $canvas_object['imageHeight'] = $image_info['imageHeight'];
+
+    $canvas = createDefaultCanvas($canvas_object);
+
+    return $canvas;
+}
+
+function getObjectCollection($object){
+
+    $collection_item = array();
+
+    $models = $object->models;
+
+    $manifest_uri = urldecode(url("islandora_iiif_manifests/{$object->id}/manifest", array(
+        'absolute' => TRUE,
+        'language' => (object) array('language' => FALSE),
+    )));
+
+    $manifest_type = (count(array_intersect($models, array('islandora:newspaperCModel', 'islandora:collectionCModel','islandora:compoundCModel'))) > 0) ? "sc:Collection" : "sc:Manifest";
+
+    $collection_item['type'] = $manifest_type;
+    $label = convertLabel($object);
+
+    $collection_item['object'] = array(
+        "@id" => $manifest_uri,
+        "@type" => $manifest_type,
+        "label" => $label,
+    );
+
+    return $collection_item;
+}
+
+/**
+ * Convert numeric label to a string
+ */
+function convertLabel($object){
+
+    if(is_numeric($object->label))
+    {
+        $label = "'".$object->label. "'";
+    }
+    else{
+        $label = $object->label;
+    }
+
+    return $label;
+}
+
+/**
+ * Retrieve object metadata
+ */
+function getMetadata($object) {
+
+    $metadata = array();
+    if (isset($object['MODS'])) {
+        $modsxml = $object['MODS']->content;
+        $xslpath = drupal_get_path('module', 'islandora_iiif_manifests') . '/xsl/mods2manifest.xsl';
+        $xsl = new DOMDocument();
+
+        $xsl->load($xslpath);
+        $mods = new DOMDocument();
+        $mods->loadXML($modsxml);
+        $processor = new XSLTProcessor();
+        $processor->importStylesheet($xsl);
+        $manifest = $processor->transformToDoc($mods);
+        $metadata = xml_to_array($manifest);
+
+    }
+    return $metadata;
+}
+
+/**
+ * Retrieve the image width and height
+ */
 function getImageInfo($object){
 
 
-    $imageWidth = 2000;
-    $imageHeight = 2000;
+    module_load_include('inc', 'islandora_handle', 'includes/handle');
+
+
+    $handler_class = islandora_handle_retrieve_selected_handler();
+    $handler = new $handler_class($object);
+    $handle = $handler->getFullHandle($object);
+
+    $handle_data = explode("/", $handle);
+    $object_handle = "/".$handle_data[0]."%2F".$handle_data[1];
+
+    $imageArray = array();
+
+    $islandora_iiif_manifest_image_uri = url(variable_get('islandora_iiif_manifests_image_uri', 'https://iiif-a.issc.leidenuniv.nl/iiif/2').$object_handle,
+        array(
+            'absolute' => TRUE,
+            'language' => (object) array('language' => FALSE),
+        )
+    );
+
+    $imageArray['thumbnail_uri'] = $islandora_iiif_manifest_image_uri."/full/80,/0/default.jpg";
+    $imageArray['resource_uri'] = $islandora_iiif_manifest_image_uri."/full/pct:50/0/default.jpg";
+    $imageArray['service_uri'] = $islandora_iiif_manifest_image_uri;
 
 
 
@@ -37,16 +212,32 @@ function getImageInfo($object){
         $json  = json_encode($xml);
         $tech_md = json_decode($json, true);
 
+        if(isset($tech_md['metadata']['image']['imageWidth'])){
+            // Set width and height
+            $imageArray['imageWidth']  = $tech_md['metadata']['image']['imageWidth'];
+            $imageArray['imageHeight'] = $tech_md['metadata']['image']['imageHeight'];
+        }
+        else{
+            // Retrieve image width and height using the islandora_handled_access module
+            $full_image_size_url = url("islandora/handled_access/{$handle}/{$object->id}/image/view", array('absolute' => TRUE));
+            list($width, $height, $mimetype, $attr) = getimagesize($full_image_size_url);
 
-        // Set width and height
-        $imageWidth = $tech_md['metadata']['image']['imageWidth'];
-        $imageHeight = $tech_md['metadata']['image']['imageHeight'];
+            $imageArray['imageWidth']  = $width;
+            $imageArray['imageHeight'] = $height;
+        }
+
     }
+    else{
 
+        // Retrieve image width and height using the islandora_handled_access module
+        $full_image_size_url = url("islandora/handled_access/{$handle}/{$object->id}/image/view", array('absolute' => TRUE));
+        list($width, $height, $mimetype, $attr) = getimagesize($full_image_size_url);
 
-    return array("width"=>$imageWidth,"height"=>$imageHeight);
+        $imageArray['imageWidth']  = $width;
+        $imageArray['imageHeight'] = $height;
+    }
+    return $imageArray;
 }
-
 
 /**
  * Retrieve the view direction from the book
@@ -67,81 +258,6 @@ function getViewingDirection($object){
     }
     return $viewingDirection;
 
-}
-
-/**
- * Helper function to write out a JSON response.
- */
-function json_response($status, $data = NULL) {
-    drupal_add_http_header('Status', $status);
-    drupal_add_http_header('Content-Type', 'application/json; charset=utf-8');
-    drupal_add_http_header('access-control-allow-origin', '*');
-    if ($data !== NULL) {
-        echo json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK). "\n";;
-        print drupal_json_encode($data);
-    }
-    exit();
-}
-
-/**
- * Build the manifest container
- */
-
-function getContainer($object) {
-
-    $id = urldecode(url(current_path(),
-            array(
-                'absolute' => TRUE,
-                'language' => (object) array('language' => FALSE),
-            )
-        )
-    );
-
-    $scManifest = array (
-        '@context' => 'http://iiif.io/api/presentation/2/context.json',
-        '@id' => $id,//$this->id,
-        '@type' => 'sc:Manifest',
-        'label' => $object->label,
-        "logo" => "https://kerkuil-a.leidenuniv.nl/iiif/ubl_logo.png",
-        "attribution" => "This manifest was created from Islandora. Contact r.k.s.mwinyimbegu@library.leidenuniv.nl",
-        'metadata' => array(),
-        'sequences' => array ( // an array but will always be a single object in our application
-            array (
-                '@type' => 'sc:Sequence',
-                'label' => $object->label,
-                'canvases' => array()
-            )
-        )
-    );
-
-    $metadata = getMetadata($object);
-    if (isset($metadata['manifest'])) {
-
-        $scManifest = array_merge_recursive($scManifest, $metadata['manifest']);
-    }
-
-    return $scManifest;
-}
-
-
-function getMetadata($object) {
-
-    $metadata = array();
-    if (isset($object['MODS'])) {
-        $modsxml = $object['MODS']->content;
-        $xslpath = drupal_get_path('module', 'islandora_iiif_manifests') . '/xsl/mods2manifest.xsl';
-        $xsl = new DOMDocument();
-
-        $xsl->load($xslpath);
-        $mods = new DOMDocument();
-        $mods->loadXML($modsxml);
-        $processor = new XSLTProcessor();
-        $processor->importStylesheet($xsl);
-        $manifest = $processor->transformToDoc($mods);
-        $metadata = xml_to_array($manifest);
-
-    }
-    return $metadata;
 }
 
 function xml_to_array($root) {
