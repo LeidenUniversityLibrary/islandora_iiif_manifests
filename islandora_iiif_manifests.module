@@ -5,6 +5,7 @@
  */
 
 define('ISLANDORA_IIIF_MANIFESTS_ISLANDORA_IIIF_MANIFEST_HOOK', 'islandora_get_iiif_manifest');
+define('ISLANDORA_IIIF_MANIFESTS_ISLANDORA_IIIF_MANIFEST_CANVAS_HOOK', 'islandora_get_iiif_manifest_canvas');
 
 /**
  * Implements hook_menu().
@@ -19,7 +20,7 @@ function islandora_iiif_manifests_menu() {
       'access callback' => TRUE,
     ),
     'islandora_iiif_manifests/%islandora_object/canvas' => array(
-      'page callback' => 'islandora_iiif__manifests_create_canvas_json',
+      'page callback' => 'islandora_iiif_manifests_create_canvas_json',
       'page arguments' => array(1),
       'file' => 'includes/manifest.inc',
       'type' => MENU_CALLBACK,
@@ -144,12 +145,22 @@ function islandora_iiif_manifests_islandora_newspaperPageCModel_islandora_get_ii
  */
 function islandora_iiif_manifests_islandora_get_iiif_manifest($object) {
 
-  module_load_include('inc', 'islandora_iiif_manifests', 'includes/manifest');
-  $manifest_container = islandora_iiif_manifest_create_container_manifest($object);
+  module_load_include('inc', 'islandora_iiif_manifests', 'includes/utilities');
+  $manifest_container = createManifest($object);
 
   return $manifest_container;
 }
 
+/**
+ * Creates the manifest container.
+ */
+function islandora_iiif_manifests_islandora_get_iiif_manifest_canvas($object) {
+
+  module_load_include('inc', 'islandora_iiif_manifests', 'includes/utilities');
+  $canvas_container = getObjectCanvas($object);
+
+  return $canvas_container;
+}
 
 /**
  * Implements hook_detail_tools_block_view().

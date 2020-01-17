@@ -1,6 +1,5 @@
 <?php
 
-
 /**
  * @file
  */
@@ -22,7 +21,6 @@ function islandora_iiif_manifest_create_issue_manifest(AbstractObject $object) {
   // Get pages
   $pages = islandora_paged_content_get_pages($object);
 
-
   $viewingHint = islandora_paged_content_get_viewing_hint($object) != "" ? islandora_paged_content_get_viewing_hint($object) : "paged";
   $viewingDirection = getViewingDirection($object);
 
@@ -35,11 +33,9 @@ function islandora_iiif_manifest_create_issue_manifest(AbstractObject $object) {
     $canvases[] = getObjectCanvas($page_object);
   }
 
-
   //Set Presentation information
   $manifest['viewingDirection'] = $viewingDirection;
   $manifest['viewingHint'] = $viewingHint;
-
 
   $label = convertLabel($object);
 

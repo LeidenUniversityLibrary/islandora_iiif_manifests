@@ -4,8 +4,7 @@
 /**
  * Build the manifest container
  */
-function createManifest($object)
-{
+function createManifest($object) {
 
   $id = urldecode(url(current_path(),
       array(
@@ -50,8 +49,7 @@ function createManifest($object)
  * Returns the appropriate manifest type for the compound.
  * If the compound only consists out of basic and large image, display the compound as a manifest.
  */
-function compoundManifestType($object)
-{
+function compoundManifestType($object) {
 
   // Get compound parts
   $parts = islandora_compound_object_get_parts($object->id);
@@ -72,8 +70,7 @@ function compoundManifestType($object)
 /**
  * Build the default canvas object
  */
-function createDefaultCanvas($canvas_object)
-{
+function createDefaultCanvas($canvas_object) {
 
   $CanvasArray = array(
     '@type' => 'sc:Canvas',
@@ -117,8 +114,7 @@ function createDefaultCanvas($canvas_object)
 /**
  * Build the page specific canvas object
  */
-function getObjectCanvas($object)
-{
+function getObjectCanvas($object) {
 
   $image_info = getImageInfo($object);
 
@@ -143,8 +139,7 @@ function getObjectCanvas($object)
   return $canvas;
 }
 
-function getObjectCollection($object)
-{
+function getObjectCollection($object) {
 
   $collection_item = array();
 
@@ -176,10 +171,19 @@ function getObjectCollection($object)
   return $collection_item;
 }
 
-function allowedCModel($object)
-{
+function allowedCModel($object) {
 
   $cmodels = array('islandora:sp_basic_image', 'islandora:sp_large_image_cmodel', 'islandora:bookCModel', 'islandora:newspaperCModel', 'islandora:collectionCModel', 'islandora:newspaperIssueCModel', 'islandora:compoundCModel');
+
+  if (count(array_intersect($object->models, $cmodels)) > 0) {
+    return true;
+  }
+  return false;
+}
+
+function allowedCanvasCModel($object) {
+
+  $cmodels = array('islandora:sp_basic_image', 'islandora:sp_large_image_cmodel', 'islandora:pageCModel', 'islandora:newspaperIssueCModel');
 
   if (count(array_intersect($object->models, $cmodels)) > 0) {
     return true;
@@ -190,8 +194,7 @@ function allowedCModel($object)
 /**
  * Convert numeric label to a string
  */
-function convertLabel($object)
-{
+function convertLabel($object) {
 
   if (is_numeric($object->label)) {
     $label = "'" . $object->label . "'";
@@ -205,8 +208,7 @@ function convertLabel($object)
 /**
  * Retrieve object metadata
  */
-function getMetadata($object)
-{
+function getMetadata($object) {
 
   $metadata = array();
   if (isset($object['MODS'])) {
@@ -229,27 +231,24 @@ function getMetadata($object)
 /**
  * Retrieve the image width and height
  */
-function getImageInfo($object)
-{
-
+function getImageInfo($object) {
 
   module_load_include('inc', 'islandora_handle', 'includes/handle');
-
 
   $handler_class = islandora_handle_retrieve_selected_handler();
   $handler = new $handler_class($object);
   $handle = $handler->getFullHandle($object);
 
-  // Get the Handle
-  $handle_admin = variable_get('islandora_iiif_manifests_object_handle', 'hdl:1887.a');
-
-  $handle_data = explode("/", $handle);
-  //$object_handle = "/".$handle_data[0]."%2F".$handle_data[1];
-  $object_handle = "/" . $handle_admin . "%2F" . $handle_data[1];
+  if (TRUE) {
+    $handle_data = explode("/", $handle);
+    $handle_admin = variable_get('islandora_iiif_manifests_object_handle', '1887.a');
+    $handle = $handle_admin . "/" . $handle_data[1];
+  }
+  $encoded_handle = urlencode($handle);
 
   $imageArray = array();
 
-  $islandora_iiif_manifest_image_uri = url(variable_get('islandora_iiif_manifests_image_uri', 'https://iiif-a.issc.leidenuniv.nl/iiif/2') . $object_handle,
+  $islandora_iiif_manifest_image_uri = url(variable_get('islandora_iiif_manifests_image_uri', 'https://iiif-a.issc.leidenuniv.nl/iiif/2') . "/" . $encoded_handle,
     array(
       'absolute' => TRUE,
       'language' => (object)array('language' => FALSE),
@@ -274,7 +273,7 @@ function getImageInfo($object)
       $imageArray['imageHeight'] = $tech_md['metadata']['image']['imageHeight'];
     } else {
       // Retrieve image width and height using the islandora_handled_access module
-      $full_image_size_url = url("islandora/handled_access/{$handle}/{$object->id}/image/view", array('absolute' => TRUE));
+      $full_image_size_url = url("islandora/handled_access/{$encoded_handle}/image/view", array('absolute' => TRUE));
       list($width, $height, $mimetype, $attr) = getimagesize($full_image_size_url);
 
       $imageArray['imageWidth'] = $width;
@@ -284,7 +283,7 @@ function getImageInfo($object)
   } else {
 
     // Retrieve image width and height using the islandora_handled_access module
-    $full_image_size_url = url("islandora/handled_access/{$handle}/{$object->id}/image/view", array('absolute' => TRUE));
+    $full_image_size_url = url("islandora/handled_access/{$encoded_handle}/image/view", array('absolute' => TRUE));
     list($width, $height, $mimetype, $attr) = getimagesize($full_image_size_url);
 
     $imageArray['imageWidth'] = $width;
@@ -296,8 +295,7 @@ function getImageInfo($object)
 /**
  * Retrieve the view direction from the book
  */
-function getViewingDirection($object)
-{
+function getViewingDirection($object) {
 
   $page_progression = islandora_paged_content_get_page_progression($object);
   $viewingDirection = "";
@@ -315,8 +313,7 @@ function getViewingDirection($object)
 
 }
 
-function xml_to_array($root)
-{
+function xml_to_array($root) {
   $result = array();
 
   if ($root->hasAttributes()) {
@@ -353,6 +350,19 @@ function xml_to_array($root)
 
 
   return $result;
+}
+
+/**
+ * Helper function to write out a JSON response.
+ */
+function islandora_iiif_manifests_create_json_response($status, $data = NULL) {
+  drupal_add_http_header('Status', $status);
+  drupal_add_http_header('Content-Type', 'application/json; charset=utf-8');
+  drupal_add_http_header('access-control-allow-origin', '*');
+  if ($data !== NULL) {
+    echo $data;
+  }
+  exit();
 }
 
 

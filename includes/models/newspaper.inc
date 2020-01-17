@@ -15,19 +15,6 @@ function islandora_iiif_manifest_create_newspaper_manifest(AbstractObject $objec
     module_load_include('inc', 'islandora_paged_content', 'includes/utilities');
     module_load_include('inc', 'islandora_newspaper', 'includes/utilities');
 
-    // Get the Handle
-    $handle = variable_get('islandora_iiif_manifests_object_handle', 'hdl:1887.a');
-
-    // Set the handle ready for URL
-    $object_handle = "/".$handle."%2F";
-
-    $islandora_iiif_manifest_image_uri = url(variable_get('islandora_iiif_manifests_image_uri', 'https://iiif-a.issc.leidenuniv.nl/iiif/2').$object_handle,
-        array(
-            'absolute' => TRUE,
-            'language' => (object) array('language' => FALSE),
-        )
-    );
-
 
     // Manifest array
     $manifest = array();
