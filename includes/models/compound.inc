@@ -74,5 +74,3 @@ function islandora_iiif_manifest_create_compound_manifest(AbstractObject $object
   return $manifest;
 
 }
-
->>>>>>> 65521abfae61020e1eae3a2cf065f2020ce93589
