@@ -36,7 +36,7 @@ function islandora_iiif_manifests_create_manifest_json(AbstractObject $object) {
 
     $output = array();
 
-    $hooks = islandora_build_hook_list(ISLANDORA_IIIF_MANIFEST_HOOK, $object->models);
+    $hooks = islandora_build_hook_list(ISLANDORA_IIIF_MANIFESTS_ISLANDORA_IIIF_MANIFEST_HOOK, $object->models);
     //echo "<pre>";print_r($hooks);die;
     foreach ($hooks as $hook) {
         $temp = module_invoke_all($hook, $object);
