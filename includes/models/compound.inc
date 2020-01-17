@@ -10,36 +10,69 @@
  */
 function islandora_iiif_manifest_create_compound_manifest(AbstractObject $object)
 {
-    module_load_include('inc', 'islandora', 'includes/utilities');
-    module_load_include('inc', 'islandora_iiif_manifests', 'includes/utilities');
+  module_load_include('inc', 'islandora', 'includes/utilities');
+  module_load_include('inc', 'islandora_iiif_manifests', 'includes/utilities');
 
-    // Manifest array
-    $manifest = array();
+  // Manifest array
+  $manifest = array();
 
-    // Get compound parts
-    $parts = islandora_compound_object_get_parts($object->id);
+  // Canvases
+  $canvases = array();
 
-    // collection of the manifests
-    $collection_members_members = array();
+  // Get compound parts
+  $parts = islandora_compound_object_get_parts($object->id);
 
-    foreach ($parts as $part){
+  $manifest_type = compoundManifestType($object);
 
-        // Load compound part
-        $part_object = islandora_object_load($part);
+  // collection of the manifests
+  $collection_members_members = array();
 
-        if(allowedCModel($part_object)){
+  foreach ($parts as $part) {
 
-            $collection_item = getObjectCollection($part_object);
-            $collection_members_members[] = $collection_item['object'];
-        }
+    // Load compound part
+    $part_object = islandora_object_load($part);
+
+    if (allowedCModel($part_object)) {
+
+      if ($manifest_type == "sc:Collection") {
+        $collection_item = getObjectCollection($part_object);
+        $collection_members_members[] = $collection_item['object'];
+      } elseif ($manifest_type == "sc:Manifest") {
+        // Add page to canvases
+        $canvases[] = getObjectCanvas($part_object);
+
+      }
 
     }
 
-    if (!empty( $collection_members_members)) {
-        $manifest['members'] = $collection_members_members;
+  }
+
+  if ($manifest_type == "sc:Collection") {
+    if (!empty($collection_members_members)) {
+      $manifest['members'] = $collection_members_members;
     }
+  } elseif ($manifest_type == "sc:Manifest") {
+    //Set Presentation information
+    $manifest['viewingDirection'] =   "left-to-right";
+    $manifest['viewingHint'] = "paged";
+
+    $label = convertLabel($object);
+
+    // Set the canvases
+    $manifest['sequences'][] = array(
+      '@type' => 'sc:Sequence',
+      'label' => $label,
+      'canvases' => $canvases
+    );
 
     return $manifest;
+  }
+
+
+
+
+  return $manifest;
 
 }
 
+>>>>>>> 65521abfae61020e1eae3a2cf065f2020ce93589
