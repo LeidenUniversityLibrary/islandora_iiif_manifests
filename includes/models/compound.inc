@@ -27,7 +27,7 @@ function islandora_iiif_manifest_create_compound_manifest(AbstractObject $object
         // Load compound part
         $part_object = islandora_object_load($part);
 
-        if(availableCModel($part_object)){
+        if(allowedCModel($part_object)){
 
             $collection_item = getObjectCollection($part_object);
             $collection_members_members[] = $collection_item['object'];

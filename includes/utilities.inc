@@ -135,7 +135,7 @@ function getObjectCollection($object){
     return $collection_item;
 }
 
-function availableCModel($object){
+function allowedCModel($object){
 
     $cmodels = array('islandora:sp_basic_image', 'islandora:sp_large_image_cmodel', 'islandora:bookCModel', 'islandora:newspaperCModel', 'islandora:collectionCModel','islandora:newspaperIssueCModel');
 
