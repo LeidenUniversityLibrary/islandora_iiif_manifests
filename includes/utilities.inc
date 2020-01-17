@@ -50,18 +50,19 @@ function createManifest($object)
  * Returns the appropriate manifest type for the compound.
  * If the compound only consists out of basic and large image, display the compound as a manifest.
  */
-function compoundManifestType($object) {
+function compoundManifestType($object)
+{
 
   // Get compound parts
   $parts = islandora_compound_object_get_parts($object->id);
 
   $arrayPartsCModel = array();
 
-  foreach ($parts as $part){
+  foreach ($parts as $part) {
 
     // Load compound part
     $part_object = islandora_object_load($part);
-    $arrayPartsCModel = array_merge($arrayPartsCModel,$part_object->models);
+    $arrayPartsCModel = array_merge($arrayPartsCModel, $part_object->models);
   }
 
   $manifest_type = (count(array_intersect($arrayPartsCModel, array('islandora:bookCModel', 'islandora:newspaperCModel', 'islandora:collectionCModel', 'islandora:newspaperIssueCModel', 'islandora:compoundCModel'))) > 0) ? "sc:Collection" : "sc:Manifest";
@@ -154,7 +155,14 @@ function getObjectCollection($object)
     'language' => (object)array('language' => FALSE),
   )));
 
-  $manifest_type = (count(array_intersect($models, array('islandora:newspaperCModel', 'islandora:collectionCModel', 'islandora:compoundCModel'))) > 0) ? "sc:Collection" : "sc:Manifest";
+  if ((count(array_intersect($object->models, array('islandora:compoundCModel'))) > 0)) {
+
+    $manifest_type = compoundManifestType($object);
+
+  } else {
+    // Set manifest type
+    $manifest_type = (count(array_intersect($object->models, array('islandora:newspaperCModel', 'islandora:collectionCModel', 'islandora:compoundCModel'))) > 0) ? "sc:Collection" : "sc:Manifest";
+  }
 
   $collection_item['type'] = $manifest_type;
   $label = convertLabel($object);
