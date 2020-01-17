@@ -27,9 +27,12 @@ function islandora_iiif_manifest_create_compound_manifest(AbstractObject $object
         // Load compound part
         $part_object = islandora_object_load($part);
 
-        $collection_item = getObjectCollection($part_object);
+        if(availableCModel($part_object)){
 
-        $collection_members_members[] = $collection_item['object'];
+            $collection_item = getObjectCollection($part_object);
+            $collection_members_members[] = $collection_item['object'];
+        }
+
     }
 
     if (!empty( $collection_members_members)) {
