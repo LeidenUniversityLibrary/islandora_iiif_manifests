@@ -53,7 +53,7 @@ function islandora_iiif_manifest_create_compound_manifest(AbstractObject $object
     }
   } elseif ($manifest_type == "sc:Manifest") {
     //Set Presentation information
-    $manifest['viewingDirection'] =   "left-to-right";
+    $manifest['viewingDirection'] = "left-to-right";
     $manifest['viewingHint'] = "paged";
 
     $label = convertLabel($object);
@@ -67,8 +67,6 @@ function islandora_iiif_manifest_create_compound_manifest(AbstractObject $object
 
     return $manifest;
   }
-
-
 
 
   return $manifest;

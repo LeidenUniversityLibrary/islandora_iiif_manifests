@@ -7,7 +7,8 @@
 /**
  * This is the actual manifest building function.
  */
-function islandora_iiif_manifest_create_container_manifest(AbstractObject $object) {
+function islandora_iiif_manifest_create_container_manifest(AbstractObject $object)
+{
   module_load_include('inc', 'islandora_iiif_manifests', 'includes/utilities');
 
   return createManifest($object);
@@ -32,43 +33,43 @@ function islandora_iiif_manifest_create_container_manifest(AbstractObject $objec
 
 function islandora_iiif_manifests_create_manifest_json(AbstractObject $object) {
 
-    module_load_include('inc', 'islandora', 'includes/utilities');
+  module_load_include('inc', 'islandora', 'includes/utilities');
 
-    $output = array();
+  $output = array();
 
-    $hooks = islandora_build_hook_list(ISLANDORA_IIIF_MANIFESTS_ISLANDORA_IIIF_MANIFEST_HOOK, $object->models);
-    //echo "<pre>";print_r($hooks);die;
-    foreach ($hooks as $hook) {
-        $temp = module_invoke_all($hook, $object);
+  $hooks = islandora_build_hook_list(ISLANDORA_IIIF_MANIFESTS_ISLANDORA_IIIF_MANIFEST_HOOK, $object->models);
+  //echo "<pre>";print_r($hooks);die;
+  foreach ($hooks as $hook) {
+    $temp = module_invoke_all($hook, $object);
 
-        if (!empty($temp)) {
-            $output = array_merge_recursive($output, $temp);
-        }
+    if (!empty($temp)) {
+      $output = array_merge_recursive($output, $temp);
     }
+  }
 
-    _islandora_iiif_create_manifest_response('200 OK', $output);
+  _islandora_iiif_create_manifest_response('200 OK', $output);
 }
 
 
 function islandora_iiif__manifests_create_canvas_json(AbstractObject $object) {
 
-    module_load_include('inc', 'islandora_iiif_manifests', 'includes/utilities');
+  module_load_include('inc', 'islandora_iiif_manifests', 'includes/utilities');
 
-    $output = getObjectCanvas($object);
+  $output = getObjectCanvas($object);
 
-    _islandora_iiif_create_manifest_response('200 OK', $output);
+  _islandora_iiif_create_manifest_response('200 OK', $output);
 }
 
 /**
  * Helper function to write out a JSON response.
  */
 function _islandora_iiif_create_manifest_response($status, $data = NULL) {
-    drupal_add_http_header('Status', $status);
-    drupal_add_http_header('Content-Type', 'application/json; charset=utf-8');
-    drupal_add_http_header('access-control-allow-origin', '*');
-    if ($data !== NULL) {
-        echo json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK). "\n";;
-        //                                                                                                                                                                             print drupal_json_encode($data);
-    }
-    exit(); 
+  drupal_add_http_header('Status', $status);
+  drupal_add_http_header('Content-Type', 'application/json; charset=utf-8');
+  drupal_add_http_header('access-control-allow-origin', '*');
+  if ($data !== NULL) {
+    echo json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK) . "\n";;
+    //                                                                                                                                                                             print drupal_json_encode($data);
+  }
+  exit();
 }
