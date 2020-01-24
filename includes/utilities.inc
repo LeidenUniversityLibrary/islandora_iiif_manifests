@@ -365,7 +365,9 @@ function islandora_iiif_manifests_create_json_response($status, $data = NULL) {
   exit();
 }
 
-
+/**
+ * Create IIIF manifest datastream.
+ */
 function islandora_iiif_manifests_add_manifest_datastream($object,$manifest){
   $dsid = 'IIIF';
   // Before we do anything, check if the datastream exists. If it does, load it; otherwise construct it.
