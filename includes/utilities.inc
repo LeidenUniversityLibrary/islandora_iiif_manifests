@@ -366,4 +366,20 @@ function islandora_iiif_manifests_create_json_response($status, $data = NULL) {
 }
 
 
+function islandora_iiif_manifests_add_manifest_datastream($object,$manifest){
+  $dsid = 'IIIF';
+  // Before we do anything, check if the datastream exists. If it does, load it; otherwise construct it.
+  // The easiest way to do this, as opposed to a string of cases or if/then/elses, is the ternary operator, e.g.
+  $datastream = isset($object[$dsid]) ? $object[$dsid] : $object->constructDatastream($dsid);
+
+  $datastream->label = 'IIIF Manifest';
+  $datastream->mimeType = 'application/json';
+  $datastream->setContentFromString($manifest);
+  // Ingest the datastream if it isn't yet.
+  if (!isset($object['IIIF'])) {
+    $object->ingestDatastream($datastream);
+  }
+}
+
+
 
