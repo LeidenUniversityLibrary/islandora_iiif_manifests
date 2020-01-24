@@ -72,4 +72,3 @@ function islandora_iiif_manifest_create_compound_manifest(AbstractObject $object
   return $manifest;
 
 }
-

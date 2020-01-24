@@ -166,6 +166,9 @@ function islandora_iiif_manifests_islandora_get_iiif_manifest_canvas($object) {
  * Implements hook_detail_tools_block_view().
  */
 function islandora_iiif_manifests_detail_tools_block_view() {
+  module_load_include('inc', 'islandora', 'includes/utilities');
+  module_load_include('inc', 'islandora_iiif_manifests', 'includes/utilities');
+
   $block = array();
 
   if (arg(1) == 'object' && islandora_is_valid_pid(arg(2))) {

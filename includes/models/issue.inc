@@ -48,6 +48,3 @@ function islandora_iiif_manifest_create_issue_manifest(AbstractObject $object) {
 
   return $manifest;
 }
-
-
-
