@@ -175,12 +175,7 @@ function islandora_iiif_manifests_detail_tools_block_view() {
   if (arg(1) == 'object' && islandora_is_valid_pid(arg(2))) {
     $obj = islandora_object_load(arg(2));
 
-    $show_menu = FALSE;
-    if (allowedCModel($obj)) {
-      if (islandora_object_access(ISLANDORA_VIEW_OBJECTS, $obj)) {
-        $show_menu = TRUE;
-      }
-    }
+    $show_menu = isset($obj[ISLANDORA_IIIF_MANIFESTS_DATASTREAM_ID]);
 
     if ($show_menu) {
       $modpath = drupal_get_path('module', 'islandora_iiif_manifests');
