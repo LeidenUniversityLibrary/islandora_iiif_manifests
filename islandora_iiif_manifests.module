@@ -14,7 +14,7 @@ define('ISLANDORA_IIIF_MANIFESTS_DATASTREAM_ID', 'MANIFEST');
 function islandora_iiif_manifests_menu() {
   return array(
     'islandora_iiif_manifests/%islandora_object/manifest' => array(
-      'page callback' => 'islandora_iiif_manifests_create_manifest_json',
+      'page callback' => 'islandora_iiif_manifests_view_manifest_json',
       'page arguments' => array(1),
       'file' => 'includes/manifest.inc',
       'type' => MENU_CALLBACK,
