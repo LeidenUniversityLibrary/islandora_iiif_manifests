@@ -30,7 +30,7 @@ jQuery(document).ready(function() {
     var iiifUrl = $iiifbutton.find('IMG').attr('src');
 
     if (typeof iiifUrl === 'string' && iiifUrl.length > 0 && typeof iiifManifest === 'string' && iiifManifest.length > 0) {
-      $metadataTable.find('TBODY').append('<TR><TH>IIIF manifest</TH><TD class="iiifmanifest"><A href="' + iiifManifest + '" target="_blank"><IMG src="' + iiifUrl + '"/>' + iiifManifest + '</A></TD></TR>');
+      $metadataTable.find('TBODY').append('<TR><TH>IIIF manifest</TH><TD class="iiifmanifest"><A href="' + iiifManifest + '" target="_blank"><IMG src="' + iiifUrl + '"/> manifest</A></TD></TR>');
     }
   }
 })
