@@ -31,7 +31,6 @@ function createManifest($object) {
     '@type' => $manifest_type,
     'label' => $label,
     "logo" => "https://kerkuil-a.leidenuniv.nl/iiif/ubl_logo.png",
-    "attribution" => "This manifest was created from Islandora. Contact r.k.s.mwinyimbegu@library.leidenuniv.nl",
     'metadata' => array()
   );
 
