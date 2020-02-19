@@ -31,7 +31,7 @@ function createManifest($object) {
     '@type' => $manifest_type,
     'label' => $label,
     "logo" => "https://kerkuil-a.leidenuniv.nl/iiif/ubl_logo.png",
-    "attribution" => "This manifest was created from Islandora. Contact r.k.s.mwinyimbegu@library.leidenuniv.nl",
+    "attribution" => "Leiden University Libraries",
     'metadata' => array()
   );
 
@@ -175,10 +175,22 @@ function allowedCModel($object) {
 
   $cmodels = array('islandora:sp_basic_image', 'islandora:sp_large_image_cmodel', 'islandora:bookCModel', 'islandora:newspaperCModel', 'islandora:collectionCModel', 'islandora:newspaperIssueCModel', 'islandora:compoundCModel');
 
-  if (count(array_intersect($object->models, $cmodels)) > 0) {
+  if (count(array_intersect($object->models, $cmodels)) > 0 && checkManifestDatastream($object)) {
     return true;
   }
+
   return false;
+}
+
+function checkManifestDatastream($object){
+
+  if (isset($object[ISLANDORA_IIIF_MANIFESTS_DATASTREAM_ID]) && islandora_datastream_access(ISLANDORA_VIEW_OBJECTS, $object[ISLANDORA_IIIF_MANIFESTS_DATASTREAM_ID])) {
+    return true;
+  }
+  else {
+    return false;
+  }
+
 }
 
 function allowedCanvasCModel($object) {
