@@ -178,7 +178,6 @@ function allowedCModel($object) {
   if (count(array_intersect($object->models, $cmodels)) > 0 ) {
     return true;
   }
-
   return false;
 }
 
