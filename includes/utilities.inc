@@ -197,7 +197,7 @@ function allowedCanvasCModel($object) {
 
   $cmodels = array('islandora:sp_basic_image', 'islandora:sp_large_image_cmodel', 'islandora:pageCModel', 'islandora:newspaperIssueCModel');
 
-  if (count(array_intersect($object->models, $cmodels)) > 0) {
+  if (count(array_intersect($object->models, $cmodels)) > 0 && checkManifestDatastream($object)) {
     return true;
   }
   return false;
