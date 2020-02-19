@@ -32,7 +32,7 @@ function islandora_iiif_manifest_create_compound_manifest(AbstractObject $object
     // Load compound part
     $part_object = islandora_object_load($part);
 
-    if (allowedCModel($part_object)) {
+    if (allowedCModel($part_object) && checkManifestDatastream($part_object)) {
 
       if ($manifest_type == "sc:Collection") {
         $collection_item = getObjectCollection($part_object);

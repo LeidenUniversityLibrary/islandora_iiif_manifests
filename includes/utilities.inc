@@ -175,7 +175,7 @@ function allowedCModel($object) {
 
   $cmodels = array('islandora:sp_basic_image', 'islandora:sp_large_image_cmodel', 'islandora:bookCModel', 'islandora:newspaperCModel', 'islandora:collectionCModel', 'islandora:newspaperIssueCModel', 'islandora:compoundCModel');
 
-  if (count(array_intersect($object->models, $cmodels)) > 0 && checkManifestDatastream($object)) {
+  if (count(array_intersect($object->models, $cmodels)) > 0 ) {
     return true;
   }
 
@@ -197,7 +197,7 @@ function allowedCanvasCModel($object) {
 
   $cmodels = array('islandora:sp_basic_image', 'islandora:sp_large_image_cmodel', 'islandora:pageCModel', 'islandora:newspaperIssueCModel');
 
-  if (count(array_intersect($object->models, $cmodels)) > 0 && checkManifestDatastream($object)) {
+  if (count(array_intersect($object->models, $cmodels)) > 0) {
     return true;
   }
   return false;
