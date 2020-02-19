@@ -8,6 +8,21 @@
 /**
  * Response in JSON for the manifest.
  */
+function islandora_iiif_manifests_view_manifest_json(AbstractObject $object) {
+  module_load_include('inc', 'islandora_iiif_manifests', 'includes/utilities');
+  module_load_include('inc', 'islandora', 'includes/datastream');
+
+  if (isset($object[ISLANDORA_IIIF_MANIFESTS_DATASTREAM_ID]) && islandora_datastream_access(ISLANDORA_VIEW_OBJECTS, $object[ISLANDORA_IIIF_MANIFESTS_DATASTREAM_ID])) {
+    islandora_view_datastream($object[ISLANDORA_IIIF_MANIFESTS_DATASTREAM_ID]);
+  }
+  else {
+    islandora_iiif_manifests_create_json_response('403 Forbidden', 'Forbidden');
+  }
+}
+
+/**
+ * Response in JSON for the manifest.
+ */
 function islandora_iiif_manifests_create_manifest_json(AbstractObject $object) {
 
   module_load_include('inc', 'islandora', 'includes/utilities');
