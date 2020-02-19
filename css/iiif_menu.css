@@ -30,4 +30,5 @@ DIV.iiifbutton DIV.iiiftext {
 }
 TD.iiifmanifest IMG {
   max-height: 2em;
+  vertical-align: text-bottom;
 }
