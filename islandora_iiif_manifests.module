@@ -189,38 +189,16 @@ function islandora_iiif_manifests_detail_tools_block_view() {
       $manifestkey = (count(array_intersect($obj->models, array('islandora:newspaperCModel', 'islandora:collectionCModel'))) > 0) ? "collection" : "manifest";
       $manifest_url = url('/islandora_iiif_manifests/' . $obj->id . '/manifest', array('absolute' => TRUE));
       $mirador_url = url('https://webpresentations-a.universiteitleiden.nl/mirador/', array('external' => TRUE, 'query' => array($manifestkey => $manifest_url)));
-      $additional = '<DIV class="iiif-additional">';
-      $additional .= '<DIV class="menu">';
-      $additional .= '<H3>IIIF</H3>';
-      $additional .= '<DIV class="explain">';
-      $additional .= t('View and use this object outside of this site using:');
-      $additional .= '</DIV>';
-      $additional .= '<A class="iiifmanifest" href="' . $manifest_url . '" target="_blank">';
-      $additional .= '<IMG src="/' . $modpath . '/images/manifest3.png"/></A>';
-      $additional .= '&nbsp;';
-      $additional .= '<A href="' . $mirador_url . '" target="_blank"><IMG src="/' . $modpath . '/images/mirador.png"/></A>';
-      $additional .= '</DIV>';
-      $additional .= '</DIV>';
-
-      // Put this in a item list.
-      $block['list'] = array(
-        '#type' => 'ul',
-        '#attributes' => array('class' => array('dc-detail-tools', 'ubl-detail-tools')),
-        '#items' => array(
-          array(
-            'data' => l(
-              '<span>link</span><i class="fa fa-eye" aria-hidden="true"></i>',
-              $url,
-              array('attributes' => array('title' => 'IIIF'), 'html' => TRUE)
-            ),
-            'weight' => 999,
-          ),
-        ),
-        '#theme' => 'item_list',
-      );
+      $text = t('Advanced Viewer');
+      $iiifimg = theme('image', array('path' => $modpath . '/images/iiif-logo.svg'));
+      $button = "<DIV class=\"iiifbutton\" data-manifest=\"$manifest_url\">$iiifimg<DIV class=\"iiiftext\">$text</DIV></DIV>";
+      $markup = l($button, $mirador_url, array('html' => TRUE, 'attributes' => array(
+        'target' => '_blank',
+        'title' => t('link to advanced viewer, or drag and drop to a IIIF-compliant viewer.'),
+      )));
       $block['iiifadditional'] = array(
         '#type' => 'markup',
-        '#markup' => $additional,
+        '#markup' => $markup,
       );
     }
   }
