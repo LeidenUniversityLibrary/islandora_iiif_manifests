@@ -240,7 +240,7 @@ function getImageInfo($object) {
 
   if (TRUE) {
     $handle_data = explode("/", $handle);
-    $handle_admin = variable_get('islandora_iiif_manifests_object_handle', '1887.a');
+    $handle_admin = variable_get('islandora_iiif_manifests_object_handle', 'hdl:1887.a');
     $handle = $handle_admin . "/" . $handle_data[1];
   }
   $encoded_handle = urlencode($handle);
@@ -253,6 +253,7 @@ function getImageInfo($object) {
       'language' => (object)array('language' => FALSE),
     )
   );
+
 
   $imageArray['thumbnail_uri'] = $islandora_iiif_manifest_image_uri . "/full/80,/0/default.jpg";
   $imageArray['resource_uri'] = $islandora_iiif_manifest_image_uri . "/full/pct:50/0/default.jpg";
