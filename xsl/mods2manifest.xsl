@@ -9,6 +9,7 @@
   <xsl:template match="/">
     <manifest>
       <xsl:apply-templates/>
+      <attribution>Leiden University Libraries</attribution>
     </manifest>
   </xsl:template>
 
@@ -249,8 +250,11 @@
     </description>
   </xsl:template>
 
-  <xsl:template match="/mods:mods/mods:accessCondition[@type='use and reproduction']">
-    <license><xsl:value-of select="@xlink:href"/></license>
+  <xsl:template match="/mods:mods/mods:accessCondition[@type='restriction on access']">
+    <license>
+      <xsl:value-of select="text()"/>
+      <xsl:text> &lt;a href=&quot;</xsl:text><xsl:value-of select="../mods:accessCondition[@type='use and reproduction']/@xlink:href"/><xsl:text>&quot;&gt;</xsl:text><xsl:value-of select="../mods:accessCondition[@type='use and reproduction']/text()"/><xsl:text>&lt;/a&gt;</xsl:text>
+    </license>
   </xsl:template>
 
   <xsl:template match="text()|@*">
