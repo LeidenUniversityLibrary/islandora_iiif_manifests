@@ -237,10 +237,10 @@ function getImageInfo($object) {
   $handler_class = islandora_handle_retrieve_selected_handler();
   $handler = new $handler_class($object);
   $handle = $handler->getFullHandle($object);
-
+// Get the Handle
   if (TRUE) {
     $handle_data = explode("/", $handle);
-    $handle_admin = variable_get('islandora_iiif_manifests_object_handle', '1887.a');
+    $handle_admin = variable_get('islandora_iiif_manifests_object_handle', 'hdl:1887.a');
     $handle = $handle_admin . "/" . $handle_data[1];
   }
   $encoded_handle = urlencode($handle);
