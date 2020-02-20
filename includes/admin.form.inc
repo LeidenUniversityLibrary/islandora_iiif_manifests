@@ -25,7 +25,7 @@ function islandora_iiif_manifests_admin_settings_form($form, &$form_state) {
     'islandora_iiif_manifests_object_handle' => array(
       '#type' => 'textfield',
       '#title' => t('Object Handle'),
-      '#default_value' => $get_default_value('islandora_iiif_manifests_object_handle', '1887.a'),
+      '#default_value' => $get_default_value('islandora_iiif_manifests_object_handle', 'hdl:1887.a'),
     ),
 
     'islandora_iiif_manifests_image_uri' => array(
