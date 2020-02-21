@@ -238,12 +238,7 @@ function getImageInfo($object) {
   $handler = new $handler_class($object);
   $handle = $handler->getFullHandle($object);
 
-  if (TRUE) {
-    $handle_data = explode("/", $handle);
-    $handle_admin = variable_get('islandora_iiif_manifests_object_handle', 'hdl:1887.a');
-    $handle = $handle_admin . "/" . $handle_data[1];
-  }
-  $encoded_handle = urlencode($handle);
+  $encoded_handle = urlencode('hdl:' . $handle);
 
   $imageArray = array();
 
