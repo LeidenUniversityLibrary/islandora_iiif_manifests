@@ -22,12 +22,6 @@ function islandora_iiif_manifests_admin_settings_form($form, &$form_state) {
   };
   //$solr_enabled = module_exists('islandora_solr');
   $form = array(
-    'islandora_iiif_manifests_object_handle' => array(
-      '#type' => 'textfield',
-      '#title' => t('Object Handle'),
-      '#default_value' => $get_default_value('islandora_iiif_manifests_object_handle', '1887.a'),
-    ),
-
     'islandora_iiif_manifests_image_uri' => array(
       '#type' => 'textfield',
       '#title' => t('SC Manifest Image URI'),
