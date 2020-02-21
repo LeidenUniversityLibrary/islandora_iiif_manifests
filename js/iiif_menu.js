@@ -23,27 +23,14 @@
  */
 
 jQuery(document).ready(function() {
-  jQuery('.ubl-detail-tools LI A .fa-eye').parent().click(function (e) {
-    var $li = jQuery(this).parent();
-    var $additionalblock = jQuery('DIV.iiif-additional');
-    if ($additionalblock.size() > 0) {
-      e.preventDefault();
-      if ($additionalblock.is(':visible')) {
-        return; // is already visible
-      }
+  var $iiifbutton = jQuery('DIV.iiifbutton');
+  var $metadataTable = jQuery('.dc-box .dc-metadata .islandora-metadata-fields');
+  if ($metadataTable.size() > 0 && $iiifbutton.size() > 0) {
+    var iiifManifest = $iiifbutton.data('manifest');
+    var iiifUrl = $iiifbutton.find('IMG').attr('src');
 
-      var x = $li.offset().left - $additionalblock.outerWidth() + $li.outerWidth();
-      if (x > 0) {
-        $additionalblock.css('left', x + 'px');
-      }
-      var y = $li.offset().top + $li.outerHeight();
-      $additionalblock.css('top', y + 'px');
-
-      e.stopPropagation();
-      jQuery('BODY').one('click', function() {
-        $additionalblock.slideUp();
-      });
-      $additionalblock.slideDown();
+    if (typeof iiifUrl === 'string' && iiifUrl.length > 0 && typeof iiifManifest === 'string' && iiifManifest.length > 0) {
+      $metadataTable.find('TBODY').append('<TR><TH>IIIF manifest</TH><TD class="iiifmanifest"><A href="' + iiifManifest + '" target="_blank"><IMG src="' + iiifUrl + '"/> manifest</A></TD></TR>');
     }
-  });
+  }
 })

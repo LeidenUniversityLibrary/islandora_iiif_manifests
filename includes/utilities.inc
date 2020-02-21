@@ -31,7 +31,6 @@ function createManifest($object) {
     '@type' => $manifest_type,
     'label' => $label,
     "logo" => "https://kerkuil-a.leidenuniv.nl/iiif/ubl_logo.png",
-    "attribution" => "This manifest was created from Islandora. Contact r.k.s.mwinyimbegu@library.leidenuniv.nl",
     'metadata' => array()
   );
 
@@ -249,6 +248,7 @@ function getImageInfo($object) {
       'language' => (object)array('language' => FALSE),
     )
   );
+
 
   $imageArray['thumbnail_uri'] = $islandora_iiif_manifest_image_uri . "/full/80,/0/default.jpg";
   $imageArray['resource_uri'] = $islandora_iiif_manifest_image_uri . "/full/pct:50/0/default.jpg";
