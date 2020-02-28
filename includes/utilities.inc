@@ -30,7 +30,7 @@ function createManifest($object) {
     '@id' => $id,//$this->id,
     '@type' => $manifest_type,
     'label' => $label,
-    "logo" => "https://kerkuil-a.leidenuniv.nl/iiif/ubl_logo.png",
+    "logo" => "https://f.start.me/iiif-a.issc.leidenuniv.nl",
     'metadata' => array()
   );
 
