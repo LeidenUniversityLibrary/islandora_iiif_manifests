@@ -175,6 +175,17 @@ function islandora_iiif_manifests_detail_tools_block_view() {
   if (arg(1) == 'object' && islandora_is_valid_pid(arg(2))) {
     $obj = islandora_object_load(arg(2));
 
+    // Check if $obj is a child of a compound, if so and parent has manifest, use it.
+    if (module_load_include('module', 'islandora_compound_object')) {
+      $parent_info = islandora_compound_object_retrieve_compound_info($obj);
+      if (isset($parent_info['parent_pid'])) {
+        $parent = islandora_object_load($parent_info['parent_pid']);
+        if (isset($parent[ISLANDORA_IIIF_MANIFESTS_DATASTREAM_ID])) {
+          $obj = $parent;
+        }
+      }
+    }
+
     $show_menu = isset($obj[ISLANDORA_IIIF_MANIFESTS_DATASTREAM_ID]);
 
     if ($show_menu) {
