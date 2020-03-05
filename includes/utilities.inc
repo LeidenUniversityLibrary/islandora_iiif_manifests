@@ -117,7 +117,7 @@ function getObjectCanvas($object) {
 
   $image_info = getImageInfo($object);
 
-  $id = urldecode(url("islandora_iiif_manifests/{$object->id}/canvas/default", array(
+  $id = urldecode(url("iiif_manifest/{$object->id}/canvas/default", array(
     'absolute' => TRUE,
     'language' => (object)array('language' => FALSE),
   )));
@@ -144,7 +144,7 @@ function getObjectCollection($object) {
 
   $models = $object->models;
 
-  $manifest_uri = urldecode(url("islandora_iiif_manifests/{$object->id}/manifest", array(
+  $manifest_uri = urldecode(url("iiif_manifest/{$object->id}/manifest", array(
     'absolute' => TRUE,
     'language' => (object)array('language' => FALSE),
   )));
