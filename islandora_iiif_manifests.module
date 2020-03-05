@@ -266,8 +266,7 @@ function islandora_iiif_manifests_check_datastreams_remark($object, $dsid) {
       return t('Manifest might need update');
     }
     return NULL;
-  }
-  else {
+  } else {
     return t('Object is not accessible for anonymous');
   }
 }
