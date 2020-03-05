@@ -11,15 +11,15 @@
 function islandora_iiif_manifest_create_large_image_canvas(AbstractObject $object) {
   module_load_include('inc', 'islandora_iiif_manifests', 'includes/utilities');
 
-  $canvas[] = getObjectCanvas($object);
+  $canvas[] = islandora_iiif_manifests_get_object_canvas($object);
 
-  $label = convertLabel($object);
+  $label = islandora_iiif_manifests_convert_label($object);
 
   // Set the canvases.
   $manifest['sequences'][] = array(
     '@type' => 'sc:Sequence',
     'label' => $label,
-    'canvases' => $canvas
+    'canvases' => $canvas,
   );
 
   return $manifest;
