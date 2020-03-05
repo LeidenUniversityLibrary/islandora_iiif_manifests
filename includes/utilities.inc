@@ -118,7 +118,7 @@ function getObjectCanvas($object) {
 
   $image_info = getImageInfo($object);
 
-  $id = urldecode(url($GLOBALS['base_url']."iiif_manifest/{$object->id}/canvas/default", array(
+  $id = urldecode(url($GLOBALS['base_url']."/iiif_manifest/{$object->id}/canvas/default", array(
     'absolute' => TRUE,
     'language' => (object)array('language' => FALSE),
   )));
