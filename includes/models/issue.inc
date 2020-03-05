@@ -22,7 +22,7 @@ function islandora_iiif_manifest_create_issue_manifest(AbstractObject $object) {
   $pages = islandora_paged_content_get_pages($object);
 
   $viewingHint = islandora_paged_content_get_viewing_hint($object) != "" ? islandora_paged_content_get_viewing_hint($object) : "paged";
-  $viewingDirection = getViewingDirection($object);
+  $viewingDirection = islandora_iiif_manifests_get_viewing_direction($object);
 
   foreach ($pages as $page) {
 
@@ -30,14 +30,14 @@ function islandora_iiif_manifest_create_issue_manifest(AbstractObject $object) {
     $page_object = islandora_object_load($page['pid']);
 
     // Add page to canvases.
-    $canvases[] = getObjectCanvas($page_object);
+    $canvases[] = islandora_iiif_manifests_get_object_canvas($page_object);
   }
 
   //Set Presentation information.
   $manifest['viewingDirection'] = $viewingDirection;
   $manifest['viewingHint'] = $viewingHint;
 
-  $label = convertLabel($object);
+  $label = islandora_iiif_manifests_convert_label($object);
 
   // Set the canvases.
   $manifest['sequences'][] = array(

@@ -28,8 +28,8 @@ function islandora_iiif_manifest_create_collection_manifest(AbstractObject $obje
     // Load collection object.
     $fedora_collection_object = islandora_object_load($collection_object['object']['value']);
 
-    if (allowedCModel($fedora_collection_object)) {
-      $collection_item = getObjectCollection($fedora_collection_object);
+    if (islandora_iiif_manifests_allowed_cmodel($fedora_collection_object)) {
+      $collection_item = islandora_iiif_manifests_get_object_collection($fedora_collection_object);
       $collection_members_members[] = $collection_item['object'];
     }
   }

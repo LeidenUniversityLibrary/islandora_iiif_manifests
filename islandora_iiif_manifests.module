@@ -147,7 +147,7 @@ function islandora_iiif_manifests_islandora_newspaperPageCModel_islandora_get_ii
 function islandora_iiif_manifests_islandora_get_iiif_manifest($object) {
 
   module_load_include('inc', 'islandora_iiif_manifests', 'includes/utilities');
-  $manifest_container = createManifest($object);
+  $manifest_container = islandora_iiif_manifests_create_manifest($object);
 
   return $manifest_container;
 }
@@ -158,7 +158,7 @@ function islandora_iiif_manifests_islandora_get_iiif_manifest($object) {
 function islandora_iiif_manifests_islandora_get_iiif_manifest_canvas($object) {
 
   module_load_include('inc', 'islandora_iiif_manifests', 'includes/utilities');
-  $canvas_container = getObjectCanvas($object);
+  $canvas_container = islandora_iiif_manifests_get_object_canvas($object);
 
   return $canvas_container;
 }
@@ -199,10 +199,11 @@ function islandora_iiif_manifests_detail_tools_block_view() {
       $text = t('Advanced Viewer');
       $iiifimg = theme('image', array('path' => $modpath . '/images/iiif-logo.svg'));
       $button = "<DIV class=\"iiifbutton\" data-manifest=\"$manifest_url\">$iiifimg<DIV class=\"iiiftext\">$text</DIV></DIV>";
-      $markup = l($button, $mirador_url, array('html' => TRUE, 'attributes' => array(
-        'target' => '_blank',
-        'title' => t('link to advanced viewer, or drag and drop to a IIIF-compliant viewer.'),
-      )));
+      $markup = l($button, $mirador_url, array(
+        'html' => TRUE, 'attributes' => array(
+          'target' => '_blank',
+          'title' => t('link to advanced viewer, or drag and drop to a IIIF-compliant viewer.'),
+        )));
       $block['iiifadditional'] = array(
         '#type' => 'markup',
         '#markup' => $markup,
@@ -218,7 +219,7 @@ function islandora_iiif_manifests_detail_tools_block_view() {
 function islandora_iiif_manifests_check_datastreams_info($object) {
   module_load_include('inc', 'islandora_iiif_manifests', 'includes/utilities');
 
-  $generatable = allowedCModel($object);
+  $generatable = islandora_iiif_manifests_allowed_cmodel($object);
   $available = isset($object[ISLANDORA_IIIF_MANIFESTS_DATASTREAM_ID]);
   $available = $available && ($object[ISLANDORA_IIIF_MANIFESTS_DATASTREAM_ID]->createdDate >= $object->lastModifiedDate);
   $available = $available && ($object[ISLANDORA_IIIF_MANIFESTS_DATASTREAM_ID]->createdDate >= $object['MODS']->createdDate);
@@ -266,7 +267,8 @@ function islandora_iiif_manifests_check_datastreams_remark($object, $dsid) {
       return t('Manifest might need update');
     }
     return NULL;
-  } else {
+  }
+  else {
     return t('Object is not accessible for anonymous');
   }
 }

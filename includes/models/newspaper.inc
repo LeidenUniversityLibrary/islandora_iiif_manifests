@@ -14,7 +14,6 @@ function islandora_iiif_manifest_create_newspaper_manifest(AbstractObject $objec
   module_load_include('inc', 'islandora_paged_content', 'includes/utilities');
   module_load_include('inc', 'islandora_newspaper', 'includes/utilities');
 
-
   // Manifest array.
   $manifest = array();
 
@@ -28,7 +27,7 @@ function islandora_iiif_manifest_create_newspaper_manifest(AbstractObject $objec
     // Load issue.
     $issue_object = islandora_object_load($issue['pid']);
 
-    $collection_item = getObjectCollection($issue_object);
+    $collection_item = islandora_iiif_manifests_get_object_collection($issue_object);
 
     $collection_members_members[] = $collection_item['object'];
 
@@ -41,5 +40,3 @@ function islandora_iiif_manifest_create_newspaper_manifest(AbstractObject $objec
   return $manifest;
 
 }
-
-
