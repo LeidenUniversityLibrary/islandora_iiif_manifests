@@ -15,7 +15,7 @@ function islandora_iiif_manifest_create_page_canvas(AbstractObject $object) {
 
   $label = convertLabel($object);
 
-  // Set the canvases
+  // Set the canvases.
   $manifest['sequences'][] = array(
     '@type' => 'sc:Sequence',
     'label' => $label,

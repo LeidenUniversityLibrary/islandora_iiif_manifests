@@ -8,8 +8,7 @@
 /**
  * This is the actual manifest building function.
  */
-function islandora_iiif_manifest_create_compound_manifest(AbstractObject $object)
-{
+function islandora_iiif_manifest_create_compound_manifest(AbstractObject $object) {
   module_load_include('inc', 'islandora', 'includes/utilities');
   module_load_include('inc', 'islandora_iiif_manifests', 'includes/utilities');
 
@@ -37,7 +36,8 @@ function islandora_iiif_manifest_create_compound_manifest(AbstractObject $object
       if ($manifest_type == "sc:Collection") {
         $collection_item = getObjectCollection($part_object);
         $collection_members_members[] = $collection_item['object'];
-      } elseif ($manifest_type == "sc:Manifest") {
+      }
+      elseif ($manifest_type == "sc:Manifest") {
         // Add page to canvases
         $canvases[] = getObjectCanvas($part_object);
 
@@ -51,7 +51,8 @@ function islandora_iiif_manifest_create_compound_manifest(AbstractObject $object
     if (!empty($collection_members_members)) {
       $manifest['members'] = $collection_members_members;
     }
-  } elseif ($manifest_type == "sc:Manifest") {
+  }
+  elseif ($manifest_type == "sc:Manifest") {
     //Set Presentation information
     $manifest['viewingDirection'] = "left-to-right";
     $manifest['viewingHint'] = "paged";

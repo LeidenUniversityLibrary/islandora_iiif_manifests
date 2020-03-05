@@ -15,7 +15,7 @@ function islandora_iiif_manifest_create_large_image_canvas(AbstractObject $objec
 
   $label = convertLabel($object);
 
-  // Set the canvases
+  // Set the canvases.
   $manifest['sequences'][] = array(
     '@type' => 'sc:Sequence',
     'label' => $label,

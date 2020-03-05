@@ -143,8 +143,6 @@ function getObjectCollection($object) {
 
   $collection_item = array();
 
-  $models = $object->models;
-
   $manifest_uri = urldecode(url("iiif_manifest/{$object->id}/manifest", array(
     'absolute' => TRUE,
     'language' => (object)array('language' => FALSE),
@@ -154,8 +152,9 @@ function getObjectCollection($object) {
 
     $manifest_type = compoundManifestType($object);
 
-  } else {
-    // Set manifest type
+  }
+  else {
+    // Set manifest type.
     $manifest_type = (count(array_intersect($object->models, array('islandora:newspaperCModel', 'islandora:collectionCModel', 'islandora:compoundCModel'))) > 0) ? "sc:Collection" : "sc:Manifest";
   }
 
@@ -257,18 +256,18 @@ function getImageInfo($object) {
 
 
   if ($object['TECHMD']) {
-    // Get Image info from TECHMD
+    // Get Image info from TECHMD.
     $mods_datastream = $object['TECHMD']->content;
     $xml = simplexml_load_string($mods_datastream);
     $json = json_encode($xml);
-    $tech_md = json_decode($json, true);
+    $tech_md = json_decode($json, TRUE);
 
     if (isset($tech_md['metadata']['image']['imageWidth'])) {
       // Set width and height
       $imageArray['imageWidth'] = $tech_md['metadata']['image']['imageWidth'];
       $imageArray['imageHeight'] = $tech_md['metadata']['image']['imageHeight'];
     } else {
-      // Retrieve image width and height using the islandora_handled_access module
+      // Retrieve image width and height using the islandora_handled_access module.
       $full_image_size_url = url("islandora/handled_access/{$encoded_handle}/image/view", array('absolute' => TRUE));
       list($width, $height, $mimetype, $attr) = getimagesize($full_image_size_url);
 
@@ -276,9 +275,10 @@ function getImageInfo($object) {
       $imageArray['imageHeight'] = $height;
     }
 
-  } else {
+  }
+  else {
 
-    // Retrieve image width and height using the islandora_handled_access module
+    // Retrieve image width and height using the islandora_handled_access module.
     $full_image_size_url = url("islandora/handled_access/{$encoded_handle}/image/view", array('absolute' => TRUE));
     list($width, $height, $mimetype, $attr) = getimagesize($full_image_size_url);
 
