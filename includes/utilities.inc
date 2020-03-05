@@ -6,13 +6,14 @@
  */
 function createManifest($object) {
 
-  $id = urldecode(url(current_path(),
+  $id = urldecode(url($GLOBALS['base_url']."/iiif_manifest/{$object->id}/manifest",
       array(
         'absolute' => TRUE,
         'language' => (object)array('language' => FALSE),
       )
     )
   );
+
   if ((count(array_intersect($object->models, array('islandora:compoundCModel'))) > 0)) {
 
     $manifest_type = compoundManifestType($object);
@@ -117,7 +118,7 @@ function getObjectCanvas($object) {
 
   $image_info = getImageInfo($object);
 
-  $id = urldecode(url("iiif_manifest/{$object->id}/canvas/default", array(
+  $id = urldecode(url($GLOBALS['base_url']."iiif_manifest/{$object->id}/canvas/default", array(
     'absolute' => TRUE,
     'language' => (object)array('language' => FALSE),
   )));
