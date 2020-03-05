@@ -381,4 +381,3 @@ function islandora_iiif_manifests_add_manifest_datastream($object, $manifest) {
 }
 
 
-
