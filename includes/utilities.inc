@@ -6,13 +6,15 @@
  */
 function islandora_iiif_manifests_create_manifest($object) {
 
-  $id = urldecode(url($GLOBALS['base_url'] . "/iiif_manifest/{$object->id}/manifest",
+  $id = urldecode(url(variable_get('islandora_iiif_manifests_domain_uri', 'https://scharrelaar-a3.leidenuniv.nl') . "/iiif_manifest/{$object->id}/manifest",
       array(
         'absolute' => TRUE,
         'language' => (object)array('language' => FALSE),
       )
     )
   );
+
+
 
   if ((count(array_intersect($object->models, array('islandora:compoundCModel'))) > 0)) {
 
@@ -117,7 +119,7 @@ function islandora_iiif_manifests_get_object_canvas($object) {
 
   $image_info = islandora_iiif_manifests_get_image_info($object);
 
-  $id = urldecode(url($GLOBALS['base_url'] . "/iiif_manifest/{$object->id}/canvas/default", array(
+  $id = urldecode(url(variable_get('islandora_iiif_manifests_domain_uri', 'https://scharrelaar-a3.leidenuniv.nl') . "/iiif_manifest/{$object->id}/canvas/default", array(
     'absolute' => TRUE,
     'language' => (object)array('language' => FALSE),
   )));
@@ -260,8 +262,6 @@ function islandora_iiif_manifests_get_image_info($object) {
     $xml = simplexml_load_string($mods_datastream);
     $json = json_encode($xml);
     $tech_md = json_decode($json, TRUE);
-
-    echo "TECHMD <pre>";print_r($tech_md);die;
 
     if (isset($tech_md['metadata']['image']['imageWidth']) && !is_array($tech_md['metadata']['image']['imageWidth'])) {
       // Set width and height
