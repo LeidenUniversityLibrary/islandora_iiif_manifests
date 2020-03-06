@@ -14,8 +14,6 @@ function islandora_iiif_manifests_create_manifest($object) {
     )
   );
 
-
-
   if ((count(array_intersect($object->models, array('islandora:compoundCModel'))) > 0)) {
 
     $manifest_type = islandora_iiif_manifests_compound_nanifest_type($object);
@@ -272,9 +270,9 @@ function islandora_iiif_manifests_get_image_info($object) {
   }
   if (!isset($imageArray['imageWidth'])) {
 
-    // Retrieve image width and height using the islandora_handled_access module.
-    $full_image_size_url = url("islandora/handled_access/{$encoded_handle}/image/view", array('absolute' => TRUE));
-    list($width, $height, $mimetype, $attr) = getimagesize($full_image_size_url);
+    $temp_file = drupal_tempnam('temporary://', 'dimensions');
+    $object['OBJ']->getContent($temp_file);
+    list($width, $height) = getimagesize($temp_file);
 
     $imageArray['imageWidth'] = $width;
     $imageArray['imageHeight'] = $height;
