@@ -6,7 +6,7 @@
  */
 function islandora_iiif_manifests_create_manifest($object) {
 
-  $id = urldecode(url(variable_get('islandora_iiif_manifests_domain_uri', 'https://scharrelaar-a3.leidenuniv.nl') . "/iiif_manifest/{$object->id}/manifest",
+  $id = urldecode(url(variable_get('islandora_iiif_manifests_domain_uri', $GLOBALS['base_url'] ) . "/iiif_manifest/{$object->id}/manifest",
       array(
         'absolute' => TRUE,
         'language' => (object)array('language' => FALSE),
@@ -119,7 +119,7 @@ function islandora_iiif_manifests_get_object_canvas($object) {
 
   $image_info = islandora_iiif_manifests_get_image_info($object);
 
-  $id = urldecode(url(variable_get('islandora_iiif_manifests_domain_uri', 'https://scharrelaar-a3.leidenuniv.nl') . "/iiif_manifest/{$object->id}/canvas/default", array(
+  $id = urldecode(url(variable_get('islandora_iiif_manifests_domain_uri', $GLOBALS['base_url'] ) . "/iiif_manifest/{$object->id}/canvas/default", array(
     'absolute' => TRUE,
     'language' => (object)array('language' => FALSE),
   )));

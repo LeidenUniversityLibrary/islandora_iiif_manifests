@@ -35,7 +35,7 @@ function islandora_iiif_manifests_admin_settings_form($form, &$form_state) {
     'islandora_iiif_manifests_domain_uri' => array(
     '#type' => 'textfield',
     '#title' => t('Manifest domain URI'),
-    '#default_value' => $get_default_value('islandora_iiif_manifests_domain_uri', 'https://scharrelaar-a3.leidenuniv.nl'),
+    '#default_value' => $get_default_value('islandora_iiif_manifests_domain_uri', $GLOBALS['base_url'] ),
   )
   );
   return system_settings_form($form);
