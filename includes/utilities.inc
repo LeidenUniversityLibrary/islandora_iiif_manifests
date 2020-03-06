@@ -261,22 +261,16 @@ function islandora_iiif_manifests_get_image_info($object) {
     $json = json_encode($xml);
     $tech_md = json_decode($json, TRUE);
 
-    if (isset($tech_md['metadata']['image']['imageWidth'])) {
+    echo "TECHMD <pre>";print_r($tech_md);die;
+
+    if (isset($tech_md['metadata']['image']['imageWidth']) && !is_array($tech_md['metadata']['image']['imageWidth'])) {
       // Set width and height
       $imageArray['imageWidth'] = $tech_md['metadata']['image']['imageWidth'];
       $imageArray['imageHeight'] = $tech_md['metadata']['image']['imageHeight'];
     }
-    else {
-      // Retrieve image width and height using the islandora_handled_access module.
-      $full_image_size_url = url("islandora/handled_access/{$encoded_handle}/image/view", array('absolute' => TRUE));
-      list($width, $height, $mimetype, $attr) = getimagesize($full_image_size_url);
-
-      $imageArray['imageWidth'] = $width;
-      $imageArray['imageHeight'] = $height;
-    }
 
   }
-  else {
+  if (!isset($imageArray['imageWidth'])) {
 
     // Retrieve image width and height using the islandora_handled_access module.
     $full_image_size_url = url("islandora/handled_access/{$encoded_handle}/image/view", array('absolute' => TRUE));
