@@ -24,14 +24,19 @@ function islandora_iiif_manifests_admin_settings_form($form, &$form_state) {
   $form = array(
     'islandora_iiif_manifests_image_uri' => array(
       '#type' => 'textfield',
-      '#title' => t('SC Manifest Image URI'),
+      '#title' => t('IIIF Image URI'),
       '#default_value' => $get_default_value('islandora_iiif_manifests_image_uri', 'https://iiif-a.issc.leidenuniv.nl/iiif/2'),
     ),
     'islandora_iiif_manifests_presentation_uri' => array(
       '#type' => 'textfield',
-      '#title' => t('SC Manifest Presentation URI'),
-      '#default_value' => $get_default_value('islandora_sc_manifest_presentation_uri', 'https://iiif.library.utoronto.ca/presentation/v2/'),
-    )
+      '#title' => t('Manifest Presentation URI'),
+      '#default_value' => $get_default_value('islandora_iiif_manifests_presentation_uri', 'http://iiif.io/api/presentation/2/context.json'),
+    )    ,
+    'islandora_iiif_manifests_domain_uri' => array(
+    '#type' => 'textfield',
+    '#title' => t('Manifest domain URI'),
+    '#default_value' => $get_default_value('islandora_iiif_manifests_domain_uri', $GLOBALS['base_url'] ),
+  )
   );
   return system_settings_form($form);
 }

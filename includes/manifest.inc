@@ -87,7 +87,7 @@ function islandora_iiif_manifests_build_canvas($object) {
 
   $output = array();
 
-  if (allowedCanvasCModel($object)) {
+  if (islandora_iiif_manifests_allowed_canvas_cmodel($object)) {
 
     $hooks = islandora_build_hook_list(ISLANDORA_IIIF_MANIFESTS_ISLANDORA_IIIF_MANIFEST_CANVAS_HOOK, $object->models);
 

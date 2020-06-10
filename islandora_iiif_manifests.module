@@ -13,21 +13,21 @@ define('ISLANDORA_IIIF_MANIFESTS_DATASTREAM_ID', 'MANIFEST');
  */
 function islandora_iiif_manifests_menu() {
   return array(
-    'islandora_iiif_manifests/%islandora_object/manifest' => array(
+    'iiif_manifest/%islandora_object/manifest' => array(
       'page callback' => 'islandora_iiif_manifests_view_manifest_json',
       'page arguments' => array(1),
       'file' => 'includes/manifest.inc',
       'type' => MENU_CALLBACK,
       'access callback' => TRUE,
     ),
-    'islandora_iiif_manifests/%islandora_object/canvas' => array(
+    'iiif_manifest/%islandora_object/canvas' => array(
       'page callback' => 'islandora_iiif_manifests_create_canvas_json',
       'page arguments' => array(1),
       'file' => 'includes/manifest.inc',
       'type' => MENU_CALLBACK,
       'access callback' => TRUE,
     ),
-    'admin/islandora/tools/islandora_iiif_manifests_admin' => array(
+    'admin/islandora/tools/iiif_manifests_admin' => array(
       'title' => 'IIIF manifest module configuration',
       'description' => 'Configure the IIIF Module.',
       'page callback' => 'drupal_get_form',
@@ -147,7 +147,7 @@ function islandora_iiif_manifests_islandora_newspaperPageCModel_islandora_get_ii
 function islandora_iiif_manifests_islandora_get_iiif_manifest($object) {
 
   module_load_include('inc', 'islandora_iiif_manifests', 'includes/utilities');
-  $manifest_container = createManifest($object);
+  $manifest_container = islandora_iiif_manifests_create_manifest($object);
 
   return $manifest_container;
 }
@@ -158,7 +158,7 @@ function islandora_iiif_manifests_islandora_get_iiif_manifest($object) {
 function islandora_iiif_manifests_islandora_get_iiif_manifest_canvas($object) {
 
   module_load_include('inc', 'islandora_iiif_manifests', 'includes/utilities');
-  $canvas_container = getObjectCanvas($object);
+  $canvas_container = islandora_iiif_manifests_get_object_canvas($object);
 
   return $canvas_container;
 }
@@ -175,6 +175,17 @@ function islandora_iiif_manifests_detail_tools_block_view() {
   if (arg(1) == 'object' && islandora_is_valid_pid(arg(2))) {
     $obj = islandora_object_load(arg(2));
 
+    // Check if $obj is a child of a compound, if so and parent has manifest, use it.
+    if (module_load_include('module', 'islandora_compound_object')) {
+      $parent_info = islandora_compound_object_retrieve_compound_info($obj);
+      if (isset($parent_info['parent_pid'])) {
+        $parent = islandora_object_load($parent_info['parent_pid']);
+        if (isset($parent[ISLANDORA_IIIF_MANIFESTS_DATASTREAM_ID])) {
+          $obj = $parent;
+        }
+      }
+    }
+
     $show_menu = isset($obj[ISLANDORA_IIIF_MANIFESTS_DATASTREAM_ID]);
 
     if ($show_menu) {
@@ -183,15 +194,16 @@ function islandora_iiif_manifests_detail_tools_block_view() {
       drupal_add_js($modpath . '/js/iiif_menu.js');
 
       $manifestkey = (count(array_intersect($obj->models, array('islandora:newspaperCModel', 'islandora:collectionCModel'))) > 0) ? "collection" : "manifest";
-      $manifest_url = url('/islandora_iiif_manifests/' . $obj->id . '/manifest', array('absolute' => TRUE));
+      $manifest_url = url('/iiif_manifest/' . $obj->id . '/manifest', array('absolute' => TRUE));
       $mirador_url = url('https://webpresentations-a.universiteitleiden.nl/mirador/', array('external' => TRUE, 'query' => array($manifestkey => $manifest_url)));
       $text = t('Advanced Viewer');
       $iiifimg = theme('image', array('path' => $modpath . '/images/iiif-logo.svg'));
       $button = "<DIV class=\"iiifbutton\" data-manifest=\"$manifest_url\">$iiifimg<DIV class=\"iiiftext\">$text</DIV></DIV>";
-      $markup = l($button, $mirador_url, array('html' => TRUE, 'attributes' => array(
-        'target' => '_blank',
-        'title' => t('link to advanced viewer, or drag and drop to a IIIF-compliant viewer.'),
-      )));
+      $markup = l($button, $mirador_url, array(
+        'html' => TRUE, 'attributes' => array(
+          'target' => '_blank',
+          'title' => t('link to advanced viewer, or drag and drop to a IIIF-compliant viewer.'),
+        )));
       $block['iiifadditional'] = array(
         '#type' => 'markup',
         '#markup' => $markup,
@@ -207,7 +219,7 @@ function islandora_iiif_manifests_detail_tools_block_view() {
 function islandora_iiif_manifests_check_datastreams_info($object) {
   module_load_include('inc', 'islandora_iiif_manifests', 'includes/utilities');
 
-  $generatable = allowedCModel($object);
+  $generatable = islandora_iiif_manifests_allowed_cmodel($object);
   $available = isset($object[ISLANDORA_IIIF_MANIFESTS_DATASTREAM_ID]);
   $available = $available && ($object[ISLANDORA_IIIF_MANIFESTS_DATASTREAM_ID]->createdDate >= $object->lastModifiedDate);
   $available = $available && ($object[ISLANDORA_IIIF_MANIFESTS_DATASTREAM_ID]->createdDate >= $object['MODS']->createdDate);
@@ -227,26 +239,29 @@ function islandora_iiif_manifests_check_datastreams_info($object) {
  * Implements hook_generate_extra_derivatives().
  */
 function islandora_iiif_manifests_generate_extra_derivatives($object, $what, $options) {
-  module_load_include('inc', 'islandora_iiif_manifests', 'includes/manifest');
+  if ($what === ISLANDORA_IIIF_MANIFESTS_DATASTREAM_ID) {
+    module_load_include('inc', 'islandora_iiif_manifests', 'includes/manifest');
 
-  $manifestjson = islandora_iiif_manifests_build_manifest($object);
-  if (empty($manifestjson)) {
-    return array(array('success' => FALSE, 'message' => t('Cannot generate IIIF manifest')));
-  }
-  if (isset($object[ISLANDORA_IIIF_MANIFESTS_DATASTREAM_ID])) {
-    $object[ISLANDORA_IIIF_MANIFESTS_DATASTREAM_ID]->content = $manifestjson;
+    $manifestjson = islandora_iiif_manifests_build_manifest($object);
+    if (empty($manifestjson)) {
+      return array(array('success' => FALSE, 'message' => t('Cannot generate IIIF manifest')));
+    }
+    if (isset($object[ISLANDORA_IIIF_MANIFESTS_DATASTREAM_ID])) {
+      $object[ISLANDORA_IIIF_MANIFESTS_DATASTREAM_ID]->content = $manifestjson;
 
-    return array(array('success' => TRUE, 'message' => t('IIIF manifest updated')));
-  }
-  else {
-    $manifestds = $object->constructDatastream(ISLANDORA_IIIF_MANIFESTS_DATASTREAM_ID);
-    $manifestds->label = 'IIIF manifest';
-    $manifestds->mimetype = 'application/json';
-    $manifestds->setContentFromString($manifestjson);
-    $object->ingestDatastream($manifestds);
+      return array(array('success' => TRUE, 'message' => t('IIIF manifest updated')));
+    }
+    else {
+      $manifestds = $object->constructDatastream(ISLANDORA_IIIF_MANIFESTS_DATASTREAM_ID);
+      $manifestds->label = 'IIIF manifest';
+      $manifestds->mimetype = 'application/json';
+      $manifestds->setContentFromString($manifestjson);
+      $object->ingestDatastream($manifestds);
 
-    return array(array('success' => TRUE, 'message' => t('IIIF manifest created')));
+      return array(array('success' => TRUE, 'message' => t('IIIF manifest created')));
+    }
   }
+  return NULL;
 }
 
 function islandora_iiif_manifests_check_datastreams_remark($object, $dsid) {

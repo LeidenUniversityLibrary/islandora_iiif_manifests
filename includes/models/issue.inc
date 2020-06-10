@@ -12,34 +12,34 @@ function islandora_iiif_manifest_create_issue_manifest(AbstractObject $object) {
   module_load_include('inc', 'islandora_iiif_manifests', 'includes/utilities');
   module_load_include('inc', 'islandora_paged_content', 'includes/utilities');
 
-  // Manifest array
+  // Manifest array.
   $manifest = array();
 
-  // Canvases
+  // Canvases.
   $canvases = array();
 
-  // Get pages
+  // Get pages.
   $pages = islandora_paged_content_get_pages($object);
 
   $viewingHint = islandora_paged_content_get_viewing_hint($object) != "" ? islandora_paged_content_get_viewing_hint($object) : "paged";
-  $viewingDirection = getViewingDirection($object);
+  $viewingDirection = islandora_iiif_manifests_get_viewing_direction($object);
 
   foreach ($pages as $page) {
 
-    // Get page object
+    // Get page object.
     $page_object = islandora_object_load($page['pid']);
 
-    // Add page to canvases
-    $canvases[] = getObjectCanvas($page_object);
+    // Add page to canvases.
+    $canvases[] = islandora_iiif_manifests_get_object_canvas($page_object);
   }
 
-  //Set Presentation information
+  //Set Presentation information.
   $manifest['viewingDirection'] = $viewingDirection;
   $manifest['viewingHint'] = $viewingHint;
 
-  $label = convertLabel($object);
+  $label = islandora_iiif_manifests_convert_label($object);
 
-  // Set the canvases
+  // Set the canvases.
   $manifest['sequences'][] = array(
     '@type' => 'sc:Sequence',
     'label' => $object->$label,
