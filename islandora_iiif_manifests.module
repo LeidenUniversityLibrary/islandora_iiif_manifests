@@ -187,15 +187,15 @@ function islandora_iiif_manifests_detail_tools_block_view() {
     }
 
     $show_menu = isset($obj[ISLANDORA_IIIF_MANIFESTS_DATASTREAM_ID]);
-
-    if ($show_menu) {
+    $iiifviewerurl = variable_get('islandora_iiif_manifests_viewer_url');
+    if ($show_menu && $iiifviewerurl) {
       $modpath = drupal_get_path('module', 'islandora_iiif_manifests');
       drupal_add_css($modpath . '/css/iiif_menu.css');
       drupal_add_js($modpath . '/js/iiif_menu.js');
 
       $manifestkey = (count(array_intersect($obj->models, array('islandora:newspaperCModel', 'islandora:collectionCModel'))) > 0) ? "collection" : "manifest";
       $manifest_url = url('/iiif_manifest/' . $obj->id . '/manifest', array('absolute' => TRUE));
-      $mirador_url = url('https://webpresentations-a.universiteitleiden.nl/mirador/', array('external' => TRUE, 'query' => array($manifestkey => $manifest_url)));
+      $mirador_url = url($iiifviewerurl, array('external' => TRUE, 'query' => array($manifestkey => $manifest_url)));
       $text = t('Advanced Viewer');
       $iiifimg = theme('image', array('path' => $modpath . '/images/iiif-logo.svg'));
       $button = "<DIV class=\"iiifbutton\" data-manifest=\"$manifest_url\">$iiifimg<DIV class=\"iiiftext\">$text</DIV></DIV>";
