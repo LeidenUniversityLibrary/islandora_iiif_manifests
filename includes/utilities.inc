@@ -348,7 +348,8 @@ function islandora_iiif_manifests_create_json_response($status, $data = NULL) {
   drupal_add_http_header('Status', $status);
   drupal_add_http_header('Content-Type', 'application/json; charset=utf-8');
   drupal_add_http_header('access-control-allow-origin', '*');
-  drupal_add_http_header('Set-Cookie: cross-site-cookie=name; SameSite=None; Secure');
+  drupal_add_http_header('Set-Cookie: same-site-cookie=foo; SameSite=Lax', false);
+  drupal_add_http_header('Set-Cookie: cross-site-cookie=bar; SameSite=None; Secure', false);
   if ($data !== NULL) {
     echo $data;
   }
