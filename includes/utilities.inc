@@ -238,7 +238,7 @@ function islandora_iiif_manifests_get_image_info($object) {
   $handler = new $handler_class($object);
   $handle = $handler->getFullHandle($object);
 
-  $encoded_handle = urlencode( $handle);
+  $encoded_handle = urlencode( 'hdl:'.$handle);
 
   $imageArray = array();
 
