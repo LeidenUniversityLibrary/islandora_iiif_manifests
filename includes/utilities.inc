@@ -32,7 +32,7 @@ function islandora_iiif_manifests_create_manifest($object) {
     '@type' => $manifest_type,
     'label' => $label,
     "logo" => $iiifmanifestlogourl,
-    'metadata' => array(),
+    'metadata' => array(),get
   );
 
   $metadata = islandora_iiif_manifests_get_metadata($object);
@@ -238,7 +238,7 @@ function islandora_iiif_manifests_get_image_info($object) {
   $handler = new $handler_class($object);
   $handle = $handler->getFullHandle($object);
 
-  $encoded_handle = urlencode( $handle);
+  $encoded_handle = urlencode( 'hdl:'.$handle);
 
   $imageArray = array();
 
