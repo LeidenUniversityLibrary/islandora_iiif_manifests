@@ -32,7 +32,7 @@ function islandora_iiif_manifests_create_manifest($object) {
     '@type' => $manifest_type,
     'label' => $label,
     "logo" => $iiifmanifestlogourl,
-    'metadata' => array(),
+    'metadata' => array(),get
   );
 
   $metadata = islandora_iiif_manifests_get_metadata($object);
