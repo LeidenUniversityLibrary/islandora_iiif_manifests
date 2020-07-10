@@ -25,13 +25,13 @@ function islandora_iiif_manifests_create_manifest($object) {
   }
 
   $label = islandora_iiif_manifests_convert_label($object);
-
+  $iiifmanifestlogourl = variable_get('islandora_iiif_manifests_logo_url');
   $scManifest = array(
     '@context' => 'http://iiif.io/api/presentation/2/context.json',
     '@id' => $id,
     '@type' => $manifest_type,
     'label' => $label,
-    "logo" => "https://f.start.me/iiif-a.issc.leidenuniv.nl",
+    "logo" => $iiifmanifestlogourl,
     'metadata' => array(),
   );
 
@@ -238,7 +238,7 @@ function islandora_iiif_manifests_get_image_info($object) {
   $handler = new $handler_class($object);
   $handle = $handler->getFullHandle($object);
 
-  $encoded_handle = urlencode('hdl:' . $handle);
+  $encoded_handle = urlencode( $handle);
 
   $imageArray = array();
 
