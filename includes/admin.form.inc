@@ -42,6 +42,11 @@ function islandora_iiif_manifests_admin_settings_form($form, &$form_state) {
       '#title' => t('IIIF Viewer URL'),
       '#default_value' => $get_default_value('islandora_iiif_manifests_viewer_url'),
     ),
+    'islandora_iiif_manifests_logo_url' => array(
+      '#type' => 'textfield',
+      '#title' => t('IIIF Manifest Logo URL'),
+      '#default_value' => $get_default_value('islandora_iiif_manifests_logo_url'),
+    ),
   );
   return system_settings_form($form);
 }
