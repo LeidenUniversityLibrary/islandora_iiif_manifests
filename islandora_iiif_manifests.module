@@ -186,7 +186,7 @@ function islandora_iiif_manifests_detail_tools_block_view() {
       }
     }
 
-    $show_menu = isset($obj[ISLANDORA_IIIF_MANIFESTS_DATASTREAM_ID]);
+    $show_menu = isset($obj[ISLANDORA_IIIF_MANIFESTS_DATASTREAM_ID]) && islandora_datastream_access(ISLANDORA_VIEW_OBJECTS, $obj[ISLANDORA_IIIF_MANIFESTS_DATASTREAM_ID]);
     $iiifviewerurl = variable_get('islandora_iiif_manifests_viewer_url');
     if ($show_menu && $iiifviewerurl) {
       $modpath = drupal_get_path('module', 'islandora_iiif_manifests');
