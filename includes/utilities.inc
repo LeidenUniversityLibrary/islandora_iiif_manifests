@@ -276,6 +276,8 @@ function islandora_iiif_manifests_get_image_info($object) {
 
     $imageArray['imageWidth'] = $width;
     $imageArray['imageHeight'] = $height;
+
+    @unlink($temp_file);
   }
   return $imageArray;
 }
