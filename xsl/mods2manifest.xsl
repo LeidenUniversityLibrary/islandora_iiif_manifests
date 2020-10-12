@@ -16,7 +16,12 @@
   <xsl:template match="/mods:mods/mods:titleInfo[not(@type='translated')]/mods:title[1]">
     <xsl:call-template name="metadata">
       <xsl:with-param name="label">Title</xsl:with-param>
-      <xsl:with-param name="firstvalue" select="."/>
+      <xsl:with-param name="firstvalue">
+        <xsl:if test="string-length(normalize-space(../mods:nonSort)) &gt; 0">
+          <xsl:value-of select="../mods:nonSort"/>
+        </xsl:if>
+        <xsl:value-of select="."/>
+      </xsl:with-param>
     </xsl:call-template>
   </xsl:template>
 
