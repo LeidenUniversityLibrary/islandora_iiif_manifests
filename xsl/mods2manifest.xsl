@@ -35,6 +35,7 @@
   <xsl:template match="/mods:mods/mods:originInfo[not(@eventType)]/mods:dateIssued[1]">
     <xsl:call-template name="metadata">
       <xsl:with-param name="label">Date issued</xsl:with-param>
+      <xsl:with-param name="type">date</xsl:with-param>
       <xsl:with-param name="firstvalue" select="."/>
     </xsl:call-template>
   </xsl:template>
@@ -226,6 +227,7 @@
   <xsl:template match="/mods:mods/mods:originInfo[@eventType='publication'][1]/mods:dateIssued[1]">
     <xsl:call-template name="metadata">
       <xsl:with-param name="label">Publication date</xsl:with-param>
+      <xsl:with-param name="type">date</xsl:with-param>
       <xsl:with-param name="firstvalue" select="."/>
       <xsl:with-param name="values" select="../../mods:originInfo[@eventType='publication']/mods:dateIssued"/>
     </xsl:call-template>
@@ -359,8 +361,11 @@
           <xsl:value-of select="concat(' (', normalize-space($value/mods:namePart[@type = 'date']), ')')"/>
         </xsl:if>
       </xsl:when>
+      <xsl:when test="$type = 'date'">
+        <xsl:value-of select="concat($value, '&#160;')"/>
+      </xsl:when>
       <xsl:otherwise>
-        <xsl:value-of select="normalize-space($value/text())"/>
+        <xsl:value-of select="normalize-space($value)"/>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
