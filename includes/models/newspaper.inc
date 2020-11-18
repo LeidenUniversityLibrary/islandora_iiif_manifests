@@ -27,9 +27,12 @@ function islandora_iiif_manifest_create_newspaper_manifest(AbstractObject $objec
     // Load issue.
     $issue_object = islandora_object_load($issue['pid']);
 
-    $collection_item = islandora_iiif_manifests_get_object_collection($issue_object);
+    if(islandora_iiif_manifests_allowed_manifest($object)){
+        $collection_item = islandora_iiif_manifests_get_object_collection($issue_object);
 
-    $collection_members_members[] = $collection_item['object'];
+        $collection_members_members[] = $collection_item['object'];
+    }
+
 
   }
 
