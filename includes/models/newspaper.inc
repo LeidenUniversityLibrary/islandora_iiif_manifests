@@ -28,10 +28,10 @@ function islandora_iiif_manifest_create_newspaper_manifest(AbstractObject $objec
     foreach ($group_issues as $group_issue) {
 
         $keys = array_keys($group_issue);
-        echo $group_issue[$keys[0]]."<br>";
-        echo $group_issue[$keys[1]]."<br>";
-        echo $group_issue[$keys[2]]."<br>";
-        echo "<pre>";print_r($group_issue[$keys[3]]);
+        echo "<pre>";print_r($group_issue[$keys[0]]);
+        echo "<br><pre>";print_r($group_issue[$keys[1]]);
+        echo "<br><pre>";print_r($group_issue[$keys[2]]);
+        echo "<br><pre>";print_r($group_issue[$keys[3]]);
         echo "<br><pre>";
         print_r($group_issue );
         die;
