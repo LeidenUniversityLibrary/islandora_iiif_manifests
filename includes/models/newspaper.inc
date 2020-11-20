@@ -45,7 +45,7 @@ function islandora_iiif_manifest_create_newspaper_manifest(AbstractObject $objec
 
                                 // Level 3
                                 echo "Level 3:". $key3 . ' = ' . $val3 . '<br />';
-                                echo "<pre>"; print_r($val3);die;
+                                echo "<pre>"; print_r($val3);
                             }
                         }
                         else {
