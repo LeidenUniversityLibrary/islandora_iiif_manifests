@@ -28,15 +28,14 @@ function islandora_iiif_manifest_create_newspaper_manifest(AbstractObject $objec
 
     $collection_members_members = array();
 
-    foreach ($group_issues as $group_issue) {
+    foreach ($group_issues as $key => $value) {
 
-        $keys0 = array_keys($group_issue);
-        $keys1 = array_keys($keys0);
-        $keys2 = array_keys($keys1);
-        $keys3 = array_keys($keys2);
-        echo "Keys 3<pre>";print_r($keys3);
+
+        $pid = array_column($value, 'pid');
+        echo "Key $key <br>";
+        echo "Pid $pid <br>";
         echo "<br><pre>";
-        print_r($group_issue );
+        print_r($value);
         die;
         // Load issue.
         $group_issue = islandora_object_load($issue['pid']);
