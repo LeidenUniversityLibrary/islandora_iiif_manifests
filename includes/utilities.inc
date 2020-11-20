@@ -189,6 +189,11 @@ function islandora_iiif_manifests_allowed_canvas_cmodel($object) {
     return FALSE;
 }
 
+/**
+ * Check if the object already has manifest or access is allowed
+ * @param $object
+ * @return bool
+ */
 function islandora_iiif_manifests_allowed_manifest($object){
 
     if (isset($object[ISLANDORA_IIIF_MANIFESTS_DATASTREAM_ID]) && islandora_datastream_access(ISLANDORA_VIEW_OBJECTS, $object[ISLANDORA_IIIF_MANIFESTS_DATASTREAM_ID])) {
@@ -197,6 +202,15 @@ function islandora_iiif_manifests_allowed_manifest($object){
     else {
         return FALSE;
     }
+}
+
+function islandora_iiif_manifests_get_newspaper_volumes($objet){
+
+    // Get Image info from TECHMD.
+    $mods_datastream = $object['TECHMD']->content;
+    $xml = simplexml_load_string($mods_datastream);
+    $json = json_encode($xml);
+    $tech_md = json_decode($json, TRUE);
 }
 
 /**
