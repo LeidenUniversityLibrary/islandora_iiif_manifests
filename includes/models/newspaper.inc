@@ -24,60 +24,61 @@ function islandora_iiif_manifest_create_newspaper_manifest(AbstractObject $objec
     $group_issues = islandora_newspaper_group_issues($issues);
 
 
-
     $collection_members_members = array();
 
-    foreach($group_issues as $key => $val){
-        if(is_array($val)){
+    foreach ($group_issues as $key => $val) {
+        if (is_array($val)) {
             //We can use foreach instead of printin it out directly
             //if this array will have more value
             //If not just use $val['id']
-            foreach($val as $k => $v){
+            foreach ($val as $k => $v) {
                 echo $k . ' = ' . $v . '<br />';
             }
-        }else{
+        }
+        else {
             echo $key . ' = ' . $val . '<br />';
         }
     }
-    echo "<pre>";
-    print_r($group_issues );die;
-    foreach ($group_issues as $key => $value) {
 
+    foreach ($group_issues as $key0 => $val0) {
 
-        $pid = array_column($value, 'pid');
-        echo "Key $key <br>";
-        echo "Pid $pid <br>";
-        echo "<br><pre>";
-        print_r($value);
-        die;
-        // Load issue.
-        $group_issue = islandora_object_load($issue['pid']);
+        // Level 0
+        if (is_array($val0)) {
 
+            foreach ($val0 as $key1 => $val1) {
 
+                //Level 1
+                if (is_array($val1)) {
 
-        foreach ($issues as $issue) {
+                    foreach ($val1 as $key2 => $val2) {
 
-            // Load issue.
-            $issue_object = islandora_object_load($issue['pid']);
-
-            if (islandora_iiif_manifests_allowed_manifest($issue_object)) {
-
-                $collection_item = islandora_iiif_manifests_get_object_collection($issue_object);
-
-                $collection_members_members[] = $collection_item['object'];
+                        // Level 2
+                        echo "Level 2:". $key2 . ' = ' . $val2 . '<br />';
+                    }
+                }
+                else {
+                    echo "Level 1:".$key1 . ' = ' . $val1 . '<br />';
+                }
             }
-
         }
-
-        if (islandora_iiif_manifests_allowed_manifest($issue_object)) {
-
-            $collection_item = islandora_iiif_manifests_get_object_collection($issue_object);
-
-            $collection_members_members[] = $collection_item['object'];
+        else{
+            echo "Level 0:".$key0 . ' = ' . $val0 . '<br />';
         }
-
 
     }
+
+    echo "<pre>";
+    print_r($group_issues);die;
+
+    $pid = array_column($value, 'pid');
+    echo "Key $key <br>";
+    echo "Pid $pid <br>";
+    echo "<br><pre>";
+    print_r($value);
+    die;
+    // Load issue.
+    $group_issue = islandora_object_load($issue['pid']);
+
 
     foreach ($issues as $issue) {
 
@@ -93,10 +94,34 @@ function islandora_iiif_manifest_create_newspaper_manifest(AbstractObject $objec
 
     }
 
-    if (!empty($collection_members_members)) {
-        $manifest['members'] = $collection_members_members;
+    if (islandora_iiif_manifests_allowed_manifest($issue_object)) {
+
+        $collection_item = islandora_iiif_manifests_get_object_collection($issue_object);
+
+        $collection_members_members[] = $collection_item['object'];
     }
 
-    return $manifest;
+
+}
+
+foreach ($issues as $issue) {
+
+    // Load issue.
+    $issue_object = islandora_object_load($issue['pid']);
+
+    if (islandora_iiif_manifests_allowed_manifest($issue_object)) {
+
+        $collection_item = islandora_iiif_manifests_get_object_collection($issue_object);
+
+        $collection_members_members[] = $collection_item['object'];
+    }
+
+}
+
+if (!empty($collection_members_members)) {
+    $manifest['members'] = $collection_members_members;
+}
+
+return $manifest;
 
 }
