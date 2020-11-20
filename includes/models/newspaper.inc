@@ -23,11 +23,24 @@ function islandora_iiif_manifest_create_newspaper_manifest(AbstractObject $objec
     // Get issues.
     $group_issues = islandora_newspaper_group_issues($issues);
 
-    echo "<pre>";
-    print_r($group_issues );
+
 
     $collection_members_members = array();
 
+    foreach($group_issues as $key => $val){
+        if(is_array($val)){
+            //We can use foreach instead of printin it out directly
+            //if this array will have more value
+            //If not just use $val['id']
+            foreach($val as $k => $v){
+                echo $k . ' = ' . $v . '<br />';
+            }
+        }else{
+            echo $key . ' = ' . $val . '<br />';
+        }
+    }
+    echo "<pre>";
+    print_r($group_issues );die;
     foreach ($group_issues as $key => $value) {
 
 
