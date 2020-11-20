@@ -20,6 +20,13 @@ function islandora_iiif_manifests_menu() {
       'type' => MENU_CALLBACK,
       'access callback' => TRUE,
     ),
+    'iiif_manifest/%islandora_object/create_manifest' => array(
+        'page callback' => 'islandora_iiif_manifests_create_manifest_json',
+        'page arguments' => array(1),
+        'file' => 'includes/manifest.inc',
+        'type' => MENU_CALLBACK,
+        'access callback' => TRUE,
+    ),
     'iiif_manifest/%islandora_object/canvas' => array(
       'page callback' => 'islandora_iiif_manifests_create_canvas_json',
       'page arguments' => array(1),
