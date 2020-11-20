@@ -20,10 +20,11 @@ function islandora_iiif_manifest_create_newspaper_manifest(AbstractObject $objec
     // Get issues.
     $issues = islandora_newspaper_get_issues($object);
 
-    $dateIssued = islandora_newspaper_get_issues_sparql($object);
+    // Get issues.
+    //$issues = islandora_newspaper_get_issues_sparql($object);
 
     echo "<pre>";
-    print_r($dateIssued);
+    print_r($issues);
     die;
 
     $collection_members_members = array();
