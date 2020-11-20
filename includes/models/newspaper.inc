@@ -23,11 +23,46 @@ function islandora_iiif_manifest_create_newspaper_manifest(AbstractObject $objec
     // Get issues.
     $group_issues = islandora_newspaper_group_issues($issues);
 
-    echo "<pre>";
-    print_r($group_issues );
-    die;
-
     $collection_members_members = array();
+
+    foreach ($group_issues as $group_issue) {
+
+        $keys = array_keys($group_issue);
+        echo $group_issue[$keys[0]]."<br>";
+        echo $group_issue[$keys[1]]."<br>";
+        echo $group_issue[$keys[2]]."<br>";
+        echo "<pre>";print_r($group_issue[$keys[3]]);
+        echo "<br><pre>";
+        print_r($group_issue );
+        die;
+        // Load issue.
+        $group_issue = islandora_object_load($issue['pid']);
+
+
+
+        foreach ($issues as $issue) {
+
+            // Load issue.
+            $issue_object = islandora_object_load($issue['pid']);
+
+            if (islandora_iiif_manifests_allowed_manifest($issue_object)) {
+
+                $collection_item = islandora_iiif_manifests_get_object_collection($issue_object);
+
+                $collection_members_members[] = $collection_item['object'];
+            }
+
+        }
+
+        if (islandora_iiif_manifests_allowed_manifest($issue_object)) {
+
+            $collection_item = islandora_iiif_manifests_get_object_collection($issue_object);
+
+            $collection_members_members[] = $collection_item['object'];
+        }
+
+
+    }
 
     foreach ($issues as $issue) {
 
@@ -40,7 +75,6 @@ function islandora_iiif_manifest_create_newspaper_manifest(AbstractObject $objec
 
             $collection_members_members[] = $collection_item['object'];
         }
-
 
     }
 

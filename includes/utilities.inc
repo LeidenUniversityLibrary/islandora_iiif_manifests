@@ -140,7 +140,34 @@ function islandora_iiif_manifests_get_object_canvas($object) {
 
 function islandora_iiif_manifests_get_object_collection($object) {
 
+    $collection_item = array();
 
+    $manifest_uri = urldecode(url("iiif_manifest/{$object->id}/manifest", array(
+        'absolute' => TRUE,
+        'language' => (object)array('language' => FALSE),
+    )));
+
+    if ((count(array_intersect($object->models, array('islandora:compoundCModel'))) > 0)) {
+        $manifest_type = islandora_iiif_manifests_compound_nanifest_type($object);
+    }
+    else {
+        // Set manifest type.
+        $manifest_type = (count(array_intersect($object->models, array('islandora:newspaperCModel', 'islandora:collectionCModel', 'islandora:compoundCModel'))) > 0) ? "sc:Collection" : "sc:Manifest";
+    }
+
+    $collection_item['type'] = $manifest_type;
+    $label = islandora_iiif_manifests_convert_label($object);
+
+    $collection_item['object'] = array(
+        "@id" => $manifest_uri,
+        "@type" => $manifest_type,
+        "label" => $label,
+    );
+
+    return $collection_item;
+}
+
+function islandora_iiif_manifests_get_object_newspaper_collection($object) {
 
     $collection_item = array();
 
