@@ -39,7 +39,17 @@ function islandora_iiif_manifest_create_newspaper_manifest(AbstractObject $objec
                     foreach ($val1 as $key2 => $val2) {
 
                         // Level 2
-                        echo "Level 2:". $key2 . ' = ' . $val2 . '<br />';
+                        if (is_array($val2)) {
+
+                            foreach ($val2 as $key3 => $val3) {
+
+                                // Level 3
+                                echo "Level 3:". $key3 . ' = ' . $val3 . '<br />';
+                            }
+                        }
+                        else {
+                            echo "Level 2:".$key2. ' = ' . $val2 . '<br />';
+                        }
                     }
                 }
                 else {
