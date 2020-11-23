@@ -27,7 +27,7 @@ function islandora_iiif_manifest_create_newspaper_manifest(AbstractObject $objec
     $collection_members_members = array();
 
 
-
+    $j=0;
     foreach ($group_issues as $volume => $issue) {
 
         echo "Volume $volume issue: <pre>";
@@ -39,7 +39,7 @@ function islandora_iiif_manifest_create_newspaper_manifest(AbstractObject $objec
         )));
 
 
-        $collection_item['collections'][][$volume] = array(
+        $collection_item['collections'][$j] = array(
             "@id" => $manifest_uri,
             "@type" => 'sc:Collection',
             "label" => "Volume " . $volume,
@@ -51,12 +51,14 @@ function islandora_iiif_manifest_create_newspaper_manifest(AbstractObject $objec
             // Level 0
             if (is_array($value_month)) {
 
+                //echo "Value Day<pre>";print_r($value_month);
+
                 foreach ($value_month as $key_day => $value_day) {
 
                     //Level 1
                     if (is_array($value_day)) {
 
-                        echo "Value Day<pre>";print_r($value_day);
+                        //echo "Value Day<pre>";print_r($value_day);
 
                         foreach ($value_day as $issue_data) {
 
@@ -73,22 +75,19 @@ function islandora_iiif_manifest_create_newspaper_manifest(AbstractObject $objec
                                 "@type" => 'sc:Manifest',
                                 "label" => $label,
                             );
-                            echo "<pre>";print_r($issue_data);
-                            echo " Volume $volume Issue $i $label  <br />";
-                            $collection_item['collections'][][$volume]['members'] = $collection_members_members;
+                            //echo "<pre>";print_r($issue_data);
+                            //echo "Volume $volume Issue $i $label  <br />";
                             $i++;
 
                         }
                     }
                 }
             }
-            else {
-                echo "Level 0:" . $key0 . ' = ' . $val0 . '<br />';
-            }
 
         }
 
-
+        $collection_item['collections'][$j]['members'] = $collection_members_members;
+    $j++;
 
     }
 
