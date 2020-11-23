@@ -26,7 +26,7 @@ function islandora_iiif_manifest_create_newspaper_manifest(AbstractObject $objec
 
     $collection_members_members = array();
 
-    $i = 0;
+
 
     foreach ($group_issues as $volume => $issue) {
 
@@ -45,6 +45,7 @@ function islandora_iiif_manifest_create_newspaper_manifest(AbstractObject $objec
             "label" => "Volume " . $volume,
         );
 
+        $i = 0;
         foreach ($issue as $key0 => $val0) {
 
             // Level 0
@@ -54,6 +55,8 @@ function islandora_iiif_manifest_create_newspaper_manifest(AbstractObject $objec
 
                     //Level 1
                     if (is_array($val1)) {
+
+                        echo "<pre>";print_r($val1);die;
 
                         foreach ($val1 as $key2 => $val2) {
 
@@ -71,7 +74,7 @@ function islandora_iiif_manifest_create_newspaper_manifest(AbstractObject $objec
                                 "label" => $label,
                             );
                             echo " Volume $volume Issue $i $label key/value:" . $key2 . ' = ' . $val2 . '<br />';
-
+                            $collection_item['collections'][][$volume]['members'] = $collection_members_members;
                             $i++;
 
                         }
@@ -83,7 +86,7 @@ function islandora_iiif_manifest_create_newspaper_manifest(AbstractObject $objec
             }
 
         }
-        $collection_item['collections'][][$volume]['members'] = $collection_members_members;
+
 
 
     }
