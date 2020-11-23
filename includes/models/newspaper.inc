@@ -26,69 +26,87 @@ function islandora_iiif_manifest_create_newspaper_manifest(AbstractObject $objec
 
     $collection_members_members = array();
 
-    foreach ($group_issues as $key0 => $val0) {
+    $i = 0;
+
+    foreach($group_issues as $group_issue){
+
+        foreach ($group_issue as $key0 => $val0) {
+
+            $manifest_uri = urldecode(url("iiif_manifest/{$object->id}/collection/{$key0}", array(
+                'absolute' => TRUE,
+                'language' => (object)array('language' => FALSE),
+            )));
+
+
+            $collection_item['collections'][][$key0] = array(
+                "@id" =>  $manifest_uri,
+                "@type" => 'sc:Collection',
+                "label" => "Volume ".$key0,
+            );
+
+            // Level 0
+            if (is_array($val0)) {
+
+                foreach ($val0 as $key1 => $val1) {
+
+                    //Level 1
+                    if (is_array($val1)) {
+
+                        foreach ($val1 as $key2 => $val2) {
+
+                            // Level 2
+                            if (is_array($val2)) {
+
+                                foreach ($val2 as $key3 => $val3) {
+
+                                    // Level 3
+                                    echo " $i Level 3:" . $key3 . ' = ' . $val3 . '<br />';
+                                    echo "<pre>";
+                                    print_r($val3);
+                                    $issue_object = islandora_object_load($val3['pid']);
+                                    $manifest_uri = urldecode(url("iiif_manifest/{$val3['pid']}/manifest/", array(
+                                        'absolute' => TRUE,
+                                        'language' => (object)array('language' => FALSE),
+                                    )));
+                                    $label = islandora_iiif_manifests_convert_label($issue_object);
+                                    $collection_members_members['members'][$i] = array(
+                                        "@id" =>  $manifest_uri,
+                                        "@type" => 'sc:Manifest',
+                                        "label" => $label,
+                                    );
+
+
+                                    $i++;
 
 
 
 
-        // Level 0
-        if (is_array($val0)) {
 
-            foreach ($val0 as $key1 => $val1) {
-
-                //Level 1
-                if (is_array($val1)) {
-
-                    foreach ($val1 as $key2 => $val2) {
-
-                        // Level 2
-                        if (is_array($val2)) {
-
-                            foreach ($val2 as $key3 => $val3) {
-
-
-
-
-                                $manifest_uri = urldecode(url("iiif_manifest/{$val3['pid']}/manifest", array(
-                                    'absolute' => TRUE,
-                                    'language' => (object)array('language' => FALSE),
-                                )));
-
-
-                                $collection_item['collections'][][$key0] = array(
-                                    "@id" =>  $manifest_uri,
-                                    "@type" => 'collection',
-                                    "label" => $key0,
-                                );
-
-                                // Level 3
-                                echo "Level 3:" . $key3 . ' = ' . $val3 . '<br />';
-                                echo "<pre>";
-                                print_r($val3);
-                                print_r($collection_item);
-
-
-
-
+                                }
+                            }
+                            else {
+                                echo "Level 2:" . $key2 . ' = ' . $val2 . '<br />';
                             }
                         }
-                        else {
-                            echo "Level 2:" . $key2 . ' = ' . $val2 . '<br />';
-                        }
+                    }
+                    else {
+                        echo "Level 1:" . $key1 . ' = ' . $val1 . '<br />';
                     }
                 }
-                else {
-                    echo "Level 1:" . $key1 . ' = ' . $val1 . '<br />';
-                }
             }
-        }
-        else {
-            echo "Level 0:" . $key0 . ' = ' . $val0 . '<br />';
+            else {
+                echo "Level 0:" . $key0 . ' = ' . $val0 . '<br />';
+            }
+
         }
 
     }
 
+
+
     echo "<pre>";
+    print_r($collection_members_members);
+    print_r($collection_item);
     print_r($group_issues);
     die;
 
