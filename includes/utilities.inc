@@ -196,6 +196,8 @@ function islandora_iiif_manifests_get_object_newspaper_collection($object) {
     return $collection_item;
 }
 
+
+
 function islandora_iiif_manifests_allowed_cmodel($object) {
 
     $cmodels = array('islandora:sp_basic_image', 'islandora:sp_large_image_cmodel', 'islandora:bookCModel', 'islandora:newspaperCModel', 'islandora:collectionCModel', 'islandora:newspaperIssueCModel', 'islandora:compoundCModel');

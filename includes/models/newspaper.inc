@@ -28,6 +28,9 @@ function islandora_iiif_manifest_create_newspaper_manifest(AbstractObject $objec
 
     foreach ($group_issues as $key0 => $val0) {
 
+
+
+
         // Level 0
         if (is_array($val0)) {
 
@@ -43,29 +46,51 @@ function islandora_iiif_manifest_create_newspaper_manifest(AbstractObject $objec
 
                             foreach ($val2 as $key3 => $val3) {
 
+
+
+
+                                $manifest_uri = urldecode(url("iiif_manifest/{$val3['pid']}/manifest", array(
+                                    'absolute' => TRUE,
+                                    'language' => (object)array('language' => FALSE),
+                                )));
+
+
+                                $collection_item['collections'][] = [$key0] = array(
+                                    "@id" =>  $manifest_uri,
+                                    "@type" => 'collection',
+                                    "label" => $key0,
+                                );
+
                                 // Level 3
-                                echo "Level 3:". $key3 . ' = ' . $val3 . '<br />';
-                                echo "<pre>"; print_r($val3);
+                                echo "Level 3:" . $key3 . ' = ' . $val3 . '<br />';
+                                echo "<pre>";
+                                print_r($val3);
+                                print_r($collection_item);die;
+
+
+
+
                             }
                         }
                         else {
-                            echo "Level 2:".$key2. ' = ' . $val2 . '<br />';
+                            echo "Level 2:" . $key2 . ' = ' . $val2 . '<br />';
                         }
                     }
                 }
                 else {
-                    echo "Level 1:".$key1 . ' = ' . $val1 . '<br />';
+                    echo "Level 1:" . $key1 . ' = ' . $val1 . '<br />';
                 }
             }
         }
-        else{
-            echo "Level 0:".$key0 . ' = ' . $val0 . '<br />';
+        else {
+            echo "Level 0:" . $key0 . ' = ' . $val0 . '<br />';
         }
 
     }
 
     echo "<pre>";
-    print_r($group_issues);die;
+    print_r($group_issues);
+    die;
 
 
     // Load issue.
@@ -94,13 +119,10 @@ function islandora_iiif_manifest_create_newspaper_manifest(AbstractObject $objec
     }
 
 
+    if (!empty($collection_members_members)) {
+        $manifest['members'] = $collection_members_members;
+    }
 
-
-
-if (!empty($collection_members_members)) {
-    $manifest['members'] = $collection_members_members;
-}
-
-return $manifest;
+    return $manifest;
 
 }
