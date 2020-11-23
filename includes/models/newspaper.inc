@@ -65,7 +65,7 @@ function islandora_iiif_manifest_create_newspaper_manifest(AbstractObject $objec
                                 echo "Level 3:" . $key3 . ' = ' . $val3 . '<br />';
                                 echo "<pre>";
                                 print_r($val3);
-                                print_r($collection_item);die;
+                                print_r($collection_item);
 
 
 
