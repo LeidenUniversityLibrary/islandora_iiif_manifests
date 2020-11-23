@@ -55,7 +55,7 @@ function islandora_iiif_manifest_create_newspaper_manifest(AbstractObject $objec
                                 )));
 
 
-                                $collection_item['collections'][] = [$key0] = array(
+                                $collection_item['collections'][][$key0] = array(
                                     "@id" =>  $manifest_uri,
                                     "@type" => 'collection',
                                     "label" => $key0,
