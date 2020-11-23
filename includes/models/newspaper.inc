@@ -56,7 +56,7 @@ function islandora_iiif_manifest_create_newspaper_manifest(AbstractObject $objec
                     //Level 1
                     if (is_array($val1)) {
 
-                        echo "<pre>";print_r($val1);die;
+                        echo "<pre>";print_r($val1);
 
                         foreach ($val1 as $key2 => $val2) {
 
