@@ -28,22 +28,24 @@ function islandora_iiif_manifest_create_newspaper_manifest(AbstractObject $objec
 
     $i = 0;
 
-    foreach($group_issues as $group_issue){
-        echo "<pre>"; print_r($group_issue);
+    foreach ($group_issues as $volume => $issue) {
 
-        foreach ($group_issue as $key0 => $val0) {
+        echo "group issue: <pre>";
+        print_r($issue);
 
-            $manifest_uri = urldecode(url("iiif_manifest/{$object->id}/collection/{$key0}", array(
-                'absolute' => TRUE,
-                'language' => (object)array('language' => FALSE),
-            )));
+        $manifest_uri = urldecode(url("iiif_manifest/{$object->id}/collection/{$volume}", array(
+            'absolute' => TRUE,
+            'language' => (object)array('language' => FALSE),
+        )));
 
 
-            $collection_item['collections'][][$key0] = array(
-                "@id" =>  $manifest_uri,
-                "@type" => 'sc:Collection',
-                "label" => "Volume ".$key0,
-            );
+        $collection_item['collections'][][$volume] = array(
+            "@id" => $manifest_uri,
+            "@type" => 'sc:Collection',
+            "label" => "Volume " . $volume,
+        );
+
+        foreach ($issue as $key0 => $val0) {
 
             // Level 0
             if (is_array($val0)) {
@@ -56,28 +58,23 @@ function islandora_iiif_manifest_create_newspaper_manifest(AbstractObject $objec
                         foreach ($val1 as $key2 => $val2) {
 
                             // Level 3
-                            echo " $i Level 2:" . $key2 . ' = ' . $val2 . '<br />';
-                            echo "<pre>";
-                            print_r($val2);
+
                             $issue_object = islandora_object_load($val2['pid']);
                             $manifest_uri = urldecode(url("iiif_manifest/{$val2['pid']}/manifest/", array(
                                 'absolute' => TRUE,
                                 'language' => (object)array('language' => FALSE),
                             )));
                             $label = islandora_iiif_manifests_convert_label($issue_object);
-                            $collection_members_members['members'][$i] = array(
-                                "@id" =>  $manifest_uri,
+                            $collection_members_members[$i] = array(
+                                "@id" => $manifest_uri,
                                 "@type" => 'sc:Manifest',
                                 "label" => $label,
                             );
-
+                            echo " Volume $volume Issue $i $label key/value:" . $key2 . ' = ' . $val2 . '<br />';
 
                             $i++;
 
                         }
-                    }
-                    else {
-                        echo "Level 1:" . $key1 . ' = ' . $val1 . '<br />';
                     }
                 }
             }
@@ -86,9 +83,10 @@ function islandora_iiif_manifest_create_newspaper_manifest(AbstractObject $objec
             }
 
         }
+        $collection_item['collections'][][$volume]['members'] = $collection_members_members;
+
 
     }
-
 
 
     echo "<pre>";
