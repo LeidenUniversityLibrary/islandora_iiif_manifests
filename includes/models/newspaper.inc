@@ -30,7 +30,7 @@ function islandora_iiif_manifest_create_newspaper_manifest(AbstractObject $objec
 
     foreach ($group_issues as $volume => $issue) {
 
-        echo "group issue: <pre>";
+        echo "Volume $volume issue: <pre>";
         print_r($issue);
 
         $manifest_uri = urldecode(url("iiif_manifest/{$object->id}/collection/{$volume}", array(
@@ -46,24 +46,24 @@ function islandora_iiif_manifest_create_newspaper_manifest(AbstractObject $objec
         );
 
         $i = 0;
-        foreach ($issue as $key0 => $val0) {
+        foreach ($issue as $key_month => $value_month) {
 
             // Level 0
-            if (is_array($val0)) {
+            if (is_array($value_month)) {
 
-                foreach ($val0 as $key1 => $val1) {
+                foreach ($value_month as $key_day => $value_day) {
 
                     //Level 1
-                    if (is_array($val1)) {
+                    if (is_array($value_day)) {
 
-                        echo "<pre>";print_r($val1);
+                        echo "Value Day<pre>";print_r($value_day);
 
-                        foreach ($val1 as $key2 => $val2) {
+                        foreach ($value_day as $issue_data) {
 
                             // Level 3
 
-                            $issue_object = islandora_object_load($val2['pid']);
-                            $manifest_uri = urldecode(url("iiif_manifest/{$val2['pid']}/manifest/", array(
+                            $issue_object = islandora_object_load($issue_data['pid']);
+                            $manifest_uri = urldecode(url("iiif_manifest/{$issue_data['pid']}/manifest/", array(
                                 'absolute' => TRUE,
                                 'language' => (object)array('language' => FALSE),
                             )));
@@ -73,7 +73,8 @@ function islandora_iiif_manifest_create_newspaper_manifest(AbstractObject $objec
                                 "@type" => 'sc:Manifest',
                                 "label" => $label,
                             );
-                            echo " Volume $volume Issue $i $label key/value:" . $key2 . ' = ' . $val2 . '<br />';
+                            echo "<pre>";print_r($issue_data);
+                            echo " Volume $volume Issue $i $label  <br />";
                             $collection_item['collections'][][$volume]['members'] = $collection_members_members;
                             $i++;
 
