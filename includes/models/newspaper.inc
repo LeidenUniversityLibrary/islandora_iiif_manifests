@@ -55,39 +55,25 @@ function islandora_iiif_manifest_create_newspaper_manifest(AbstractObject $objec
 
                         foreach ($val1 as $key2 => $val2) {
 
-                            // Level 2
-                            if (is_array($val2)) {
-
-                                foreach ($val2 as $key3 => $val3) {
-
-                                    // Level 3
-                                    echo " $i Level 3:" . $key3 . ' = ' . $val3 . '<br />';
-                                    echo "<pre>";
-                                    print_r($val3);
-                                    $issue_object = islandora_object_load($val3['pid']);
-                                    $manifest_uri = urldecode(url("iiif_manifest/{$val3['pid']}/manifest/", array(
-                                        'absolute' => TRUE,
-                                        'language' => (object)array('language' => FALSE),
-                                    )));
-                                    $label = islandora_iiif_manifests_convert_label($issue_object);
-                                    $collection_members_members['members'][$i] = array(
-                                        "@id" =>  $manifest_uri,
-                                        "@type" => 'sc:Manifest',
-                                        "label" => $label,
-                                    );
+                            // Level 3
+                            echo " $i Level 2:" . $key2 . ' = ' . $val2 . '<br />';
+                            echo "<pre>";
+                            print_r($val2);
+                            $issue_object = islandora_object_load($val2['pid']);
+                            $manifest_uri = urldecode(url("iiif_manifest/{$val2['pid']}/manifest/", array(
+                                'absolute' => TRUE,
+                                'language' => (object)array('language' => FALSE),
+                            )));
+                            $label = islandora_iiif_manifests_convert_label($issue_object);
+                            $collection_members_members['members'][$i] = array(
+                                "@id" =>  $manifest_uri,
+                                "@type" => 'sc:Manifest',
+                                "label" => $label,
+                            );
 
 
-                                    $i++;
+                            $i++;
 
-
-
-
-
-                                }
-                            }
-                            else {
-                                echo "Level 2:" . $key2 . ' = ' . $val2 . '<br />';
-                            }
                         }
                     }
                     else {
