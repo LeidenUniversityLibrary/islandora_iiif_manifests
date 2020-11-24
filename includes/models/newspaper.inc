@@ -37,16 +37,18 @@ function islandora_iiif_manifest_create_newspaper_manifest(AbstractObject $objec
       )));
       
       
-      $manifest['collections'][$j] = array(
+      $newspaper_collection =  array(
         "@id" => $manifest_uri,
         "@type" => 'sc:Collection',
         "label" => "Volume " . $volume,
       );
       
-      $manifest['collections'][$j]['members'] = islandora_iiif_manifests_get_newspaper_member_collection($issue);
+      $newspaper_collection['members'] = islandora_iiif_manifests_get_newspaper_member_collection($issue);
+      array_push($manifest['collections'],$newspaper_collection);
+      $j++;
     }
     
-    $j++;
+   
     
   }
   
