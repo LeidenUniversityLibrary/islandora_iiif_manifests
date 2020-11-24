@@ -47,9 +47,11 @@ function islandora_iiif_manifest_create_newspaper_manifest(AbstractObject $objec
       $newspaper_collection['members'] = islandora_iiif_manifests_get_newspaper_member_collection($issue);
       echo "<pre>";print_r($newspaper_collection);
       array_push($manifest['collections'],$newspaper_collection['members']);
+  
+      echo "Regular: <pre>";print_r($manifest);
+      echo "Json <pre>";print_r(json_encode($manifest)); die;
       $j++;
     }
-    
    
     
   }
