@@ -45,11 +45,11 @@ function islandora_iiif_manifests_create_manifest_json(AbstractObject $object) {
 /**
  * Response in JSON for the manifest.
  */
-function islandora_iiif_manifests_view_collection_json(AbstractObject $object,$subcollection) {
+function islandora_iiif_manifests_create_volume_json(AbstractObject $object,$volume) {
   
   module_load_include('inc', 'islandora', 'includes/utilities');
   
-  $output = islandora_iiif_manifests_build_sub_collection($object,$subcollection);
+  $output = islandora_iiif_manifests_build_volume_collection($object,$volume);
   
   islandora_iiif_manifests_create_json_response('200 OK', $output);
 }
@@ -108,8 +108,6 @@ function islandora_iiif_manifests_build_canvas($object) {
     $output = array();
 
     if (islandora_iiif_manifests_allowed_canvas_cmodel($object)) {
-  
-      echo "models: <pre>";print_r($object->models);die;
       
         $hooks = islandora_build_hook_list(ISLANDORA_IIIF_MANIFESTS_ISLANDORA_IIIF_MANIFEST_CANVAS_HOOK, $object->models);
 
@@ -128,7 +126,7 @@ function islandora_iiif_manifests_build_canvas($object) {
 /**
  * Build newspaper volume array.
  */
-function islandora_iiif_manifests_build_volume_collection(AbstractObject $object,$volume) {
+function islandora_iiif_manifests_build_volume_collection($object,$volume) {
   
   module_load_include('inc', 'islandora_iiif_manifests', 'includes/utilities');
   
