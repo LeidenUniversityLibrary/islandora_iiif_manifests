@@ -70,7 +70,7 @@ function islandora_iiif_manifest_create_newspaper_manifest_volume(AbstractObject
  
   foreach ($group_issues as $volume => $issue) {
    
-    if($selected_volume === $volume){
+    if(intval($selected_volume) === $volume){
   
       echo "Selected volume:".$selected_volume ." = $volume";
       
@@ -95,10 +95,10 @@ function islandora_iiif_manifest_create_newspaper_manifest_volume(AbstractObject
     }
     else{
       
-      if(is_string($selected_volume))
-        echo "Selected volume: ".$selected_volume ." is a string";
+      if(is_int($selected_volume))
+        echo "Selected volume: ".$selected_volume ." is a int";
       else
-        echo "Selected volume: ".$selected_volume ." not a string ";
+        echo "Selected volume: ".$selected_volume ." not a int ";
   
       if(is_string($volume))
         echo "Current volume: ".$volume ." is a string";
