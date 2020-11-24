@@ -25,7 +25,8 @@ function islandora_iiif_manifest_create_newspaper_manifest(AbstractObject $objec
   // Get issues.
   $group_issues = islandora_newspaper_group_issues($issues);
   
-  echo "<pre>";print_r($group_issues);die;
+  echo $volume;
+  echo "group issues:<pre>";print_r($group_issues);die;
 
   foreach ($group_issues as $volume => $issue) {
     
