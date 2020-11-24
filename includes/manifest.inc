@@ -136,9 +136,10 @@ function islandora_iiif_manifests_build_volume_collection($object, $volume) {
   
   $hooks = islandora_build_hook_list(ISLANDORA_IIIF_MANIFESTS_ISLANDORA_IIIF_MANIFEST_NEWSPAPER_VOLUME_HOOK, $object->models,$volume);
   
+  echo "<pre>";print_r($hooks);
   foreach ($hooks as $hook) {
     $temp = module_invoke_all($hook, $object);
-    
+    echo "<pre>";print_r($temp);
     if (!empty($temp)) {
       $output = array_merge_recursive($output, $temp);
     }
