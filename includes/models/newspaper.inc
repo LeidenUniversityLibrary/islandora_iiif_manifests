@@ -76,7 +76,6 @@ function islandora_iiif_manifest_create_newspaper_manifest_volume(AbstractObject
       
       if (!empty(islandora_iiif_manifests_get_newspaper_member_collection($issue))) {
   
-        echo "<pre>";print_r($issue);
         $manifest_uri = urldecode(url("iiif_manifest/{$object->id}/collection/{$volume}", array(
           'absolute' => TRUE,
           'language' => (object)array('language' => FALSE),
@@ -93,19 +92,7 @@ function islandora_iiif_manifest_create_newspaper_manifest_volume(AbstractObject
     
       }
     }
-    else{
-      
-      if(is_int($selected_volume))
-        echo "Selected volume: ".$selected_volume ." is a int";
-      else
-        echo "Selected volume: ".$selected_volume ." not a int ";
-  
-      if(is_string($volume))
-        echo "Current volume: ".$volume ." is a string";
-      else
-        echo "Current volume: ".$volume ." not a string ";
-
-    }
+   
     
    
   }
