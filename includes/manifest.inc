@@ -126,7 +126,7 @@ function islandora_iiif_manifests_build_canvas($object) {
 /**
  * Build newspaper volume array.
  */
-function islandora_iiif_manifests_build_volume_collection($object,$volume) {
+function islandora_iiif_manifests_build_volume_collection(AbstractObject $object,$volume) {
   
   module_load_include('inc', 'islandora_iiif_manifests', 'includes/utilities');
   
