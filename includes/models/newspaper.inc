@@ -48,9 +48,6 @@ function islandora_iiif_manifest_create_newspaper_manifest(AbstractObject $objec
     
   }
   
-  echo "Regular: <pre>";print_r($manifest);
-  echo "Json <pre>";print_r(json_encode($manifest)); die;
-  
   return $manifest;
   
 }
