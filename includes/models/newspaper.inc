@@ -28,6 +28,7 @@ function islandora_iiif_manifest_create_newspaper_manifest(AbstractObject $objec
   
   foreach ($group_issues as $volume => $issue) {
     
+    $newspaper_collection = array();
     
     if (!empty(islandora_iiif_manifests_get_newspaper_member_collection($issue))) {
       
@@ -44,6 +45,7 @@ function islandora_iiif_manifest_create_newspaper_manifest(AbstractObject $objec
       );
       
       $newspaper_collection['members'] = islandora_iiif_manifests_get_newspaper_member_collection($issue);
+      echo "<pre>";print_r($newspaper_collection);
       array_push($manifest['collections'],$newspaper_collection['members']);
       $j++;
     }

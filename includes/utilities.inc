@@ -197,9 +197,7 @@ function islandora_iiif_manifests_get_newspaper_member_collection($issue) {
     
   }
 
-  
-
-    return $volume_issues ;
+  return $volume_issues ;
 }
 
 
