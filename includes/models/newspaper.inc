@@ -92,7 +92,6 @@ function islandora_iiif_manifest_create_newspaper_manifest_volume(AbstractObject
     
       }
     }
-   
     
    
   }
