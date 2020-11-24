@@ -66,11 +66,12 @@ function islandora_iiif_manifest_create_newspaper_manifest_volume(AbstractObject
   // Get issues.
   $group_issues = islandora_newspaper_group_issues($issues);
   
-  echo "Selected volume:".$selected_volume;
+  
  
   foreach ($group_issues as $volume => $issue) {
-    
-    if($selected_volume == $volume){
+    echo "Selected volume:".$selected_volume;
+    echo "Current loop volume:".$volume;
+    if($selected_volume === $volume){
       if (!empty(islandora_iiif_manifests_get_newspaper_member_collection($issue))) {
     
         $manifest_uri = urldecode(url("iiif_manifest/{$object->id}/collection/{$volume}", array(
