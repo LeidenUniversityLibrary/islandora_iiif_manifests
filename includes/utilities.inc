@@ -13,16 +13,8 @@ function islandora_iiif_manifests_create_manifest($object) {
             )
         )
     );
-
-    if ((count(array_intersect($object->models, array('islandora:compoundCModel'))) > 0)) {
-
-        $manifest_type = islandora_iiif_manifests_compound_nanifest_type($object);
-
-    }
-    else {
-        // Set manifest type.
-        $manifest_type = (count(array_intersect($object->models, array('islandora:newspaperCModel', 'islandora:collectionCModel', 'islandora:compoundCModel'))) > 0) ? "sc:Collection" : "sc:Manifest";
-    }
+  
+    $manifest_type = islandora_iiif_manifests_get_manifest_type($object);
 
     $label = islandora_iiif_manifests_convert_label($object);
     $iiifmanifestlogourl = variable_get('islandora_iiif_manifests_logo_url');
@@ -146,14 +138,8 @@ function islandora_iiif_manifests_get_object_collection($object) {
         'absolute' => TRUE,
         'language' => (object)array('language' => FALSE),
     )));
-
-    if ((count(array_intersect($object->models, array('islandora:compoundCModel'))) > 0)) {
-        $manifest_type = islandora_iiif_manifests_compound_nanifest_type($object);
-    }
-    else {
-        // Set manifest type.
-        $manifest_type = (count(array_intersect($object->models, array('islandora:newspaperCModel', 'islandora:collectionCModel', 'islandora:compoundCModel'))) > 0) ? "sc:Collection" : "sc:Manifest";
-    }
+  
+    $manifest_type = islandora_iiif_manifests_get_manifest_type($object);
 
     $collection_item['type'] = $manifest_type;
     $label = islandora_iiif_manifests_convert_label($object);
@@ -167,33 +153,53 @@ function islandora_iiif_manifests_get_object_collection($object) {
     return $collection_item;
 }
 
-function islandora_iiif_manifests_get_object_newspaper_collection($object) {
+function islandora_iiif_manifests_get_newspaper_member_collection($issue) {
 
-    $collection_item = array();
+  $i = 0;
+  $volume_issues = array();
+  
+  foreach ($issue as $key_month => $value_month) {
+    
+    // Level 0
+    if (is_array($value_month)) {
 
-    $manifest_uri = urldecode(url("iiif_manifest/{$object->id}/manifest", array(
-        'absolute' => TRUE,
-        'language' => (object)array('language' => FALSE),
-    )));
+      foreach ($value_month as $key_day => $value_day) {
 
-    if ((count(array_intersect($object->models, array('islandora:compoundCModel'))) > 0)) {
-        $manifest_type = islandora_iiif_manifests_compound_nanifest_type($object);
+        if (is_array($value_day)) {
+          
+          foreach ($value_day as $issue_data) {
+            
+            $issue_object = islandora_object_load($issue_data['pid']);
+  
+            if (islandora_iiif_manifests_allowed_manifest($issue_object)) {
+  
+              $manifest_type = islandora_iiif_manifests_get_manifest_type($issue_object);
+              
+              $manifest_uri = urldecode(url("iiif_manifest/{$issue_data['pid']}/manifest/", array(
+                'absolute' => TRUE,
+                'language' => (object)array('language' => FALSE),
+              )));
+  
+              $volume_issues [$i] = array(
+                "@id" => $manifest_uri,
+                "@type" => $manifest_type,
+                "label" => islandora_iiif_manifests_convert_label($issue_object),
+              );
+  
+              $i++;
+            }
+            
+            
+          }
+        }
+      }
     }
-    else {
-        // Set manifest type.
-        $manifest_type = (count(array_intersect($object->models, array('islandora:newspaperCModel', 'islandora:collectionCModel', 'islandora:compoundCModel'))) > 0) ? "sc:Collection" : "sc:Manifest";
-    }
+    
+  }
 
-    $collection_item['type'] = $manifest_type;
-    $label = islandora_iiif_manifests_convert_label($object);
+  
 
-    $collection_item['object'] = array(
-        "@id" => $manifest_uri,
-        "@type" => $manifest_type,
-        "label" => $label,
-    );
-
-    return $collection_item;
+    return $volume_issues ;
 }
 
 
@@ -233,13 +239,22 @@ function islandora_iiif_manifests_allowed_manifest($object){
     }
 }
 
-function islandora_iiif_manifests_get_newspaper_volumes($objet){
-
-    // Get Image info from TECHMD.
-    $mods_datastream = $object['TECHMD']->content;
-    $xml = simplexml_load_string($mods_datastream);
-    $json = json_encode($xml);
-    $tech_md = json_decode($json, TRUE);
+/**
+ * Return manifest type: Collection or Manifest
+ * @param $object
+ * @return string
+ */
+function islandora_iiif_manifests_get_manifest_type($object){
+  
+  if ((count(array_intersect($object->models, array('islandora:compoundCModel'))) > 0)) {
+    $manifest_type = islandora_iiif_manifests_compound_nanifest_type($object);
+  }
+  else {
+    // Set manifest type.
+    $manifest_type = (count(array_intersect($object->models, array('islandora:newspaperCModel', 'islandora:collectionCModel', 'islandora:compoundCModel'))) > 0) ? "sc:Collection" : "sc:Manifest";
+  }
+  
+  return $manifest_type;
 }
 
 /**
