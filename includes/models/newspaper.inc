@@ -71,8 +71,6 @@ function islandora_iiif_manifest_create_newspaper_manifest_volume(AbstractObject
   foreach ($group_issues as $volume => $issue) {
    
     if(intval($selected_volume) === $volume){
-  
-      echo "Selected volume:".$selected_volume ." = $volume";
       
       if (!empty(islandora_iiif_manifests_get_newspaper_member_collection($issue))) {
   
