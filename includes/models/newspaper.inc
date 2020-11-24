@@ -14,9 +14,6 @@ function islandora_iiif_manifest_create_newspaper_manifest(AbstractObject $objec
   module_load_include('inc', 'islandora_paged_content', 'includes/utilities');
   module_load_include('inc', 'islandora_newspaper', 'includes/utilities');
   
-  // Manifest array.
-  //$manifest = array();
-  
   // Collections array
   $manifest['collections'] = array();
   
