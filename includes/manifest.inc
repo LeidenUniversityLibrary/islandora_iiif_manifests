@@ -144,6 +144,5 @@ function islandora_iiif_manifests_build_volume_collection($object, $volume) {
     }
     //}
   }
-  
-  return json_encode($output, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
+  islandora_iiif_manifests_create_json_response('200 OK', $output);
 }
