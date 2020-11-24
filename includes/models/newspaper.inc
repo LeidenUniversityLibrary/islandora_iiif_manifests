@@ -93,8 +93,20 @@ function islandora_iiif_manifest_create_newspaper_manifest_volume(AbstractObject
     
       }
     }
-    else
-      echo "Selected volume: ".$selected_volume ." != $volume";
+    else{
+      
+      if(is_string($selected_volume))
+        echo "Selected volume: ".$selected_volume ." is a string";
+      else
+        echo "Selected volume: ".$selected_volume ." not a string ";
+  
+      if(is_string($volume))
+        echo "Current volume: ".$volume ." is a string";
+      else
+        echo "Current volume: ".$volume ." not a string ";
+
+    }
+    
    
   }
   return $manifest;
