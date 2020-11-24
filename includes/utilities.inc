@@ -130,6 +130,7 @@ function islandora_iiif_manifests_get_object_canvas($object) {
     return $canvas;
 }
 
+
 function islandora_iiif_manifests_get_object_collection($object) {
 
     $collection_item = array();

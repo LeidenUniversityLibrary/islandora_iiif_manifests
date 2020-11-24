@@ -6,9 +6,11 @@
  */
 
 /**
- * This is the actual manifest building function.
+ * @param AbstractObject $object
+ * @param null $subcollection
+ * @return mixed
  */
-function islandora_iiif_manifest_create_newspaper_manifest(AbstractObject $object) {
+function islandora_iiif_manifest_create_newspaper_manifest(AbstractObject $object, $volume = NULL) {
   module_load_include('inc', 'islandora', 'includes/utilities');
   module_load_include('inc', 'islandora_iiif_manifests', 'includes/utilities');
   module_load_include('inc', 'islandora_paged_content', 'includes/utilities');
@@ -25,17 +27,19 @@ function islandora_iiif_manifest_create_newspaper_manifest(AbstractObject $objec
 
   foreach ($group_issues as $volume => $issue) {
     
+    
+    
     if (!empty(islandora_iiif_manifests_get_newspaper_member_collection($issue))) {
       
-      $manifest_uri = url("iiif_manifest/{$object->id}/collection/{$volume}", array(
+      $manifest_uri = urldecode(url("iiif_manifest/{$object->id}/collection/{$volume}", array(
         'absolute' => TRUE,
         'language' => (object)array('language' => FALSE),
-      ));
+      )));
       
       $newspaper_collection =  array(
         "@id" => $manifest_uri,
         "@type" => 'sc:Collection',
-        "label" => "Volume " . $volume,
+        "label" => $volume,
       );
       
       $newspaper_collection['members'] = islandora_iiif_manifests_get_newspaper_member_collection($issue);
