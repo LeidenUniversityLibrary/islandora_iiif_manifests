@@ -17,6 +17,9 @@ function islandora_iiif_manifest_create_newspaper_manifest(AbstractObject $objec
   // Manifest array.
   $manifest = array();
   
+  // Collections array
+  $manifest['collections'] = array();
+  
   // Get issues.
   $issues = islandora_newspaper_get_issues($object);
   
