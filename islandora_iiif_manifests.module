@@ -20,10 +20,9 @@ function islandora_iiif_manifests_menu() {
       'file' => 'includes/manifest.inc',
       'type' => MENU_CALLBACK,
       'access callback' => TRUE,
-    ), 'iiif_manifest/%islandora_object/collection/%subcollection' => array(
+    ), 'iiif_manifest/%islandora_object/collection/%volmue' => array(
       'page callback' => 'islandora_iiif_manifests_build_volume_collection',
-      'page arguments' => array(1),
-      'load arguments' => array(3),
+      'page arguments' => array(1,2),
       'file' => 'includes/manifest.inc',
       'type' => MENU_CALLBACK,
       'access callback' => TRUE,
