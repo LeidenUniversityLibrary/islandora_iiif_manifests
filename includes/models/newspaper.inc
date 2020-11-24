@@ -27,10 +27,10 @@ function islandora_iiif_manifest_create_newspaper_manifest(AbstractObject $objec
     
     if (!empty(islandora_iiif_manifests_get_newspaper_member_collection($issue))) {
       
-      $manifest_uri = urldecode(url("iiif_manifest/{$object->id}/collection/{$volume}", array(
+      $manifest_uri = url("iiif_manifest/{$object->id}/collection/{$volume}", array(
         'absolute' => TRUE,
         'language' => (object)array('language' => FALSE),
-      )));
+      ));
       
       $newspaper_collection =  array(
         "@id" => $manifest_uri,
