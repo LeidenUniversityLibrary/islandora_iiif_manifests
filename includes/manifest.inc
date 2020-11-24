@@ -134,11 +134,11 @@ function islandora_iiif_manifests_build_volume_collection(AbstractObject $object
   
   //if (islandora_iiif_manifests_allowed_canvas_cmodel($object)) {
   
-  
+  echo "models: <pre>";print_r($object->models);die;
     
     $hooks = islandora_build_hook_list(ISLANDORA_IIIF_MANIFESTS_ISLANDORA_IIIF_MANIFEST_NEWSPAPER_VOLUME_HOOK, $object->models);
   
-  echo "models: <pre>";print_r($object->models);die;
+  
   
     foreach ($hooks as $hook) {
       $temp = module_invoke_all($hook, $object);
