@@ -22,7 +22,7 @@ function islandora_iiif_manifests_menu() {
       'access callback' => TRUE,
     ), 'iiif_manifest/%islandora_object/collection/%subcollection' => array(
       'page callback' => 'islandora_iiif_manifests_build_volume_collection',
-      'page arguments' => array(2),
+      'page arguments' => array(1),
       'file' => 'includes/manifest.inc',
       'type' => MENU_CALLBACK,
       'access callback' => TRUE,
