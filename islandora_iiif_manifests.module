@@ -180,7 +180,7 @@ function islandora_iiif_manifests_islandora_get_iiif_manifest_canvas($object) {
 /**
  * Creates the sub collection container.
  */
-function islandora_iiif_manifests_islandora_newspaperCModel_islandora_get_iiif_manifest_newspaper_volume($object,$volume) {
+function islandora_iiif_manifests_islandora_get_iiif_manifest_newspaper_volume($object,$volume) {
   
   
   module_load_include('inc', 'islandora_iiif_manifests', 'includes/models/newspaper');
