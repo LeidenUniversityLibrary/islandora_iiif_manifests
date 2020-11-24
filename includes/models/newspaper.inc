@@ -51,7 +51,7 @@ function islandora_iiif_manifest_create_newspaper_manifest(AbstractObject $objec
   
 }
 
-function islandora_iiif_manifest_create_newspaper_manifest_volume(AbstractObject $object, $volume) {
+function islandora_iiif_manifest_create_newspaper_manifest_volume(AbstractObject $object, $selected_volume) {
   module_load_include('inc', 'islandora', 'includes/utilities');
   module_load_include('inc', 'islandora_iiif_manifests', 'includes/utilities');
   module_load_include('inc', 'islandora_paged_content', 'includes/utilities');
@@ -66,30 +66,30 @@ function islandora_iiif_manifest_create_newspaper_manifest_volume(AbstractObject
   // Get issues.
   $group_issues = islandora_newspaper_group_issues($issues);
   
-  echo $volume;
-  echo "group issues:<pre>";print_r($group_issues);die;
-  
+ 
   foreach ($group_issues as $volume => $issue) {
     
     
+    if($selected_volume == $volume){
+      if (!empty(islandora_iiif_manifests_get_newspaper_member_collection($issue))) {
     
-    if (!empty(islandora_iiif_manifests_get_newspaper_member_collection($issue))) {
-      
-      $manifest_uri = urldecode(url("iiif_manifest/{$object->id}/collection/{$volume}", array(
-        'absolute' => TRUE,
-        'language' => (object)array('language' => FALSE),
-      )));
-      
-      $newspaper_collection =  array(
-        "@id" => $manifest_uri,
-        "@type" => 'sc:Collection',
-        "label" => $volume,
-      );
-      
-      $newspaper_collection['members'] = islandora_iiif_manifests_get_newspaper_member_collection($issue);
-      array_push($manifest['collections'],$newspaper_collection);
-      
+        $manifest_uri = urldecode(url("iiif_manifest/{$object->id}/collection/{$volume}", array(
+          'absolute' => TRUE,
+          'language' => (object)array('language' => FALSE),
+        )));
+    
+        $newspaper_collection =  array(
+          "@id" => $manifest_uri,
+          "@type" => 'sc:Collection',
+          "label" => $volume,
+        );
+    
+        $newspaper_collection['members'] = islandora_iiif_manifests_get_newspaper_member_collection($issue);
+        array_push($manifest['collections'],$newspaper_collection);
+    
+      }
     }
+   
   }
   return $manifest;
   
