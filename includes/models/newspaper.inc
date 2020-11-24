@@ -22,13 +22,9 @@ function islandora_iiif_manifest_create_newspaper_manifest(AbstractObject $objec
   
   // Get issues.
   $group_issues = islandora_newspaper_group_issues($issues);
-  
-  
-  $j = 0;
-  
+
   foreach ($group_issues as $volume => $issue) {
     
-    $newspaper_collection = array();
     
     if (!empty(islandora_iiif_manifests_get_newspaper_member_collection($issue))) {
       
