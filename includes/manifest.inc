@@ -140,8 +140,7 @@ function islandora_iiif_manifests_build_collection($object, $volume) {
   
   foreach ($hooks as $hook) {
     $temp = module_invoke_all($hook, $object,$volume);
-    
-    echo "<pre>";print_r($temp);
+
     if (!empty($temp)) {
       $output = array_merge_recursive($output, $temp);
     }
