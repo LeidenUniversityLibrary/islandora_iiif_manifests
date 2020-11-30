@@ -50,7 +50,7 @@ function islandora_iiif_manifest_get_newspaper_manifest($object) {
     
     if (!empty(islandora_iiif_manifests_get_newspaper_member_collection($member))) {
       
-      $manifest_uri = urldecode(url(variable_get('islandora_iiif_manifests_domain_uri', $GLOBALS['base_url'] ) ."iiif_manifest/{$object->id}/collection/{$collection}", array(
+      $manifest_uri = urldecode(url(variable_get('islandora_iiif_manifests_domain_uri', $GLOBALS['base_url'] ) ."/iiif_manifest/{$object->id}/collection/{$collection}", array(
         'absolute' => TRUE,
         'language' => (object)array('language' => FALSE),
       )));

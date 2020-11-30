@@ -135,7 +135,7 @@ function islandora_iiif_manifests_get_object_collection($object) {
 
     $collection_item = array();
 
-    $manifest_uri = urldecode(url(variable_get('islandora_iiif_manifests_domain_uri', $GLOBALS['base_url'] ) ."iiif_manifest/{$object->id}/manifest", array(
+    $manifest_uri = urldecode(url(variable_get('islandora_iiif_manifests_domain_uri', $GLOBALS['base_url'] ) ."/iiif_manifest/{$object->id}/manifest", array(
         'absolute' => TRUE,
         'language' => (object)array('language' => FALSE),
     )));
@@ -176,7 +176,7 @@ function islandora_iiif_manifests_get_newspaper_member_collection($issue) {
   
               $manifest_type = islandora_iiif_manifests_get_manifest_type($issue_object);
               
-              $manifest_uri = urldecode(url(variable_get('islandora_iiif_manifests_domain_uri', $GLOBALS['base_url'] ) ."iiif_manifest/{$issue_data['pid']}/manifest/", array(
+              $manifest_uri = urldecode(url(variable_get('islandora_iiif_manifests_domain_uri', $GLOBALS['base_url'] ) ."/iiif_manifest/{$issue_data['pid']}/manifest/", array(
                 'absolute' => TRUE,
                 'language' => (object)array('language' => FALSE),
               )));
