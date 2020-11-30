@@ -6,7 +6,7 @@
 
 define('ISLANDORA_IIIF_MANIFESTS_ISLANDORA_IIIF_MANIFEST_HOOK', 'islandora_get_iiif_manifest');
 define('ISLANDORA_IIIF_MANIFESTS_ISLANDORA_IIIF_MANIFEST_CANVAS_HOOK', 'islandora_get_iiif_manifest_canvas');
-define('ISLANDORA_IIIF_MANIFESTS_ISLANDORA_IIIF_MANIFEST_NEWSPAPER_VOLUME_HOOK', 'islandora_get_iiif_manifest_newspaper_collection');
+define('ISLANDORA_IIIF_MANIFESTS_ISLANDORA_IIIF_MANIFEST_COLLECTION_HOOK', 'islandora_get_iiif_manifest_collection');
 define('ISLANDORA_IIIF_MANIFESTS_DATASTREAM_ID', 'MANIFEST');
 
 /**
@@ -180,7 +180,7 @@ function islandora_iiif_manifests_islandora_get_iiif_manifest_canvas($object) {
 /**
  * Creates the sub collection container.
  */
-function islandora_iiif_manifests_islandora_get_iiif_manifest_newspaper_collection($object, $volume) {
+function islandora_newspaperCModel_islandora_get_iiif_manifest_collection($object, $volume) {
   
   
   module_load_include('inc', 'islandora_iiif_manifests', 'includes/models/newspaper');

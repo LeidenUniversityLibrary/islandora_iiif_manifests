@@ -10,11 +10,25 @@
  * @param null $volume
  * @return mixed
  */
-function islandora_iiif_manifest_create_newspaper_manifest(AbstractObject $object) {
+function islandora_iiif_manifest_create_newspaper_manifest(AbstractObject $object, $selected_collection = NULL) {
   module_load_include('inc', 'islandora', 'includes/utilities');
   module_load_include('inc', 'islandora_iiif_manifests', 'includes/utilities');
   module_load_include('inc', 'islandora_paged_content', 'includes/utilities');
   module_load_include('inc', 'islandora_newspaper', 'includes/utilities');
+  
+ 
+  if(empty($selected_collection)){
+    
+    $manifest =  islandora_iiif_manifest_get_newspaper_manifest($object);
+  }else{
+      $manifest =  islandora_iiif_manifest_get_newspaper_collection($object,$selected_collection);
+  }
+  
+  return $manifest;
+  
+}
+
+function islandora_iiif_manifest_get_newspaper_manifest($object) {
   
   // Collections array
   $manifest['collections'] = array();
@@ -24,6 +38,8 @@ function islandora_iiif_manifest_create_newspaper_manifest(AbstractObject $objec
   
   // Get issues.
   $group_issues = islandora_newspaper_group_issues($issues);
+  // Collections array
+  $manifest['collections'] = array();
   
   foreach ($group_issues as $volume => $issue) {
     
@@ -45,9 +61,42 @@ function islandora_iiif_manifest_create_newspaper_manifest(AbstractObject $objec
       array_push($manifest['collections'], $newspaper_collection);
       
     }
+    
   }
-  return $manifest;
   
+  return $manifest;
+}
+
+
+function islandora_iiif_manifest_get_newspaper_collection($object,$selected_collection) {
+  // Collections array
+  $manifest = array();
+  
+  // Get issues.
+  $issues = islandora_newspaper_get_issues($object);
+  
+  // Get issues.
+  $group_issues = islandora_newspaper_group_issues($issues);
+  
+  
+  foreach ($group_issues as $collection => $issue) {
+    
+    if (intval($selected_collection) === $collection) {
+      
+      if (!empty(islandora_iiif_manifests_get_newspaper_member_collection($issue))) {
+        
+        $collection_members_members[] = islandora_iiif_manifests_get_newspaper_member_collection($issue);
+        
+      }
+    }
+    
+  }
+  
+  if (!empty($collection_members_members)) {
+    $manifest['members'] = $collection_members_members;
+  }
+  
+  return $manifest;
 }
 
 function islandora_iiif_manifest_create_newspaper_manifest_collection(AbstractObject $object, $selected_volume) {
@@ -57,7 +106,7 @@ function islandora_iiif_manifest_create_newspaper_manifest_collection(AbstractOb
   module_load_include('inc', 'islandora_newspaper', 'includes/utilities');
   
   // Collections array
-  $manifest= array();
+  $manifest = array();
   
   // Get issues.
   $issues = islandora_newspaper_get_issues($object);
