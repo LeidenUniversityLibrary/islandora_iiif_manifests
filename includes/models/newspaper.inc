@@ -73,6 +73,17 @@ function islandora_iiif_manifest_create_newspaper_manifest_collection(AbstractOb
       
       if (!empty(islandora_iiif_manifests_get_newspaper_member_collection($issue))) {
   
+  
+        // Load issue.
+        $issue_object = islandora_object_load($issue['pid']);
+  
+        if (islandora_iiif_manifests_allowed_manifest($issue_object)) {
+    
+          $collection_item = islandora_iiif_manifests_get_object_collection($issue_object);
+    
+          $collection_members_members[] = $collection_item['object'];
+        }
+  
         $manifest_uri = urldecode(url("iiif_manifest/{$object->id}/collection/{$volume}", array(
           'absolute' => TRUE,
           'language' => (object)array('language' => FALSE),
@@ -89,9 +100,17 @@ function islandora_iiif_manifest_create_newspaper_manifest_collection(AbstractOb
     
       }
     }
+  
+    
+      $collection_item = islandora_iiif_manifests_get_object_collection($issue_object);
+    
+      $collection_members_members[] = $collection_item['object'];
     
    
   }
+  
+  echo "eollection members <pre>";print_r($collection_members_members);
+  echo "manifest <pre>";print_r($manifest);diel
   return $manifest;
   
 }
