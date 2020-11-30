@@ -176,6 +176,8 @@ function islandora_iiif_manifests_get_newspaper_member_collection($issue) {
   
               $manifest_type = islandora_iiif_manifests_get_manifest_type($issue_object);
               
+              echo "<pre>";print_r($issue_object);
+              
               $manifest_uri = urldecode(url(variable_get('islandora_iiif_manifests_domain_uri', $GLOBALS['base_url'] ) ."/iiif_manifest/{$issue_data['pid']}/manifest/", array(
                 'absolute' => TRUE,
                 'language' => (object)array('language' => FALSE),
