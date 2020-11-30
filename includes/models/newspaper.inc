@@ -79,7 +79,7 @@ function islandora_iiif_manifest_create_newspaper_manifest_collection(AbstractOb
   
         if (islandora_iiif_manifests_allowed_manifest($issue_object)) {
     
-          $collection_item = islandora_iiif_manifests_get_object_collection($issue_object);
+          $collection_item = islandora_iiif_manifests_get_newspaper_member_collection($issue);
     
           $collection_members_members[] = $collection_item['object'];
         }
