@@ -80,7 +80,7 @@ function islandora_iiif_manifest_get_newspaper_manifest($object) {
  */
 function islandora_iiif_manifest_get_newspaper_collection($object,$selected_collection) {
   // Collections array
-  $manifest = array();
+  $manifest['members'] = array();
   
   // Get issues.
   $issues = islandora_newspaper_get_issues($object);
@@ -103,11 +103,7 @@ function islandora_iiif_manifest_get_newspaper_collection($object,$selected_coll
     }
     
   }
-  
-  if (!empty($collection_members_members)) {
-    $manifest['members'] = $collection_members_members;
-  }
-  
+
   return $manifest;
 }
 
