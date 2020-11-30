@@ -110,7 +110,7 @@ function islandora_iiif_manifest_create_newspaper_manifest_collection(AbstractOb
   }
   
   echo "eollection members <pre>";print_r($collection_members_members);
-  echo "manifest <pre>";print_r($manifest);diel
+  echo "manifest <pre>";print_r($manifest);die;
   return $manifest;
   
 }
