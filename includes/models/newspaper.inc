@@ -94,10 +94,8 @@ function islandora_iiif_manifest_get_newspaper_collection($object,$selected_coll
     if (intval($selected_collection) === $collection) {
       
       if (!empty(islandora_iiif_manifests_get_newspaper_member_collection($issue))) {
-        
-        $collection_member = islandora_iiif_manifests_get_newspaper_member_collection($issue);
   
-        array_push($manifest['members'],  $collection_member);
+        $manifest['members'] = islandora_iiif_manifests_get_newspaper_member_collection($issue);
         
       }
     }
