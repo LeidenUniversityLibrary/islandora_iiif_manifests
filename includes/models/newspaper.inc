@@ -6,6 +6,8 @@
  */
 
 /**
+ * Create the requested newspaper manifest. When $selected_collection is set, the manifest of that collection is returned otherwise
+ * the full news paper manifest collection is returned
  * @param AbstractObject $object
  * @param null $selected_collection - Return the selected sub collection
  * @return mixed
@@ -23,13 +25,11 @@ function islandora_iiif_manifest_create_newspaper_manifest(AbstractObject $objec
   }else{
       $manifest =  islandora_iiif_manifest_get_newspaper_collection($object,$selected_collection);
   }
-  
   return $manifest;
-  
 }
 
 /**
- * Create the newspaper manifest
+ * Create the newspaper manifest with collections and its member within
  * @param $object
  * @return mixed
  */
@@ -46,12 +46,11 @@ function islandora_iiif_manifest_get_newspaper_manifest($object) {
   // Collections array
   $manifest['collections'] = array();
   
-  foreach ($group_issues as $volume => $issue) {
+  foreach ($group_issues as $collection => $member) {
     
-    
-    if (!empty(islandora_iiif_manifests_get_newspaper_member_collection($issue))) {
+    if (!empty(islandora_iiif_manifests_get_newspaper_member_collection($member))) {
       
-      $manifest_uri = urldecode(url("iiif_manifest/{$object->id}/collection/{$volume}", array(
+      $manifest_uri = urldecode(url(variable_get('islandora_iiif_manifests_domain_uri', $GLOBALS['base_url'] ) ."iiif_manifest/{$object->id}/collection/{$collection}", array(
         'absolute' => TRUE,
         'language' => (object)array('language' => FALSE),
       )));
@@ -59,10 +58,10 @@ function islandora_iiif_manifest_get_newspaper_manifest($object) {
       $newspaper_collection = array(
         "@id" => $manifest_uri,
         "@type" => 'sc:Collection',
-        "label" => $volume,
+        "label" => $collection,
       );
       
-      $newspaper_collection['members'] = islandora_iiif_manifests_get_newspaper_member_collection($issue);
+      $newspaper_collection['members'] = islandora_iiif_manifests_get_newspaper_member_collection($member);
       array_push($manifest['collections'], $newspaper_collection);
       
     }
@@ -73,7 +72,7 @@ function islandora_iiif_manifest_get_newspaper_manifest($object) {
 }
 
 /**
- * Create the newspaper sub collection manifest
+ * Create the newspaper manifest collection
  * @param $object
  * @param $selected_collection
  * @return array
@@ -89,13 +88,13 @@ function islandora_iiif_manifest_get_newspaper_collection($object,$selected_coll
   $group_issues = islandora_newspaper_group_issues($issues);
   
   
-  foreach ($group_issues as $collection => $issue) {
+  foreach ($group_issues as $collection => $member) {
     
     if (intval($selected_collection) === $collection) {
       
-      if (!empty(islandora_iiif_manifests_get_newspaper_member_collection($issue))) {
+      if (!empty(islandora_iiif_manifests_get_newspaper_member_collection($member))) {
   
-        $manifest['members'] = islandora_iiif_manifests_get_newspaper_member_collection($issue);
+        $manifest['members'] = islandora_iiif_manifests_get_newspaper_member_collection($member);
         
       }
     }

@@ -70,13 +70,20 @@ function islandora_iiif_manifests_create_canvas_json(AbstractObject $object) {
 /**
  * Response in JSON for the sub collection
  */
-function islandora_iiif_manifests_create_collection_json(AbstractObject $object, $volume) {
+function islandora_iiif_manifests_create_collection_json(AbstractObject $object, $collection) {
   
   module_load_include('inc', 'islandora', 'includes/utilities');
   
-  $output = islandora_iiif_manifests_build_collection($object, $volume);
+  if (!isset($collection)){
+
+    islandora_iiif_manifests_create_json_response('403 Forbidden',"Collection not set" );
+  }else{
+    
+    $output = islandora_iiif_manifests_build_collection($object, $collection);
   
-  islandora_iiif_manifests_create_json_response('200 OK', $output);
+    islandora_iiif_manifests_create_json_response('200 OK', $output);
+  }
+ 
 }
 
 
