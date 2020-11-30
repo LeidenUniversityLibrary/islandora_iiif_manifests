@@ -124,10 +124,10 @@ function islandora_iiif_manifests_islandora_pageCModel_islandora_get_iiif_manife
 /**
  * Implements hook_CMODEL_PID_islandora_get_iiif_manifest().
  */
-function islandora_iiif_manifests_islandora_newspaperCModel_islandora_get_iiif_manifest($object) {
+function islandora_iiif_manifests_islandora_newspaperCModel_islandora_get_iiif_manifest($object,$collection = NULL) {
   
   module_load_include('inc', 'islandora_iiif_manifests', 'includes/models/newspaper');
-  $array = islandora_iiif_manifest_create_newspaper_manifest($object);
+  $array = islandora_iiif_manifest_create_newspaper_manifest($object,$collection);
   
   return $array;
 }

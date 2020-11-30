@@ -128,16 +128,16 @@ function islandora_iiif_manifests_build_canvas($object) {
 /**
  * Build newspaper volume array.
  */
-function islandora_iiif_manifests_build_collection($object, $volume) {
+function islandora_iiif_manifests_build_collection($object, $collection) {
   
   module_load_include('inc', 'islandora_iiif_manifests', 'includes/utilities');
   
   $output = array();
   
   $hooks = islandora_build_hook_list(ISLANDORA_IIIF_MANIFESTS_ISLANDORA_IIIF_MANIFEST_HOOK, $object->models);
-  echo "<pre>";print_r($hooks);
+  echo "$collection <pre>";print_r($hooks);
   foreach ($hooks as $hook) {
-    $temp = module_invoke_all($hook, $object,$volume);
+    $temp = module_invoke_all($hook, $object,$collection);
 
     if (!empty($temp)) {
       $output = array_merge_recursive($output, $temp);
