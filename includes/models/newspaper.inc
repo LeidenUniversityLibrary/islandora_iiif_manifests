@@ -97,7 +97,7 @@ function islandora_iiif_manifest_get_newspaper_collection($object,$selected_coll
         
         $collection_member = islandora_iiif_manifests_get_newspaper_member_collection($issue);
   
-        array_push($manifest,  $collection_member);
+        array_push($manifest['members'],  $collection_member);
         
       }
     }
