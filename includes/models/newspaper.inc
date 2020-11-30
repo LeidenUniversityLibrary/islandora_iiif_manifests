@@ -58,7 +58,7 @@ function islandora_iiif_manifest_get_newspaper_manifest($object) {
       $newspaper_collection = array(
         "@id" => $manifest_uri,
         "@type" => 'sc:Collection',
-        "label" => $collection,
+        "label" => strval($collection),
       );
       
       $newspaper_collection['members'] = islandora_iiif_manifests_get_newspaper_member_collection($member);

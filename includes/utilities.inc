@@ -176,12 +176,18 @@ function islandora_iiif_manifests_get_newspaper_member_collection($issue) {
   
               $manifest_type = islandora_iiif_manifests_get_manifest_type($issue_object);
               
-              echo "<pre>";print_r($issue_object);
-              
               $manifest_uri = urldecode(url(variable_get('islandora_iiif_manifests_domain_uri', $GLOBALS['base_url'] ) ."/iiif_manifest/{$issue_data['pid']}/manifest/", array(
                 'absolute' => TRUE,
                 'language' => (object)array('language' => FALSE),
               )));
+  
+              // Get Image info from TECHMD.
+              $rels_datastream = $issue_object['RELS-EXT']->content;
+              $xml = simplexml_load_string($rels_datastream );
+              $json = json_encode($xml);
+              $rels_md = json_decode($json, TRUE);
+              
+              echo "<pre>";print_r($rels_md);
   
               $volume_issues [$i] = array(
                 "@id" => $manifest_uri,
