@@ -16,10 +16,11 @@ function islandora_iiif_manifest_create_newspaper_manifest(AbstractObject $objec
   module_load_include('inc', 'islandora_paged_content', 'includes/utilities');
   module_load_include('inc', 'islandora_newspaper', 'includes/utilities');
   
- 
+ echo "seleted collection: $selected_collection";
   if(empty($selected_collection)){
     
     $manifest =  islandora_iiif_manifest_get_newspaper_manifest($object);
+    
   }else{
       $manifest =  islandora_iiif_manifest_get_newspaper_collection($object,$selected_collection);
   }
