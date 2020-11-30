@@ -42,17 +42,6 @@ function islandora_iiif_manifests_create_manifest_json(AbstractObject $object) {
   islandora_iiif_manifests_create_json_response('200 OK', $output);
 }
 
-/**
- * Response in JSON for the manifest.
- */
-function islandora_iiif_manifests_create_volume_json(AbstractObject $object, $volume) {
-  
-  module_load_include('inc', 'islandora', 'includes/utilities');
-  
-  $output = islandora_iiif_manifests_build_volume_collection($object, $volume);
-  
-  islandora_iiif_manifests_create_json_response('200 OK', $output);
-}
 
 /**
  * Response in JSON for the manifest.
@@ -77,6 +66,19 @@ function islandora_iiif_manifests_create_canvas_json(AbstractObject $object) {
   
   islandora_iiif_manifests_create_json_response('200 OK', $output);
 }
+
+/**
+ * Response in JSON for the sub collection
+ */
+function islandora_iiif_manifests_create_collection_json(AbstractObject $object, $volume) {
+  
+  module_load_include('inc', 'islandora', 'includes/utilities');
+  
+  $output = islandora_iiif_manifests_build_collection($object, $volume);
+  
+  islandora_iiif_manifests_create_json_response('200 OK', $output);
+}
+
 
 /**
  * Build manifest array.
@@ -126,7 +128,7 @@ function islandora_iiif_manifests_build_canvas($object) {
 /**
  * Build newspaper volume array.
  */
-function islandora_iiif_manifests_build_volume_collection($object, $volume) {
+function islandora_iiif_manifests_build_collection($object, $volume) {
   
   module_load_include('inc', 'islandora_iiif_manifests', 'includes/utilities');
   
@@ -134,10 +136,12 @@ function islandora_iiif_manifests_build_volume_collection($object, $volume) {
   
   //if (islandora_iiif_manifests_allowed_canvas_cmodel($object)) {
   
-  $hooks = islandora_build_hook_list(ISLANDORA_IIIF_MANIFESTS_ISLANDORA_IIIF_MANIFEST_HOOK, $object->models);
+  $hooks = islandora_build_hook_list(ISLANDORA_IIIF_MANIFESTS_ISLANDORA_IIIF_MANIFEST_NEWSPAPER_VOLUME_HOOK, $object->models);
   
   foreach ($hooks as $hook) {
     $temp = module_invoke_all($hook, $object,$volume);
+    
+    echo "<pre>";print_r($temp);
     if (!empty($temp)) {
       $output = array_merge_recursive($output, $temp);
     }

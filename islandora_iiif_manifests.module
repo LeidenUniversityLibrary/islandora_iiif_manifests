@@ -21,7 +21,7 @@ function islandora_iiif_manifests_menu() {
       'type' => MENU_CALLBACK,
       'access callback' => TRUE,
     ), 'iiif_manifest/%islandora_object/collection/%' => array(
-      'page callback' => 'islandora_iiif_manifests_create_volume_json',
+      'page callback' => 'islandora_iiif_manifests_create_collection_json',
       'page arguments' => array(1,3),
       'file' => 'includes/manifest.inc',
       'type' => MENU_CALLBACK,
@@ -180,11 +180,11 @@ function islandora_iiif_manifests_islandora_get_iiif_manifest_canvas($object) {
 /**
  * Creates the sub collection container.
  */
-function islandora_iiif_manifests_islandora_get_iiif_manifest_newspaper_volume($object,$volume) {
+function islandora_iiif_manifests_islandora_get_iiif_manifest_newspaper_collection($object, $volume) {
   
   
   module_load_include('inc', 'islandora_iiif_manifests', 'includes/models/newspaper');
-  $array = islandora_iiif_manifest_create_newspaper_manifest_volume($object,$volume);
+  $array = islandora_iiif_manifest_create_newspaper_manifest_collection($object,$volume);
   
   return $array;
 }

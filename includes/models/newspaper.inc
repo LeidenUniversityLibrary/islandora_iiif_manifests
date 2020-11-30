@@ -51,7 +51,7 @@ function islandora_iiif_manifest_create_newspaper_manifest(AbstractObject $objec
   
 }
 
-function islandora_iiif_manifest_create_newspaper_manifest_volume(AbstractObject $object, $selected_volume) {
+function islandora_iiif_manifest_create_newspaper_manifest_collection(AbstractObject $object, $selected_volume) {
   module_load_include('inc', 'islandora', 'includes/utilities');
   module_load_include('inc', 'islandora_iiif_manifests', 'includes/utilities');
   module_load_include('inc', 'islandora_paged_content', 'includes/utilities');
@@ -65,7 +65,6 @@ function islandora_iiif_manifest_create_newspaper_manifest_volume(AbstractObject
   
   // Get issues.
   $group_issues = islandora_newspaper_group_issues($issues);
-  
   
  
   foreach ($group_issues as $volume => $issue) {
