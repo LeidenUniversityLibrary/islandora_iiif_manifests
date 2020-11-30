@@ -57,7 +57,7 @@ function islandora_iiif_manifest_create_newspaper_manifest_collection(AbstractOb
   module_load_include('inc', 'islandora_newspaper', 'includes/utilities');
   
   // Collections array
-  $manifest['collections'] = array();
+  $manifest= array();
   
   // Get issues.
   $issues = islandora_newspaper_get_issues($object);

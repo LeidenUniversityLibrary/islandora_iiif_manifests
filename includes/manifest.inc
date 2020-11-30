@@ -134,17 +134,15 @@ function islandora_iiif_manifests_build_collection($object, $volume) {
   
   $output = array();
   
-  //if (islandora_iiif_manifests_allowed_canvas_cmodel($object)) {
-  
   $hooks = islandora_build_hook_list(ISLANDORA_IIIF_MANIFESTS_ISLANDORA_IIIF_MANIFEST_NEWSPAPER_VOLUME_HOOK, $object->models);
-  
+  echo "<pre>";print_r($hooks);
   foreach ($hooks as $hook) {
     $temp = module_invoke_all($hook, $object,$volume);
 
     if (!empty($temp)) {
       $output = array_merge_recursive($output, $temp);
     }
-    //}
+ 
   }
   return json_encode($output, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
 }
