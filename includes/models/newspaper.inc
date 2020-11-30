@@ -7,7 +7,7 @@
 
 /**
  * @param AbstractObject $object
- * @param null $volume
+ * @param null $selected_collection - Return the selected sub collection
  * @return mixed
  */
 function islandora_iiif_manifest_create_newspaper_manifest(AbstractObject $object, $selected_collection = NULL) {
@@ -29,6 +29,11 @@ function islandora_iiif_manifest_create_newspaper_manifest(AbstractObject $objec
   
 }
 
+/**
+ * Create the newspaper manifest
+ * @param $object
+ * @return mixed
+ */
 function islandora_iiif_manifest_get_newspaper_manifest($object) {
   
   // Collections array
@@ -68,7 +73,12 @@ function islandora_iiif_manifest_get_newspaper_manifest($object) {
   return $manifest;
 }
 
-
+/**
+ * Create the newspaper sub collection manifest
+ * @param $object
+ * @param $selected_collection
+ * @return array
+ */
 function islandora_iiif_manifest_get_newspaper_collection($object,$selected_collection) {
   // Collections array
   $manifest = array();
@@ -100,39 +110,4 @@ function islandora_iiif_manifest_get_newspaper_collection($object,$selected_coll
   return $manifest;
 }
 
-function islandora_iiif_manifest_create_newspaper_manifest_collection(AbstractObject $object, $selected_volume) {
-  module_load_include('inc', 'islandora', 'includes/utilities');
-  module_load_include('inc', 'islandora_iiif_manifests', 'includes/utilities');
-  module_load_include('inc', 'islandora_paged_content', 'includes/utilities');
-  module_load_include('inc', 'islandora_newspaper', 'includes/utilities');
-  
-  // Collections array
-  $manifest = array();
-  
-  // Get issues.
-  $issues = islandora_newspaper_get_issues($object);
-  
-  // Get issues.
-  $group_issues = islandora_newspaper_group_issues($issues);
-  
-  
-  foreach ($group_issues as $volume => $issue) {
-    
-    if (intval($selected_volume) === $volume) {
-      
-      if (!empty(islandora_iiif_manifests_get_newspaper_member_collection($issue))) {
-        
-        $collection_members_members[] = islandora_iiif_manifests_get_newspaper_member_collection($issue);
-        
-      }
-    }
-    
-  }
-  
-  if (!empty($collection_members_members)) {
-    $manifest['members'] = $collection_members_members;
-  }
-  
-  return $manifest;
-  
-}
+

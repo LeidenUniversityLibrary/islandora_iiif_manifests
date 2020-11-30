@@ -177,17 +177,6 @@ function islandora_iiif_manifests_islandora_get_iiif_manifest_canvas($object) {
   return $canvas_container;
 }
 
-/**
- * Creates the sub collection container.
- */
-function islandora_newspaperCModel_islandora_get_iiif_manifest_collection($object, $volume) {
-  
-  
-  module_load_include('inc', 'islandora_iiif_manifests', 'includes/models/newspaper');
-  $array = islandora_iiif_manifest_create_newspaper_manifest_collection($object,$volume);
-  
-  return $array;
-}
 
 /**
  * Implements hook_detail_tools_block_view().
