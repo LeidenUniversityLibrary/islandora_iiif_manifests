@@ -98,36 +98,16 @@ function islandora_iiif_manifest_get_newspaper_collection($object,$selected_coll
   
   $manifest_ds = json_decode($object[ISLANDORA_IIIF_MANIFESTS_DATASTREAM_ID]->content);
   
-  echo "1 manifest ds collections: <pre>";print_r($manifest_ds);
-  echo "2 manifest ds collections: <pre>";print_r($manifest_ds->collections);
-  
-  
   foreach ($manifest_ds->collections as $col){
   
     if (intval($selected_collection) === intval($col->label)) {
-      
-      echo "<pre>";print_r($col);die;
-    }
-    else{
-      
-      echo intval($selected_collection)." != ".intval($col->label);
+  
+      $manifest['members'] =  $col;
     }
     
   }
   
-  foreach ($group_issues as $collection => $member) {
-    
-    if (intval($selected_collection) === $collection) {
-      
-      if (!empty(islandora_iiif_manifests_get_newspaper_member_collection($member))) {
   
-        $manifest['members'] = islandora_iiif_manifests_get_newspaper_member_collection($member);
-        
-      }
-    }
-    
-  }
-
   return $manifest;
 }
 
