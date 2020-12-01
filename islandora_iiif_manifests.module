@@ -6,7 +6,6 @@
 
 define('ISLANDORA_IIIF_MANIFESTS_ISLANDORA_IIIF_MANIFEST_HOOK', 'islandora_get_iiif_manifest');
 define('ISLANDORA_IIIF_MANIFESTS_ISLANDORA_IIIF_MANIFEST_CANVAS_HOOK', 'islandora_get_iiif_manifest_canvas');
-define('ISLANDORA_IIIF_MANIFESTS_ISLANDORA_IIIF_MANIFEST_COLLECTION_HOOK', 'islandora_get_iiif_manifest_collection');
 define('ISLANDORA_IIIF_MANIFESTS_DATASTREAM_ID', 'MANIFEST');
 
 /**

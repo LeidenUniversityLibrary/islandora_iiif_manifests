@@ -74,6 +74,7 @@ function islandora_iiif_manifests_create_collection_json(AbstractObject $object,
   
   module_load_include('inc', 'islandora', 'includes/utilities');
   
+  echo $collection."<br>";
   if (!isset($collection)){
 
     islandora_iiif_manifests_create_json_response('403 Forbidden',"Collection not set" );
