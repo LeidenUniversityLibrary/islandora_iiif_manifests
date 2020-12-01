@@ -181,13 +181,12 @@ function islandora_iiif_manifests_get_newspaper_member_collection($issue) {
                 'language' => (object)array('language' => FALSE),
               )));
               
-              $d = new DateTime($issue_data['issued']->date);
               
               $volume_issues [$i] = array(
                 "@id" => $manifest_uri,
                 "@type" => $manifest_type,
-                "label" => islandora_iiif_manifests_convert_label($issue_object)." ".$d->format('D j F Y'),
-                "navDate" => $d->format('c'),
+                "label" => islandora_iiif_manifests_convert_label($issue_object)." - ".$issue_data['issued']->format('D j F Y'),
+                "navDate" => $issue_data['issued']->format('\'Y-m-d\TH:i:s\Z\''),
               );
               $i++;
             }
