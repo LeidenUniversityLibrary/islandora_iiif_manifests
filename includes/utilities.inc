@@ -183,9 +183,6 @@ function islandora_iiif_manifests_get_newspaper_member_collection($issue) {
               
               $date = $issue_data['issued']->date;
               
-              echo "Date 1:".$date->format('Y-m-d H:i:s')."<br>";
-              echo "Date 2:".$date->format('YYYY-MM-DDThh:mm:ssZ')."<br>";
-              
               //echo "Issue data  <pre>";print_r($issue_data);
               $volume_issues [$i] = array(
                 "@id" => $manifest_uri,
