@@ -188,6 +188,7 @@ function islandora_iiif_manifests_get_newspaper_member_collection($issue) {
               $rels_md = json_decode($json, TRUE);
               
               echo " Rels <pre>";print_r($rels_md); die;
+              echo " Rels  datastream<pre>";print_r($rels_datastream); die;
   
               $volume_issues [$i] = array(
                 "@id" => $manifest_uri,
