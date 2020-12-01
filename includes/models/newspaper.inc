@@ -104,12 +104,12 @@ function islandora_iiif_manifest_get_newspaper_collection($object,$selected_coll
   
       $manifest['members'] =  $col;
       
-      echo "1<pre>";print_r($col);
-      echo "2<pre>";print_r(json_encode($col));
-      echo "3<pre>";print_r(json_decode($col));
+      echo "<br>1 <pre>";print_r($col);
+      echo "<br>2<pre>";print_r(json_encode($col));
+      echo "<br>3<pre>";print_r(json_decode($col));
     }
     else
-      echo intval($selected_collection) ." != ".intval($col)."<br>";
+      echo intval($selected_collection) ." != ".intval($col->label)."<br>";
     
   }
   
