@@ -41,7 +41,7 @@ function islandora_iiif_manifest_create_issue_manifest(AbstractObject $object) {
   
   if ($object['MODS']) {
     // Get Image info from TECHMD.
-    $mods_datastream = $object['TECHMD']->content;
+    $mods_datastream = $object['MODS']->content;
     $xml = simplexml_load_string($mods_datastream);
     $json = json_encode($xml);
     $tech_md = json_decode($json, TRUE);
