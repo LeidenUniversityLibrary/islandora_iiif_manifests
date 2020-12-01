@@ -103,11 +103,18 @@ function islandora_iiif_manifest_get_newspaper_collection($object,$selected_coll
   
   
   foreach ($manifest_ds->collections as $col){
+  
+    if (intval($selected_collection) === intval($col->label)) {
+      
+      echo "<pre>";print_r($col);die;
+    }
+    else{
+      
+      echo intval($selected_collection)." != ".intval($col->label);
+    }
     
-    echo "label:".$col->label."<br>";
   }
   
-  die;
   foreach ($group_issues as $collection => $member) {
     
     if (intval($selected_collection) === $collection) {
