@@ -182,16 +182,17 @@ function islandora_iiif_manifests_get_newspaper_member_collection($issue) {
               )));
               
               $d = new DateTime($issue_data['issued']->date);
-              print_r($d);
+              echo "1";print_r($d);
               $d->setTimezone(new DateTimeZone('UTC'));
-              print_r($d);
+              echo "2";print_r($d);
+              echo $d->format('YYYY-MM-DDThh:mm:ssZ');
               
-              //echo "Issue data  <pre>";print_r($issue_data);
+              echo "Issue data  <pre>";print_r($issue_data);
               $volume_issues [$i] = array(
                 "@id" => $manifest_uri,
                 "@type" => $manifest_type,
-                "label" => islandora_iiif_manifests_convert_label($issue_object)." ".$issue_data['issued']->date,
-                "navDate" => $issue_data['issued']->date,
+                "label" => islandora_iiif_manifests_convert_label($issue_object)." ".$d->date,
+                "navDate" => $d->date,
               );
               $i++;
             }
