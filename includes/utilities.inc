@@ -181,7 +181,7 @@ function islandora_iiif_manifests_get_newspaper_member_collection($issue) {
                 'language' => (object)array('language' => FALSE),
               )));
               
-              $d = new DateTime('$issue_data[\'issued\']->date');
+              $d = new DateTime($issue_data['issued']->date);
               print_r($d);
               $d->setTimezone(new DateTimeZone('UTC'));
               print_r($d);
