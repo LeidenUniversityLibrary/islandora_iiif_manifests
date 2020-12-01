@@ -100,7 +100,7 @@ function islandora_iiif_manifest_get_newspaper_collection($object,$selected_coll
   
   foreach ($manifest_ds->collections as $col){
     
-    $collection_id = str_replace("''", "",$col->label);
+    $collection_id = str_replace("'", "",$col->label);
     echo "collection id:".$collection_id."<br>";
     if ($selected_collection === $collection_id) {
   
