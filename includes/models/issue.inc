@@ -38,11 +38,12 @@ function islandora_iiif_manifest_create_issue_manifest(AbstractObject $object) {
   $manifest['viewingHint'] = $viewingHint;
 
   $label = islandora_iiif_manifests_convert_label($object);
-
+  
   // Set the canvases.
   $manifest['sequences'][] = array(
     '@type' => 'sc:Sequence',
-    'label' => $object->$label,
+    'label' => $label." - ".$page['issued']->format('D j F Y'),
+    "navDate" => $page['issued']->format('Y-m-d\TH:i:s\Z\''),
     'canvases' => $canvases
   );
 
