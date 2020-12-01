@@ -87,7 +87,7 @@ function islandora_iiif_manifest_get_newspaper_collection($object,$selected_coll
   // Get issues.
   $group_issues = islandora_newspaper_group_issues($issues);
   
-  echo "<pre>";print_r(json_decode($object[ISLANDORA_IIIF_MANIFESTS_DATASTREAM_ID]));
+  echo "JSON <pre>";print_r($object[ISLANDORA_IIIF_MANIFESTS_DATASTREAM_ID]);
   
   
   foreach ($group_issues as $collection => $member) {
