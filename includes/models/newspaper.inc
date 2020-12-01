@@ -54,11 +54,18 @@ function islandora_iiif_manifest_get_newspaper_manifest($object) {
         'absolute' => TRUE,
         'language' => (object)array('language' => FALSE),
       )));
+  
+      if (is_numeric($collection)) {
+        $label = "'" . $collection . "'";
+      }
+      else {
+        $label = $collection;
+      }
       
       $newspaper_collection = array(
         "@id" => $manifest_uri,
         "@type" => 'sc:Collection',
-        "label" => strval($collection),
+        "label" => $label,
       );
       
       $newspaper_collection['members'] = islandora_iiif_manifests_get_newspaper_member_collection($member);
