@@ -98,7 +98,7 @@ function islandora_iiif_manifest_get_newspaper_collection($object,$selected_coll
   
   $manifest_ds = json_decode($object[ISLANDORA_IIIF_MANIFESTS_DATASTREAM_ID]->content);
   
-  echo "1 manifest ds collections: <pre>";print_r($manifest_ds['collections']);
+  echo "1 manifest ds collections: <pre>";print_r($manifest_ds);
   echo "2 manifest ds collections: <pre>";print_r($manifest_ds->collections);
   
   
