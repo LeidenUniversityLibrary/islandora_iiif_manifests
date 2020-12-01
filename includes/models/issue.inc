@@ -39,6 +39,16 @@ function islandora_iiif_manifest_create_issue_manifest(AbstractObject $object) {
 
   $label = islandora_iiif_manifests_convert_label($object);
   
+  if ($object['MODS']) {
+    // Get Image info from TECHMD.
+    $mods_datastream = $object['TECHMD']->content;
+    $xml = simplexml_load_string($mods_datastream);
+    $json = json_encode($xml);
+    $tech_md = json_decode($json, TRUE);
+    
+    echo "<pre>";print_r($tech_md);die;
+  }
+  
   // Set the canvases.
   $manifest['sequences'][] = array(
     '@type' => 'sc:Sequence',
