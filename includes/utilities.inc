@@ -181,23 +181,8 @@ function islandora_iiif_manifests_get_newspaper_member_collection($issue) {
                 'language' => (object)array('language' => FALSE),
               )));
   
-              if($issue_object['RELS-EXT']){
-                // Get Image info from TECHMD.
-                $rels_datastream = $issue_object['MODS']->content;
-                $json = json_encode(simplexml_load_string($rels_datastream));
-                $array = json_decode($json,true);
-                
-                
-  
-                //echo "dateIssued: ".$array['dateIssued'];
-                echo " Rels <pre>";print_r($array);
-                echo " Rels  datastream<pre>";print_r($rels_datastream);
-              }
-              else
-                echo "No RELS-EXT found";
-              
-              
-  
+              echo "Object <pre>";print_r($issue_object);
+              echo "Issue data  <pre>";print_r($issue_data);
               $volume_issues [$i] = array(
                 "@id" => $manifest_uri,
                 "@type" => $manifest_type,
