@@ -11,6 +11,7 @@ function islandora_iiif_manifest_create_issue_manifest(AbstractObject $object) {
   module_load_include('inc', 'islandora', 'includes/utilities');
   module_load_include('inc', 'islandora_iiif_manifests', 'includes/utilities');
   module_load_include('inc', 'islandora_paged_content', 'includes/utilities');
+  module_load_include('inc', 'islandora_newspaper', 'includes/utilities');
 
   // Manifest array.
   $manifest = array();
