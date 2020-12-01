@@ -94,6 +94,9 @@ function islandora_iiif_manifest_get_newspaper_collection($object,$selected_coll
   // Get issues.
   $group_issues = islandora_newspaper_group_issues($issues);
   
+  $manifest_ds  =islandora_view_datastream($object[ISLANDORA_IIIF_MANIFESTS_DATASTREAM_ID]);
+  echo "<pre>";print_r($manifest_ds);
+  
   foreach ($group_issues as $collection => $member) {
     
     if (intval($selected_collection) === $collection) {
