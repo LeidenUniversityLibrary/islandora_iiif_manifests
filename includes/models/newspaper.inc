@@ -20,15 +20,10 @@ function islandora_iiif_manifest_create_newspaper_manifest(AbstractObject $objec
   module_load_include('inc', 'islandora', 'includes/datastream');
   
   
-  
   if(empty($selected_collection)){
-  
     $manifest =  islandora_iiif_manifest_get_newspaper_manifest($object);
-    
   }else{
-    echo "2 selected collection:".$selected_collection."<br>";
     $manifest =  islandora_iiif_manifest_get_newspaper_collection($object,$selected_collection);
-    
   }
   return $manifest;
 }
@@ -100,6 +95,10 @@ function islandora_iiif_manifest_get_newspaper_collection($object,$selected_coll
   // Get issues.
   $group_issues = islandora_newspaper_group_issues($issues);
   
+  $manifest_ds = islandora_view_datastream($object[ISLANDORA_IIIF_MANIFESTS_DATASTREAM_ID]);
+  
+  echo "<pre>";print_r($manifest_ds);die;
+  
   foreach ($group_issues as $collection => $member) {
     
     if (intval($selected_collection) === $collection) {
@@ -110,8 +109,6 @@ function islandora_iiif_manifest_get_newspaper_collection($object,$selected_coll
         
       }
     }
-    else
-      echo $selected_collection ." not equal to ".$collection." <br>";
     
   }
 
