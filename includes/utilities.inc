@@ -188,6 +188,7 @@ function islandora_iiif_manifests_get_newspaper_member_collection($issue) {
                 $json = json_encode($xml);
                 $rels_md = json_decode($json, TRUE);
   
+                echo "dateIssued: ".$rels_md['dateIssued'];
                 echo " Rels <pre>";print_r($rels_md);
                 echo " Rels  datastream<pre>";print_r($rels_datastream);
               }
