@@ -183,13 +183,14 @@ function islandora_iiif_manifests_get_newspaper_member_collection($issue) {
   
               if($issue_object['RELS-EXT']){
                 // Get Image info from TECHMD.
-                $rels_datastream = $issue_object['RELS-EXT']->content;
-                $xml = simplexml_load_string($rels_datastream );
-                $json = json_encode($xml);
-                $rels_md = json_decode($json, TRUE);
+                $rels_datastream = $issue_object['MODS']->content;
+                $json = json_encode(simplexml_load_string($rels_datastream));
+                $array = json_decode($json,true);
+                
+                
   
-                echo "dateIssued: ".$rels_md['dateIssued'];
-                echo " Rels <pre>";print_r($rels_md);
+                //echo "dateIssued: ".$array['dateIssued'];
+                echo " Rels <pre>";print_r($array);
                 echo " Rels  datastream<pre>";print_r($rels_datastream);
               }
               else
