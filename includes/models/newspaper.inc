@@ -104,8 +104,8 @@ function islandora_iiif_manifest_get_newspaper_collection($object,$selected_coll
 
     if ($selected_collection === $collection_id) {
       
-      echo "<pre>";print_r($col);die;
-      $manifest['members'] =  $col;
+      echo "<pre>";print_r($col);
+      $manifest['members'] =  $col->members;
     }
     
     
