@@ -58,7 +58,7 @@ function islandora_iiif_manifest_get_newspaper_manifest($object) {
       )));
   
       if (is_numeric($collection)) {
-        $label = "'". $collection ."''";
+        $label = "'". $collection ."'";
       }
       else {
         $label = $collection;
@@ -98,7 +98,9 @@ function islandora_iiif_manifest_get_newspaper_collection($object,$selected_coll
   
   $manifest_ds = $object[ISLANDORA_IIIF_MANIFESTS_DATASTREAM_ID]->content;
   
-  echo "<pre>";print_r(json_decode($manifest_ds));die;
+  echo "<pre>";print_r($manifest_ds);
+  echo "<pre>";print_r($manifest_ds->collections);
+  die;
   
   foreach ($group_issues as $collection => $member) {
     
