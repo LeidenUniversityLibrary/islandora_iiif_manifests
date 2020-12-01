@@ -63,7 +63,7 @@ function islandora_iiif_manifest_get_newspaper_manifest($object) {
       )));
   
       if (is_numeric($collection)) {
-        $label = '"'. $collection . '"';
+        $label = "'". $collection ."''";
       }
       else {
         $label = $collection;
@@ -72,7 +72,7 @@ function islandora_iiif_manifest_get_newspaper_manifest($object) {
       $newspaper_collection = array(
         "@id" => $manifest_uri,
         "@type" => 'sc:Collection',
-        "label" => $label,
+        "label" => strval($label),
       );
       
       $newspaper_collection['members'] = islandora_iiif_manifests_get_newspaper_member_collection($member);
@@ -101,10 +101,6 @@ function islandora_iiif_manifest_get_newspaper_collection($object,$selected_coll
   // Get issues.
   $group_issues = islandora_newspaper_group_issues($issues);
   
-  $manifest_ds  = $object[ISLANDORA_IIIF_MANIFESTS_DATASTREAM_ID]->content;
-  
-  echo "Manifest md:<pre>";print_r(json_decode($manifest_ds));die;
-  
   foreach ($group_issues as $collection => $member) {
     
     if (intval($selected_collection) === $collection) {
@@ -115,6 +111,8 @@ function islandora_iiif_manifest_get_newspaper_collection($object,$selected_coll
         
       }
     }
+    else
+      echo $selected_collection ." not equal to ".$collection." <br>";
     
   }
 
