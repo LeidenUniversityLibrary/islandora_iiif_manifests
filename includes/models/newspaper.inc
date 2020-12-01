@@ -111,7 +111,7 @@ function islandora_iiif_manifest_get_newspaper_collection($object,$selected_coll
       echo "<br>3<pre>";print_r(json_decode($col));
     }
     else
-      echo $selected_collection ." != ."$collection_id."<br>";
+      echo $selected_collection ." != ".$collection_id."<br>";
     
   }
   
