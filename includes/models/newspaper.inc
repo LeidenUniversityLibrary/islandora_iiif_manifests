@@ -56,7 +56,7 @@ function islandora_iiif_manifest_get_newspaper_manifest($object) {
       )));
   
       if (is_numeric($collection)) {
-        $label = "'" . $collection . "'";
+        $label = "" . $collection . "";
       }
       else {
         $label = $collection;
