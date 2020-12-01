@@ -101,21 +101,15 @@ function islandora_iiif_manifest_get_newspaper_collection($object,$selected_coll
   foreach ($manifest_ds->collections as $col){
     
     $collection_id = str_replace("'", "",$col->label);
-    echo "collection id:".$collection_id."<br>";
+
     if ($selected_collection === $collection_id) {
-  
       $manifest['members'] =  $col;
-      
-      echo "<br>1 <pre>";print_r($col);
-      echo "<br>2<pre>";print_r(json_encode($col));
-      echo "<br>3<pre>";print_r(json_decode($col));
     }
     else
       echo $selected_collection ." != ".$collection_id."<br>";
     
   }
-  
-  echo "3<pre>";print_r($manifest);die;
+
   
   return $manifest;
 }
