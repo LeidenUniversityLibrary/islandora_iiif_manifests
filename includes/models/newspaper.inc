@@ -102,9 +102,9 @@ function islandora_iiif_manifest_get_newspaper_collection($object,$selected_coll
   echo "2 manifest ds collections: <pre>";print_r($manifest_ds->collections);
   
   
-  foreach ($manifest_ds['collections'] as $col){
+  foreach ($manifest_ds->collections as $col){
     
-    echo "label:".$col['label']."<br>";
+    echo "label:".$col->label."<br>";
   }
   
   die;
