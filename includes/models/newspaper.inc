@@ -108,9 +108,12 @@ function islandora_iiif_manifest_get_newspaper_collection($object,$selected_coll
       echo "2<pre>";print_r(json_encode($col));
       echo "3<pre>";print_r(json_decode($col));
     }
+    else
+      echo intval($selected_collection) ." != ".intval($col)."<br>";
     
   }
   
+  echo "3<pre>";print_r($manifest);die;
   
   return $manifest;
 }
