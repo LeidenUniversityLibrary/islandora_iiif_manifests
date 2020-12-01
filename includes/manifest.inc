@@ -143,7 +143,6 @@ function islandora_iiif_manifests_build_collection($object, $collection) {
   
   $hooks = islandora_build_hook_list(ISLANDORA_IIIF_MANIFESTS_ISLANDORA_IIIF_MANIFEST_HOOK, $object->models);
   
-  echo "<pre>";print_r($hooks);
   foreach ($hooks as $hook) {
     $temp = module_invoke_all($hook, $object,$collection);
 

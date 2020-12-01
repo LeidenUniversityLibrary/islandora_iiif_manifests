@@ -23,6 +23,7 @@ function islandora_iiif_manifest_create_newspaper_manifest(AbstractObject $objec
   if(empty($selected_collection)){
     $manifest =  islandora_iiif_manifest_get_newspaper_manifest($object);
   }else{
+    echo "selected_collection:".$selected_collection;
     $manifest =  islandora_iiif_manifest_get_newspaper_collection($object,$selected_collection);
   }
   return $manifest;
