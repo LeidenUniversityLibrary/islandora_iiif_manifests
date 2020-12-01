@@ -103,6 +103,10 @@ function islandora_iiif_manifest_get_newspaper_collection($object,$selected_coll
     if (intval($selected_collection) === intval($col->label)) {
   
       $manifest['members'] =  $col;
+      
+      echo "1<pre>";print_r($col);
+      echo "2<pre>";print_r(json_encode($col));
+      echo "3<pre>";print_r(json_decode($col));
     }
     
   }
