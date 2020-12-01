@@ -181,14 +181,20 @@ function islandora_iiif_manifests_get_newspaper_member_collection($issue) {
                 'language' => (object)array('language' => FALSE),
               )));
   
-              // Get Image info from TECHMD.
-              $rels_datastream = $issue_object['RELS-EXT']->content;
-              $xml = simplexml_load_string($rels_datastream );
-              $json = json_encode($xml);
-              $rels_md = json_decode($json, TRUE);
+              if($issue_object['RELS-EXT']){
+                // Get Image info from TECHMD.
+                $rels_datastream = $issue_object['RELS-EXT']->content;
+                $xml = simplexml_load_string($rels_datastream );
+                $json = json_encode($xml);
+                $rels_md = json_decode($json, TRUE);
+  
+                echo " Rels <pre>";print_r($rels_md);
+                echo " Rels  datastream<pre>";print_r($rels_datastream);
+              }
+              else
+                echo "No RELS-EXT found";
               
-              echo " Rels <pre>";print_r($rels_md); die;
-              echo " Rels  datastream<pre>";print_r($rels_datastream); die;
+              
   
               $volume_issues [$i] = array(
                 "@id" => $manifest_uri,
