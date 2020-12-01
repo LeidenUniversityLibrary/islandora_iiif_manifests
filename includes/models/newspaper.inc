@@ -45,7 +45,6 @@ function islandora_iiif_manifest_get_newspaper_manifest($object) {
   // Get issues.
   $group_issues = islandora_newspaper_group_issues($issues);
   
-  echo "Group issues <pre>";print_r($group_issues);
   // Collections array
   $manifest['collections'] = array();
   
@@ -98,7 +97,7 @@ function islandora_iiif_manifest_get_newspaper_collection($object,$selected_coll
   $group_issues = islandora_newspaper_group_issues($issues);
   
   $manifest_ds  =islandora_view_datastream($object[ISLANDORA_IIIF_MANIFESTS_DATASTREAM_ID]);
-  echo "<pre>";print_r($manifest_ds);
+  echo "Manifest md:<pre>";print_r(json_decode($manifest_ds));
   
   foreach ($group_issues as $collection => $member) {
     
