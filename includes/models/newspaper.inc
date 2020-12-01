@@ -103,10 +103,11 @@ function islandora_iiif_manifest_get_newspaper_collection($object,$selected_coll
     $collection_id = str_replace("'", "",$col->label);
 
     if ($selected_collection === $collection_id) {
+      
+      echo "<pre>";print_r($col);die;
       $manifest['members'] =  $col;
     }
-    else
-      echo $selected_collection ." != ".$collection_id."<br>";
+    
     
   }
 
