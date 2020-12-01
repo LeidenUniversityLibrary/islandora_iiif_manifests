@@ -17,6 +17,7 @@ function islandora_iiif_manifest_create_newspaper_manifest(AbstractObject $objec
   module_load_include('inc', 'islandora_iiif_manifests', 'includes/utilities');
   module_load_include('inc', 'islandora_paged_content', 'includes/utilities');
   module_load_include('inc', 'islandora_newspaper', 'includes/utilities');
+  module_load_include('inc', 'islandora', 'includes/datastream');
   
   if(empty($selected_collection)){
     
@@ -43,6 +44,8 @@ function islandora_iiif_manifest_get_newspaper_manifest($object) {
   
   // Get issues.
   $group_issues = islandora_newspaper_group_issues($issues);
+  
+  echo "Group issues <pre>";print_r($group_issues);
   // Collections array
   $manifest['collections'] = array();
   
