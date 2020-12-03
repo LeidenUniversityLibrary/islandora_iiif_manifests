@@ -47,7 +47,7 @@ function islandora_iiif_manifest_create_issue_manifest(AbstractObject $object) {
     $json = json_encode($xml);
     $tech_md = json_decode($json, TRUE);
   
-    echo "1<pre>";print_r($mods_datastream);
+    echo "1<pre>";print_r(islandora_iiif_manifests_xml_to_array($mods_datastream));
     echo "2<pre>";print_r($xml);
     echo "3<pre>";print_r($json);
     echo "4<pre>";print_r( $tech_md);die;
