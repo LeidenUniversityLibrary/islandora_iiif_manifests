@@ -30,8 +30,11 @@ function islandora_iiif_manifest_create_issue_manifest(AbstractObject $object) {
     // Get page object.
     $page_object = islandora_object_load($page['pid']);
   
-    echo "page:<pre>";print_r($page_object);die;
-
+    
+  
+    $issue = islandora_newspaper_get_issue($$page_object->id);
+  
+    echo "issue:<pre>";print_r($issue);die;
     // Add page to canvases.
     $canvases[] = islandora_iiif_manifests_get_object_canvas($page_object);
   }
