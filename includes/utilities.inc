@@ -305,11 +305,14 @@ function islandora_iiif_manifests_get_metadata($object) {
         $date_issued = islandora_newspaper_get_date_issued_from_mods($object['MODS']);
 
         echo"<pre>";print_r($metadata);
-        foreach ($metadata['manifest']['metadata'] as $metadata){
-    
-          if($metadata['label'] == 'Title'){
-            $metadata['value'] = $metadata['value'] . " - ".$date_issued->format('D j F Y');;
+        $i=0;
+        foreach ($metadata['manifest']['metadata'] as $metadata_part){
+  
+          echo"<pre>";print_r($metadata_part);
+          if($metadata_part['label'] == 'Title'){
+            $metadata_part['manifest']['metadata'][$i['value'] = $metadata_part['value'] . " - ".$date_issued->format('D j F Y');;
           }
+          $i++;
         }
       }
       
