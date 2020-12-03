@@ -34,6 +34,7 @@ function islandora_iiif_manifest_create_issue_manifest(AbstractObject $object) {
   
     echo "Date issued:<pre>";print_r($date_issued);
     echo "Page object:<pre>";print_r($page_object);die;
+    
     // Add page to canvases.
     $canvases[] = islandora_iiif_manifests_get_object_canvas($page_object);
   }
