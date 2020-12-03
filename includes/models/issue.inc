@@ -29,11 +29,6 @@ function islandora_iiif_manifest_create_issue_manifest(AbstractObject $object) {
 
     // Get page object.
     $page_object = islandora_object_load($page['pid']);
-  
-    $date_issued = islandora_newspaper_get_date_issued_from_mods($object['MODS']);
-  
-    echo "Date issued:<pre>";print_r($date_issued);
-    echo "Page object:<pre>";print_r($pages);die;
     
     // Add page to canvases.
     $canvases[] = islandora_iiif_manifests_get_object_canvas($page_object);
@@ -43,13 +38,15 @@ function islandora_iiif_manifest_create_issue_manifest(AbstractObject $object) {
   $manifest['viewingDirection'] = $viewingDirection;
   $manifest['viewingHint'] = $viewingHint;
 
-  $label = islandora_iiif_manifests_convert_label($object);
+  $date_issued = islandora_newspaper_get_date_issued_from_mods($object['MODS']);
   
+  $label = islandora_iiif_manifests_convert_label($object)." - ".$date_issued->format('D j F Y');
   
   // Set the canvases.
   $manifest['sequences'][] = array(
     '@type' => 'sc:Sequence',
-    'label' => $label,
+    "label" => $label,
+    "navDate" => $date_issued->format('Y-m-d\TH:i:s\Z\''),
     'canvases' => $canvases
   );
 
