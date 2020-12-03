@@ -30,7 +30,7 @@ function islandora_iiif_manifest_create_issue_manifest(AbstractObject $object) {
     // Get page object.
     $page_object = islandora_object_load($page['pid']);
   
-    $date_issued = islandora_newspaper_get_date_issued_from_mods($page_object['RELS-EXT']);
+    $date_issued = islandora_newspaper_get_date_issued_from_mods($page_object['MODS']);
   
     echo "1:<pre>";print_r($date_issued);
     echo "2:<pre>";print_r($page_object);die;
