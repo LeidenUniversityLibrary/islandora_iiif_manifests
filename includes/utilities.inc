@@ -267,6 +267,13 @@ function islandora_iiif_manifests_convert_label($object) {
     else {
         $label = $object->label;
     }
+    
+    // Check if cmodels is a newspaper issue
+    if (count(array_intersect($object->models, array('islandora:newspaperIssueCModel'))) > 0) {
+      $date_issued = islandora_newspaper_get_date_issued_from_mods($object['MODS']);
+      $label = $label." - ".$date_issued->format('D j F Y');
+    }
+ 
 
     return $label;
 }
