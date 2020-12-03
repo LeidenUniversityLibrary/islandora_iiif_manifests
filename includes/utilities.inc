@@ -309,7 +309,7 @@ function islandora_iiif_manifests_get_metadata($object) {
         foreach ($metadata['manifest']['metadata'] as $metadata_part){
   
           if($metadata_part['label'] === 'Title'){
-            echo "Change: ".$metadata_part['manifest']['metadata'][$i]['value'] ;
+            echo "Change: ".$metadata_part['value'] ;
             echo"<br> to: ".$metadata_part['value'] . " - ".$date_issued->format('D j F Y');
             $metadata['manifest']['metadata'][$i]['value'] = $metadata_part['value'] . " - ".$date_issued->format('D j F Y');
           }
