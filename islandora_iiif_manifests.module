@@ -160,6 +160,7 @@ function islandora_iiif_manifests_islandora_newspaperPageCModel_islandora_get_ii
 function islandora_iiif_manifests_islandora_get_iiif_manifest($object) {
   
   module_load_include('inc', 'islandora_iiif_manifests', 'includes/utilities');
+  module_load_include('inc', 'islandora_newspaper', 'includes/utilities');
   $manifest_container = islandora_iiif_manifests_create_manifest($object);
   
   return $manifest_container;
