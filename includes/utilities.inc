@@ -304,6 +304,7 @@ function islandora_iiif_manifests_get_metadata($object) {
       if (count(array_intersect($object->models, array('islandora:newspaperIssueCModel'))) > 0) {
         $date_issued = islandora_newspaper_get_date_issued_from_mods($object['MODS']);
 
+        echo"<pre>";print_r($metadata);
         foreach ($metadata['manifest']['metadata'] as $metadata){
     
           if($metadata['label'] == 'Title'){
