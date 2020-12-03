@@ -30,10 +30,11 @@ function islandora_iiif_manifests_create_manifest($object) {
     $metadata = islandora_iiif_manifests_get_metadata($object);
     
     if (isset($metadata['manifest'])) {
-      
-      
+  
+      // Add the issued date to the label if cnewspaperIssueCModel
+      $metadata = islandora_iiif_manifests_add_issued_date($object,$metadata);
 
-        $scManifest = array_merge_recursive($scManifest, $metadata['manifest']);
+      $scManifest = array_merge_recursive($scManifest, $metadata['manifest']);
     }
 
     return $scManifest;
@@ -281,6 +282,31 @@ function islandora_iiif_manifests_convert_label($object) {
 }
 
 /**
+ * Add the issued date to the metadata label if object models contains newspaperIssueCModel
+ * @param $object
+ * @param $metadata
+ * @return mixed
+ */
+function islandora_iiif_manifests_add_issued_date($object,$metadata){
+  
+  // Check if cmodels is a newspaper issue
+  if (count(array_intersect($object->models, array('islandora:newspaperIssueCModel'))) > 0) {
+    $date_issued = islandora_newspaper_get_date_issued_from_mods($object['MODS']);
+    
+    $i=0;
+    foreach ($metadata['manifest']['metadata'] as $metadata_part){
+      
+      if($metadata_part['label'] === 'Title'){
+        $metadata['manifest']['metadata'][$i]['value'] = $metadata_part['value'] . " - ".$date_issued->format('D j F Y');
+      }
+      $i++;
+    }
+  }
+  
+  return $metadata;
+}
+
+/**
  * Retrieve object metadata
  */
 function islandora_iiif_manifests_get_metadata($object) {
@@ -298,29 +324,7 @@ function islandora_iiif_manifests_get_metadata($object) {
         $processor->importStylesheet($xsl);
         $manifest = $processor->transformToDoc($mods);
         $metadata = islandora_iiif_manifests_xml_to_array($manifest);
-  
-  
-      // Check if cmodels is a newspaper issue
-      if (count(array_intersect($object->models, array('islandora:newspaperIssueCModel'))) > 0) {
-        $date_issued = islandora_newspaper_get_date_issued_from_mods($object['MODS']);
-  
-        echo"1<pre>";print_r($metadata);
-        $i=0;
-        foreach ($metadata['manifest']['metadata'] as $metadata_part){
-  
-          if($metadata_part['label'] === 'Title'){
-            echo "Change: ".$metadata_part['value'] ;
-            echo"<br> to: ".$metadata_part['value'] . " - ".$date_issued->format('D j F Y');
-            $metadata['manifest']['metadata'][$i]['value'] = $metadata_part['value'] . " - ".$date_issued->format('D j F Y');
-          }
-          $i++;
-        }
       }
-  
-      echo"2<pre>";print_r($metadata);die;
-      
-
-    }
     return $metadata;
 }
 
