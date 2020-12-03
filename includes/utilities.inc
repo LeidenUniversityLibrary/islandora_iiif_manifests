@@ -28,6 +28,8 @@ function islandora_iiif_manifests_create_manifest($object) {
     );
 
     $metadata = islandora_iiif_manifests_get_metadata($object);
+    
+    echo "metadata <pre>";print_r($metadata);die;
 
     if (isset($metadata['manifest'])) {
 
