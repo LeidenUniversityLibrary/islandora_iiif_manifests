@@ -21,7 +21,7 @@
           <xsl:value-of select="../mods:nonSort"/>
         </xsl:if>
         <xsl:if test="/mods:mods/mods:relatedItem[@type='host'][1]/mods:part/mods:detail[@type='issue']">
-          <xsl:value-of select="concat(../mods:nonSort,' - ',/mods:mods/mods:originInfo[not(@eventType)]/mods:dateIssued[1])"/>
+          <xsl:value-of select="concat(/mods:mods/mods:originInfo[not(@eventType)]/mods:dateIssued[1],' - ',../mods:nonSort)"/>
         </xsl:if>
         <xsl:value-of select="."/>
       </xsl:with-param>
