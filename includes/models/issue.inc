@@ -33,7 +33,7 @@ function islandora_iiif_manifest_create_issue_manifest(AbstractObject $object) {
     $date_issued = islandora_newspaper_get_date_issued_from_mods($object['MODS']);
   
     echo "Date issued:<pre>";print_r($date_issued);
-    echo "Page object:<pre>";print_r($object);die;
+    echo "Page object:<pre>";print_r($pages);die;
     
     // Add page to canvases.
     $canvases[] = islandora_iiif_manifests_get_object_canvas($page_object);
