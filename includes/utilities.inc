@@ -29,9 +29,9 @@ function islandora_iiif_manifests_create_manifest($object) {
 
     $metadata = islandora_iiif_manifests_get_metadata($object);
     
-    echo "metadata <pre>";print_r($metadata);die;
-
     if (isset($metadata['manifest'])) {
+      
+      
 
         $scManifest = array_merge_recursive($scManifest, $metadata['manifest']);
     }
@@ -298,6 +298,20 @@ function islandora_iiif_manifests_get_metadata($object) {
         $processor->importStylesheet($xsl);
         $manifest = $processor->transformToDoc($mods);
         $metadata = islandora_iiif_manifests_xml_to_array($manifest);
+  
+  
+      // Check if cmodels is a newspaper issue
+      if (count(array_intersect($object->models, array('islandora:newspaperIssueCModel'))) > 0) {
+        $date_issued = islandora_newspaper_get_date_issued_from_mods($object['MODS']);
+
+        foreach ($metadata['manifest']['metadata'] as $metadata){
+    
+          if($metadata['label'] == 'Title'){
+            $metadata['value'] = $metadata['value'] . " - ".$date_issued->format('D j F Y');;
+          }
+        }
+      }
+      
 
     }
     return $metadata;
