@@ -40,7 +40,7 @@ function islandora_iiif_manifest_create_issue_manifest(AbstractObject $object) {
 
   $date_issued = islandora_newspaper_get_date_issued_from_mods($object['MODS']);
   
-  $label = islandora_iiif_manifests_convert_label($object)." - ".$date_issued->format('D j F Y');
+  $label = islandora_iiif_manifests_convert_label($object);
   
   // Set the canvases.
   $manifest['sequences'][] = array(
