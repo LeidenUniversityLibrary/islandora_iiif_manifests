@@ -28,7 +28,7 @@
   <xsl:template match="/mods:mods/mods:titleInfo/mods:subTitle[1]">
     <xsl:call-template name="metadata">
       <xsl:with-param name="label">Subtitle</xsl:with-param>
-      <xsl:with-param name="firstvalue" select="."/>
+      <xsl:with-param name="firstvalue" select="concat(/mods:mods/mods:titleInfo/mods:subTitle[1],' - ',/mods:mods/mods:originInfo[not(@eventType)]/mods:dateIssued[1])"/>
     </xsl:call-template>
   </xsl:template>
 
