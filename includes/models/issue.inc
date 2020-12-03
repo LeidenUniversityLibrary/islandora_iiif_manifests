@@ -22,7 +22,6 @@ function islandora_iiif_manifest_create_issue_manifest(AbstractObject $object) {
   // Get pages.
   $pages = islandora_paged_content_get_pages($object);
   
-  echo "<pre>";print_r($pages);
 
   $viewingHint = islandora_paged_content_get_viewing_hint($object) != "" ? islandora_paged_content_get_viewing_hint($object) : "paged";
   $viewingDirection = islandora_iiif_manifests_get_viewing_direction($object);
@@ -31,7 +30,12 @@ function islandora_iiif_manifest_create_issue_manifest(AbstractObject $object) {
 
     // Get page object.
     $page_object = islandora_object_load($page['pid']);
-
+  
+    $issue = islandora_newspaper_get_issue($page['pid']);
+  
+    echo "page:<pre>";print_r($page_object);
+    echo "issue:<pre>";print_r( $issue);die;
+    
     // Add page to canvases.
     $canvases[] = islandora_iiif_manifests_get_object_canvas($page_object);
   }
@@ -42,22 +46,11 @@ function islandora_iiif_manifest_create_issue_manifest(AbstractObject $object) {
 
   $label = islandora_iiif_manifests_convert_label($object);
   
-  if ($object['RELS-EXT']) {
-    // Get Image info from TECHMD.
-    $mods_datastream = $object['RELS-EXT']->content;
-    $xml = simplexml_load_string($mods_datastream);
-    $json = json_encode($xml);
-    $tech_md = json_decode($json, TRUE);
-  
-    echo "1<pre>";print_r($mods_datastream);
-    echo "4<pre>";print_r( $tech_md);die;
-  }
   
   // Set the canvases.
   $manifest['sequences'][] = array(
     '@type' => 'sc:Sequence',
-    'label' => $label." - ".$page['issued']->format('D j F Y'),
-    "navDate" => $page['issued']->format('Y-m-d\TH:i:s\Z\''),
+    'label' => $label,
     'canvases' => $canvases
   );
 
