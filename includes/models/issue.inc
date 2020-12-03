@@ -48,7 +48,7 @@ function islandora_iiif_manifest_create_issue_manifest(AbstractObject $object) {
     $tech_md = json_decode($json, TRUE);
     
     echo "1<pre>";print_r($tech_md);
-    echo "2<pre>";print_r(islandora_newspaper_get_issue($object));die;
+    echo "2<pre>";print_r($object);die;
   }
   
   // Set the canvases.
