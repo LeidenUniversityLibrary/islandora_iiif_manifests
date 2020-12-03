@@ -21,6 +21,8 @@ function islandora_iiif_manifest_create_issue_manifest(AbstractObject $object) {
 
   // Get pages.
   $pages = islandora_paged_content_get_pages($object);
+  
+  echo "<pre>";print_r($pages);
 
   $viewingHint = islandora_paged_content_get_viewing_hint($object) != "" ? islandora_paged_content_get_viewing_hint($object) : "paged";
   $viewingDirection = islandora_iiif_manifests_get_viewing_direction($object);
@@ -47,9 +49,7 @@ function islandora_iiif_manifest_create_issue_manifest(AbstractObject $object) {
     $json = json_encode($xml);
     $tech_md = json_decode($json, TRUE);
   
-    echo "1<pre>";print_r(islandora_iiif_manifests_xml_to_array($mods_datastream));
-    echo "2<pre>";print_r($xml);
-    echo "3<pre>";print_r($json);
+    echo "1<pre>";print_r($mods_datastream);
     echo "4<pre>";print_r( $tech_md);die;
   }
   
