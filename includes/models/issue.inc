@@ -46,9 +46,11 @@ function islandora_iiif_manifest_create_issue_manifest(AbstractObject $object) {
     $xml = simplexml_load_string($mods_datastream);
     $json = json_encode($xml);
     $tech_md = json_decode($json, TRUE);
-    
-    echo "1<pre>";print_r($tech_md);
-    echo "2<pre>";print_r( islandora_object_load($object->id));die;
+  
+    echo "1<pre>";print_r($mods_datastream);
+    echo "2<pre>";print_r($xml);
+    echo "3<pre>";print_r($json);
+    echo "4<pre>";print_r( $tech_md);die;
   }
   
   // Set the canvases.
