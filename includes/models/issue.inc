@@ -21,7 +21,6 @@ function islandora_iiif_manifest_create_issue_manifest(AbstractObject $object) {
 
   // Get pages.
   $pages = islandora_paged_content_get_pages($object);
-  
 
   $viewingHint = islandora_paged_content_get_viewing_hint($object) != "" ? islandora_paged_content_get_viewing_hint($object) : "paged";
   $viewingDirection = islandora_iiif_manifests_get_viewing_direction($object);
@@ -30,9 +29,9 @@ function islandora_iiif_manifest_create_issue_manifest(AbstractObject $object) {
 
     // Get page object.
     $page_object = islandora_object_load($page['pid']);
-    
+  
     echo "page:<pre>";print_r($page_object);die;
-    
+
     // Add page to canvases.
     $canvases[] = islandora_iiif_manifests_get_object_canvas($page_object);
   }
