@@ -22,6 +22,9 @@ function islandora_iiif_manifest_create_collection_manifest(AbstractObject $obje
   $limit = 20;
   $pages = ceil($collection_objects_total / $limit);
   
+  echo "Pages:".$pages."<br>";
+  echo "Total members:".$collection_objects_total."<br>";
+  
   // collection of the manifests.
   $collection_members_members = array();
   
