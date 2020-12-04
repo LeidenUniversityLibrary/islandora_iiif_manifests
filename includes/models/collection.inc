@@ -41,10 +41,14 @@ function islandora_iiif_manifest_create_collection_manifest(AbstractObject $obje
        $collection_item = islandora_iiif_manifests_get_object_collection($fedora_collection_object);
        $collection_members_members[] = $collection_item['object'];
      }
+     else{
+       
+       echo "Not allowed:<pre>";print_($fedora_collection_object->models);
+     }
    }
  }
 
-
+echo "<pre>";print_r($collection_members_members);die;
  
 
   if (!empty($collection_members_members)) {
