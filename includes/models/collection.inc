@@ -18,6 +18,7 @@ function islandora_iiif_manifest_create_collection_manifest(AbstractObject $obje
 
   // Get collection members.
   $collection_members = islandora_basic_collection_get_member_objects($object);
+  echo "<pre>";print_r($collection_members);die;
   $collection_objects = $collection_members[1];
 
   // collection of the manifests.
