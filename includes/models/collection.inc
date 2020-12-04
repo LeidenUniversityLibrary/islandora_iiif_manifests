@@ -35,7 +35,7 @@ function islandora_iiif_manifest_create_collection_manifest(AbstractObject $obje
      // Load collection object.
      $fedora_collection_object = islandora_object_load($member['object']['value']);
     
-     if (islandora_iiif_manifests_allowed_cmodel($fedora_collection_object)) {
+     if (islandora_iiif_manifests_allowed_cmodel($fedora_collection_object) &&  islandora_iiif_manifests_allowed_manifest($fedora_collection_object)) {
        $collection_item = islandora_iiif_manifests_get_object_collection($fedora_collection_object);
        $collection_members_members[] = $collection_item['object'];
      }
