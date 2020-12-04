@@ -169,6 +169,21 @@ function islandora_iiif_manifests_get_object_collection($object) {
   return $collection_item;
 }
 
+/**
+ * Check if the object already has manifest or access is allowed
+ * @param $object
+ * @return bool
+ */
+function islandora_iiif_manifests_allowed_manifest($object){
+  
+  if (isset($object[ISLANDORA_IIIF_MANIFESTS_DATASTREAM_ID]) && islandora_datastream_access(ISLANDORA_VIEW_OBJECTS, $object[ISLANDORA_IIIF_MANIFESTS_DATASTREAM_ID])) {
+    return TRUE;
+  }
+  else {
+    return FALSE;
+  }
+}
+
 function islandora_iiif_manifests_allowed_cmodel($object) {
 
   $cmodels = array('islandora:sp_basic_image', 'islandora:sp_large_image_cmodel', 'islandora:bookCModel', 'islandora:newspaperCModel', 'islandora:collectionCModel', 'islandora:newspaperIssueCModel', 'islandora:compoundCModel');
