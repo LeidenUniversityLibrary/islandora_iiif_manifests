@@ -30,8 +30,10 @@ function islandora_iiif_manifest_create_collection_manifest(AbstractObject $obje
   
  for($i = $pages;$i > 0;$i--){
   
-   list($count,$members) = islandora_basic_collection_get_member_objects($object,$limit,$i);
-  
+   list($count,$members) = islandora_basic_collection_get_member_objects($object,$i,$limit);
+   
+   echo "Members:<pre>";print_($members);
+   
    foreach ($members as $member) {
     
      // Load collection object.
