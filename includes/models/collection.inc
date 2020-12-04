@@ -28,15 +28,13 @@ function islandora_iiif_manifest_create_collection_manifest(AbstractObject $obje
   // collection of the manifests.
   $collection_members_members = array();
   
- for($i = $pages;$i > 0;$i--){
-  
-   echo "Page:".$i."<br>";
-   echo "Limit:".$limit."<br>";
+ for($i = 0;$i <= $pages;$i++){
+   
    list($count,$members) = islandora_basic_collection_get_member_objects($object,$i,$limit);
-   
-   echo "Count:".$count."<br>";
-   
+
    foreach ($members as $member) {
+  
+     echo "Page:".$i." Limit:".$limit." Count:".$count."<br>";
     
      // Load collection object.
      $fedora_collection_object = islandora_object_load($member['object']['value']);
@@ -52,7 +50,7 @@ function islandora_iiif_manifest_create_collection_manifest(AbstractObject $obje
    }
  }
 
-echo "<pre>";print_r($collection_members_members);die;
+echo "Collection members:<pre>";print_r($collection_members_members);die;
  
 
   if (!empty($collection_members_members)) {
