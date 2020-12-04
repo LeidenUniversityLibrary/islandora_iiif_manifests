@@ -17,23 +17,34 @@ function islandora_iiif_manifest_create_collection_manifest(AbstractObject $obje
   $manifest = array();
 
   // Get collection members.
-  $collection_members = islandora_basic_collection_get_member_objects($object);
-  echo "<pre>";print_r($collection_members);die;
-  $collection_objects = $collection_members[1];
-
+  $collection_members = islandora_basic_collection_get_member_objects($object,0,1);
+  $collection_objects_total = $collection_members[0];
+  $limit = 20;
+  $pages = ceil($collection_objects_total / $limit);
+  
+  echo "Pages:".$pages."<br>";
+  
   // collection of the manifests.
   $collection_members_members = array();
+  
+ for($i = $pages;$i > 0;$i--){
+  
+   list($count,$members) = islandora_basic_collection_get_member_objects($object,$limit,$i);
+  
+   foreach ($members as $member) {
+    
+     // Load collection object.
+     $fedora_collection_object = islandora_object_load($member['object']['value']);
+    
+     if (islandora_iiif_manifests_allowed_cmodel($fedora_collection_object)) {
+       $collection_item = islandora_iiif_manifests_get_object_collection($fedora_collection_object);
+       $collection_members_members[] = $collection_item['object'];
+     }
+   }
+ }
 
-  foreach ($collection_objects as $collection_object) {
 
-    // Load collection object.
-    $fedora_collection_object = islandora_object_load($collection_object['object']['value']);
-
-    if (islandora_iiif_manifests_allowed_cmodel($fedora_collection_object)) {
-      $collection_item = islandora_iiif_manifests_get_object_collection($fedora_collection_object);
-      $collection_members_members[] = $collection_item['object'];
-    }
-  }
+ 
 
   if (!empty($collection_members_members)) {
     $manifest['members'] = $collection_members_members;
