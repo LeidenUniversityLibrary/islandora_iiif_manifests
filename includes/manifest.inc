@@ -12,21 +12,26 @@ function islandora_iiif_manifests_view_manifest_json(AbstractObject $object) {
   module_load_include('inc', 'islandora_iiif_manifests', 'includes/utilities');
   module_load_include('inc', 'islandora', 'includes/datastream');
   
-  $data = "";
+  $response =array();
   
   if (isset($object[ISLANDORA_IIIF_MANIFESTS_DATASTREAM_ID]) && islandora_datastream_access(ISLANDORA_VIEW_OBJECTS, $object[ISLANDORA_IIIF_MANIFESTS_DATASTREAM_ID])) {
     header('Access-Control-Allow-Origin: *');
-    
     islandora_view_datastream($object[ISLANDORA_IIIF_MANIFESTS_DATASTREAM_ID]);
   }
   else {
-    if (!isset($object[ISLANDORA_IIIF_MANIFESTS_DATASTREAM_ID]))
-      $data = "No manifest found";
-    
-    if (islandora_datastream_access(ISLANDORA_VIEW_OBJECTS, $object[ISLANDORA_IIIF_MANIFESTS_DATASTREAM_ID]))
-      $data = "Forbidden";
-    
-    islandora_iiif_manifests_create_json_response('403 Forbidden', $data);
+    if (!isset($object[ISLANDORA_IIIF_MANIFESTS_DATASTREAM_ID])){
+      $response = array(
+        "data" => "No manifest found",
+        "status" => "404 Bad request"
+      );
+    }
+    if (islandora_datastream_access(ISLANDORA_VIEW_OBJECTS, $object[ISLANDORA_IIIF_MANIFESTS_DATASTREAM_ID])){
+      $response = array(
+        "data" => "Forbidden",
+        "status" => "403 Forbidden"
+      );
+    }
+    islandora_iiif_manifests_create_json_response($response['status'], $response['data']);
   }
 }
 
