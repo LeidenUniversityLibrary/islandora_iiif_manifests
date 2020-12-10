@@ -84,7 +84,7 @@ function islandora_iiif_manifests_create_collection_json(AbstractObject $object,
     islandora_iiif_manifests_create_json_response('403 Forbidden',"Collection not set" );
   }else{
     
-    $output = islandora_iiif_manifests_build_collection($object, $collection);
+    $output = islandora_iiif_manifests_build_manifest($object,$collection);
   
     islandora_iiif_manifests_create_json_response('200 OK', $output);
   }
@@ -95,14 +95,14 @@ function islandora_iiif_manifests_create_collection_json(AbstractObject $object,
 /**
  * Build manifest array.
  */
-function islandora_iiif_manifests_build_manifest($object) {
+function islandora_iiif_manifests_build_manifest($object, $collection = NULL ) {
   
   $output = array();
   
   $hooks = islandora_build_hook_list(ISLANDORA_IIIF_MANIFESTS_ISLANDORA_IIIF_MANIFEST_HOOK, $object->models);
   
   foreach ($hooks as $hook) {
-    $temp = module_invoke_all($hook, $object);
+    $temp = module_invoke_all($hook, $object,$collection);
     
     if (!empty($temp)) {
       $output = array_merge_recursive($output, $temp);
@@ -137,24 +137,3 @@ function islandora_iiif_manifests_build_canvas($object) {
   return json_encode($output, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
 }
 
-/**
- * Build newspaper volume array.
- */
-function islandora_iiif_manifests_build_collection($object, $collection) {
-  
-  module_load_include('inc', 'islandora_iiif_manifests', 'includes/utilities');
-  
-  $output = array();
-  
-  $hooks = islandora_build_hook_list(ISLANDORA_IIIF_MANIFESTS_ISLANDORA_IIIF_MANIFEST_HOOK, $object->models);
-  
-  foreach ($hooks as $hook) {
-    $temp = module_invoke_all($hook, $object,$collection);
-
-    if (!empty($temp)) {
-      $output = array_merge_recursive($output, $temp);
-    }
- 
-  }
-  return json_encode($output, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
-}
