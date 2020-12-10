@@ -76,6 +76,8 @@ function islandora_iiif_manifest_get_newspaper_manifest($object) {
  */
 function islandora_iiif_manifest_get_newspaper_collection($object, $selected_collection) {
   
+  echo "Selected collection:$selected_collection <br>";
+  
   // Members array
   $manifest['members'] = array();
   $manifest_ds = json_decode($object[ISLANDORA_IIIF_MANIFESTS_DATASTREAM_ID]->content);
