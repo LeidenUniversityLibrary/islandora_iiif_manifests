@@ -15,6 +15,8 @@ function islandora_iiif_manifest_create_newspaper_manifest(AbstractObject $objec
   module_load_include('inc', 'islandora_paged_content', 'includes/utilities');
   module_load_include('inc', 'islandora_newspaper', 'includes/utilities');
   module_load_include('inc', 'islandora', 'includes/datastream');
+  
+  
   if (empty($selected_collection)) {
     $manifest = islandora_iiif_manifest_get_newspaper_manifest($object);
   }
@@ -73,11 +75,13 @@ function islandora_iiif_manifest_get_newspaper_manifest($object) {
  * @return array
  */
 function islandora_iiif_manifest_get_newspaper_collection($object, $selected_collection) {
+  
   // Members array
   $manifest['members'] = array();
   $manifest_ds = json_decode($object[ISLANDORA_IIIF_MANIFESTS_DATASTREAM_ID]->content);
   foreach ($manifest_ds->collections as $col) {
     $collection_id = str_replace("'", "", $col->label);
+    echo "$selected_collection = $collection_id  <br>";
     if ($selected_collection === $collection_id) {
       $manifest['members'] = $col->members;
     }
