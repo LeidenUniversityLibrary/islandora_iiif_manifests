@@ -75,14 +75,17 @@ function islandora_iiif_manifest_get_newspaper_manifest($object) {
  */
 function islandora_iiif_manifest_get_newspaper_collection($object, $selected_collection) {
   
-  echo "Selected collection:$selected_collection <br>";
-  
   // Members array
   $manifest['members'] = array();
+  
+  // Get IIIF Manifest
   $manifest_ds = json_decode($object[ISLANDORA_IIIF_MANIFESTS_DATASTREAM_ID]->content);
+  
+  // Retrieve the collection member based on the collection label
   foreach ($manifest_ds->collections as $col) {
+    
     $collection_id = str_replace("'", "", $col->label);
-    echo "$selected_collection = $collection_id  <br>";
+
     if ($selected_collection === $collection_id) {
       $manifest['members'] = $col->members;
     }
