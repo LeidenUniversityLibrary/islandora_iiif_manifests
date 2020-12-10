@@ -81,7 +81,7 @@ function islandora_iiif_manifests_create_collection_json(AbstractObject $object,
   
   if (!isset($collection)){
 
-    islandora_iiif_manifests_create_json_response('403 Forbidden',"Collection not set" );
+    islandora_iiif_manifests_create_json_response('404 Bad request',"Collection not found" );
   }else{
     
     $output = islandora_iiif_manifests_build_manifest($object,$collection);
@@ -100,6 +100,9 @@ function islandora_iiif_manifests_build_manifest($object, $collection = NULL ) {
   $output = array();
   
   $hooks = islandora_build_hook_list(ISLANDORA_IIIF_MANIFESTS_ISLANDORA_IIIF_MANIFEST_HOOK, $object->models);
+  
+  echo "Collection:$collection <br>";
+  echo "<pre>";print_r($hooks);
   
   foreach ($hooks as $hook) {
     $temp = module_invoke_all($hook, $object,$collection);
