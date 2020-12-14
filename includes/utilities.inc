@@ -25,13 +25,14 @@ function islandora_iiif_manifests_create_manifest($object) {
     'label' => $label,
     "logo" => $iiifmanifestlogourl,
     'metadata' => array(),
+    'license' => '"Download provided. <a href=\"https://creativecommons.org/licenses/by/4.0/\">Use of this resource is governed by the terms and conditions of the Creative Commons CC-BY License</a>",'
   );
   
   $metadata = islandora_iiif_manifests_get_metadata($object);
   
   if (isset($metadata['manifest'])) {
     
-    // Add the issued date to the label if cnewspaperIssueCModel
+    // Add the issued date to the label if newspaperIssueCModel
     $metadata = islandora_iiif_manifests_add_issued_date($object, $metadata);
     
     $scManifest = array_merge_recursive($scManifest, $metadata['manifest']);
