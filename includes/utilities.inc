@@ -155,6 +155,10 @@ function islandora_iiif_manifests_get_object_collection($object) {
     "label" => $label,
   );
   
+  if ((count(array_intersect($object->models, array('islandora:compoundCModel'))) > 0)) {
+    $collection_item['object']['viewingHint'] = "multi-part";
+  }
+  
   return $collection_item;
 }
 
