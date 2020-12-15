@@ -261,7 +261,7 @@
   <xsl:template match="/mods:mods/mods:accessCondition[@type='restriction on access']">
     <license>
       <xsl:value-of select="text()"/>
-      <xsl:text> &lt;a href='</xsl:text><xsl:value-of select="../mods:accessCondition[@type='use and reproduction']/@xlink:href"/><xsl:text>'</xsl:text><xsl:value-of select="../mods:accessCondition[@type='use and reproduction']/text()"/><xsl:text>&lt;/a&gt;</xsl:text>
+      <xsl:text> &lt;a href='</xsl:text><xsl:value-of select="../mods:accessCondition[@type='use and reproduction']/@xlink:href"/><xsl:text>'></xsl:text><xsl:value-of select="../mods:accessCondition[@type='use and reproduction']/text()"/><xsl:text>&lt;/a&gt;</xsl:text>
     </license>
   </xsl:template>
 
