@@ -25,8 +25,6 @@ function islandora_iiif_manifests_create_manifest($object) {
     'label' => $label,
     "logo" => $iiifmanifestlogourl,
     'metadata' => array(),
-    'license' => '1 Download provided. <a href=\"https://creativecommons.org/licenses/by/4.0/\">Use of this resource is governed by the terms and conditions of the Creative Commons CC-BY License</a>',
-    'license_' => '2 Download provided. <a href="https://creativecommons.org/licenses/by/4.0/">Use of this resource is governed by the terms and conditions of the Creative Commons CC-BY License</a>'
   );
   
   $metadata = islandora_iiif_manifests_get_metadata($object);
