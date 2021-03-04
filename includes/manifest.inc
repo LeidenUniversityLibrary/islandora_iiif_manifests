@@ -12,6 +12,7 @@ function islandora_iiif_manifests_view_manifest_json(AbstractObject $object) {
   module_load_include('inc', 'islandora_iiif_manifests', 'includes/utilities');
   module_load_include('inc', 'islandora', 'includes/datastream');
 
+  echo "<pre>";print($object->models);
   if (isset($object[ISLANDORA_IIIF_MANIFESTS_DATASTREAM_ID]) && islandora_datastream_access(ISLANDORA_VIEW_OBJECTS, $object[ISLANDORA_IIIF_MANIFESTS_DATASTREAM_ID])) {
     header('Access-Control-Allow-Origin: *');
 
