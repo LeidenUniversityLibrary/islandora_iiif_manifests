@@ -24,16 +24,20 @@ function islandora_iiif_manifest_create_collection_manifest(AbstractObject $obje
   $qp->solrParams['fq'][] = $query;
   $qp->solrParams['fl'] = implode(',', $usedsolrfields);
 
-  echo "<pre>";print_r($qp->islandoraSolrResult['response']['objects']);die;
+  
+  
   $qp->executeQuery();
   if (isset($qp->islandoraSolrResult['response']['numFound']) && $qp->islandoraSolrResult['response']['numFound'] > 0) {
     foreach ($qp->islandoraSolrResult['response']['objects'] as $solrobj) {
       
-      echo "<pre>";print_r($solrobj);die;
+      echo "Yes:<pre>";print_r($solrobj);
       // Hier moet nog iets gebeuren, maar laat hiervoor NIET het hele islandora object in met islandora_object_load, omdat dit zorgt voor slechte
       // performance. Gebruik de waardes uit $solrobj om de juiste members te genereren: het bevat PID (item id), content_models en object_label.
       $manifest['members'][] = $solrobj;
     }
+  }
+  else{
+    echo "No <pre>";print_r($qp->islandoraSolrResult['response']['objects']);
   }
 
   return $manifest;
