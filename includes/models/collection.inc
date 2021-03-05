@@ -51,18 +51,5 @@ function islandora_iiif_manifest_create_collection_manifest(AbstractObject $obje
     }
   }
   
-  
   return $manifest;
-}
-
-
-function islandora_iiif_manifest_create_collection_manifest_allowed_cmodel($object) {
-  
-  $cmodels = array('islandora:sp_basic_image', 'islandora:sp_large_image_cmodel', 'islandora:bookCModel', 'islandora:newspaperCModel', 'islandora:collectionCModel', 'islandora:newspaperIssueCModel', 'islandora:compoundCModel');
-  
-  if (count(array_intersect($object->models, $cmodels)) > 0) {
-    return TRUE;
-  }
-  
-  return FALSE;
 }
