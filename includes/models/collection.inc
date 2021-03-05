@@ -27,24 +27,36 @@ function islandora_iiif_manifest_create_collection_manifest(AbstractObject $obje
   
   
   $qp->executeQuery();
-  echo "1:<pre>";print_r($qp->islandoraSolrResult);
   if (isset($qp->islandoraSolrResult['response']['numFound']) && $qp->islandoraSolrResult['response']['numFound'] > 0) {
     foreach ($qp->islandoraSolrResult['response']['objects'] as $solrobj) {
   
-      $collection_item = islandora_iiif_manifests_get_object_collection($solrobj);
-      $collection_members_members[] = $collection_item['object'];
-      
-      echo "2:<pre>";print_r($solrobj);
-      // Hier moet nog iets gebeuren, maar laat hiervoor NIET het hele islandora object in met islandora_object_load, omdat dit zorgt voor slechte
-      // performance. Gebruik de waardes uit $solrobj om de juiste members te genereren: het bevat PID (item id), content_models en object_label.
-      $manifest['members'][] = $solrobj;
-    }
-  }
-  else{
   
-    echo "No:<pre>";print_r($qp->islandoraSolrResult);
+      $cmodels = array('islandora:sp_basic_image', 'islandora:sp_large_image_cmodel', 'islandora:bookCModel', 'islandora:newspaperCModel', 'islandora:collectionCModel', 'islandora:newspaperIssueCModel', 'islandora:compoundCModel');
+  
+      if (count(array_intersect($solrobj['content_models'], $cmodels)) > 0) {
+        $collection_item = islandora_iiif_manifests_get_object_collection($solrobj);
+        $collection_members_members[] = $collection_item['object'];
+      }
+
+    }
+  
+    if (!empty($collection_members_members)) {
+      $manifest['members'] = $collection_members_members;
+    }
   }
 
 
   return $manifest;
+}
+
+
+function islandora_iiif_manifest_create_collection_manifest_allowed_cmodel($object) {
+  
+  $cmodels = array('islandora:sp_basic_image', 'islandora:sp_large_image_cmodel', 'islandora:bookCModel', 'islandora:newspaperCModel', 'islandora:collectionCModel', 'islandora:newspaperIssueCModel', 'islandora:compoundCModel');
+  
+  if (count(array_intersect($object->models, $cmodels)) > 0) {
+    return TRUE;
+  }
+  
+  return FALSE;
 }
