@@ -16,7 +16,12 @@
   <xsl:template match="/mods:mods/mods:titleInfo[not(@type='translated')]/mods:title[1]">
     <xsl:call-template name="metadata">
       <xsl:with-param name="label">Title</xsl:with-param>
-      <xsl:with-param name="firstvalue" select="."/>
+      <xsl:with-param name="firstvalue">
+        <xsl:if test="string-length(normalize-space(../mods:nonSort)) &gt; 0">
+          <xsl:value-of select="../mods:nonSort"/>
+        </xsl:if>
+        <xsl:value-of select="."/>
+      </xsl:with-param>
     </xsl:call-template>
   </xsl:template>
 
@@ -30,6 +35,7 @@
   <xsl:template match="/mods:mods/mods:originInfo[not(@eventType)]/mods:dateIssued[1]">
     <xsl:call-template name="metadata">
       <xsl:with-param name="label">Date issued</xsl:with-param>
+      <xsl:with-param name="type">date</xsl:with-param>
       <xsl:with-param name="firstvalue" select="."/>
     </xsl:call-template>
   </xsl:template>
@@ -49,11 +55,12 @@
     </xsl:call-template>
   </xsl:template>
 
-  <xsl:template match="/mods:mods/mods:name[1]/mods:namePart">
+  <xsl:template match="/mods:mods/mods:name[1]/mods:namePart[not(@type)][1]">
     <xsl:call-template name="metadata">
       <xsl:with-param name="label">Author/creator</xsl:with-param>
-      <xsl:with-param name="firstvalue" select="."/>
-      <xsl:with-param name="values" select="../../mods:name/mods:namePart[not(@type='date')]"/>
+      <xsl:with-param name="type">author</xsl:with-param>
+      <xsl:with-param name="firstvalue" select=".."/>
+      <xsl:with-param name="values" select="../../mods:name"/>
     </xsl:call-template>
   </xsl:template>
 
@@ -220,6 +227,7 @@
   <xsl:template match="/mods:mods/mods:originInfo[@eventType='publication'][1]/mods:dateIssued[1]">
     <xsl:call-template name="metadata">
       <xsl:with-param name="label">Publication date</xsl:with-param>
+      <xsl:with-param name="type">date</xsl:with-param>
       <xsl:with-param name="firstvalue" select="."/>
       <xsl:with-param name="values" select="../../mods:originInfo[@eventType='publication']/mods:dateIssued"/>
     </xsl:call-template>
@@ -263,20 +271,24 @@
 
   <xsl:template name="metadata">
     <xsl:param name="label"/>
+    <xsl:param name="type" select="normal"/>
     <xsl:param name="firstvalue"/>
     <xsl:param name="values" select="/.."/>
-    <xsl:if test="string-length(normalize-space(concat($firstvalue/text(), $values/text()))) != 0">
+    <xsl:if test="string-length(normalize-space(concat(string($firstvalue), string($values)))) != 0">
       <metadata>
         <label><xsl:value-of select="$label"/></label>
         <xsl:choose>
           <xsl:when test="count($values) &gt; 1">
             <xsl:for-each select="$values">
-              <xsl:if test="normalize-space(text())">
+              <xsl:if test="normalize-space(string(.))">
                 <xsl:choose>
                   <xsl:when test="@lang">
                     <value>
                       <xsl:attribute name="value">
-                        <xsl:value-of select="normalize-space(text())"/>
+                        <xsl:call-template name="mdvalue">
+                          <xsl:with-param name="value" select="."/>
+                          <xsl:with-param name="type" select="$type"/>
+                        </xsl:call-template>
                       </xsl:attribute>
                       <xsl:attribute name="language">
                         <xsl:value-of select="@lang"/>
@@ -284,7 +296,12 @@
                     </value>
                   </xsl:when>
                   <xsl:otherwise>
-                    <value><xsl:value-of select="normalize-space(text())"/></value>
+                    <value>
+                      <xsl:call-template name="mdvalue">
+                        <xsl:with-param name="value" select="."/>
+                        <xsl:with-param name="type" select="$type"/>
+                      </xsl:call-template>
+                    </value>
                   </xsl:otherwise>
                 </xsl:choose>
               </xsl:if>
@@ -295,7 +312,10 @@
               <xsl:when test="@lang">
                 <value>
                   <xsl:attribute name="value">
-                    <xsl:value-of select="normalize-space($firstvalue/text())"/>
+                    <xsl:call-template name="mdvalue">
+                      <xsl:with-param name="value" select="$firstvalue"/>
+                      <xsl:with-param name="type" select="$type"/>
+                    </xsl:call-template>
                   </xsl:attribute>
                   <xsl:attribute name="language">
                     <xsl:value-of select="@lang"/>
@@ -303,12 +323,50 @@
                 </value>
               </xsl:when>
               <xsl:otherwise>
-                 <value><xsl:value-of select="normalize-space($firstvalue/text())"/></value>
+                 <value>
+                    <xsl:call-template name="mdvalue">
+                      <xsl:with-param name="value" select="$firstvalue"/>
+                      <xsl:with-param name="type" select="$type"/>
+                    </xsl:call-template>
+                 </value>
               </xsl:otherwise>
             </xsl:choose>
           </xsl:otherwise>
         </xsl:choose>
       </metadata>
     </xsl:if>
+  </xsl:template>
+
+  <xsl:template name="mdvalue">
+    <xsl:param name="value"/>
+    <xsl:param name="type"/>
+
+    <xsl:choose>
+      <xsl:when test="$type = 'author'">
+        <xsl:choose>
+          <xsl:when test="string-length(normalize-space($value/mods:displayForm)) &gt; 0">
+            <xsl:value-of select="normalize-space($value/mods:displayForm)"/>
+          </xsl:when>
+          <xsl:when test="string-length(concat(normalize-space($value/mods:namePart[@type='given']), normalize-space($value/mods:namePart[@type='family']))) &gt; 0">
+            <xsl:if test="string-length(normalize-space($value/mods:namePart[@type='given'])) &gt; 0">
+              <xsl:value-of select="concat(normalize-space($value/mods:namePart[@type='given']), ' ')"/>
+            </xsl:if>
+            <xsl:value-of select="normalize-space($value/mods:namePart[@type='family'])"/>
+          </xsl:when>
+          <xsl:when test="string-length(normalize-space($value/mods:namePart[not(@type)])) &gt; 0">
+            <xsl:value-of select="normalize-space($value/mods:namePart[not(@type)])"/>
+          </xsl:when>
+        </xsl:choose>
+        <xsl:if test="string-length(normalize-space($value/mods:namePart[@type = 'date'])) &gt; 0">
+          <xsl:value-of select="concat(' (', normalize-space($value/mods:namePart[@type = 'date']), ')')"/>
+        </xsl:if>
+      </xsl:when>
+      <xsl:when test="$type = 'date'">
+        <xsl:value-of select="concat($value, '&#160;')"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="normalize-space($value)"/>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
 </xsl:stylesheet>

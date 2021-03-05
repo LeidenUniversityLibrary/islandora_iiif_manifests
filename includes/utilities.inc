@@ -5,43 +5,43 @@
  * Build the manifest container.
  */
 function islandora_iiif_manifests_create_manifest($object) {
-
-  $id = urldecode(url(variable_get('islandora_iiif_manifests_domain_uri', $GLOBALS['base_url'] ) . "/iiif_manifest/{$object->id}/manifest",
+  
+  $id = urldecode(url(variable_get('islandora_iiif_manifests_domain_uri', $GLOBALS['base_url']) . "/iiif_manifest/{$object->id}/manifest",
       array(
         'absolute' => TRUE,
         'language' => (object)array('language' => FALSE),
       )
     )
   );
-
+  
   if ((count(array_intersect($object->models, array('islandora:compoundCModel'))) > 0)) {
-
+    
     $manifest_type = islandora_iiif_manifests_compound_nanifest_type($object);
-
+    
   }
   else {
     // Set manifest type.
     $manifest_type = (count(array_intersect($object->models, array('islandora:newspaperCModel', 'islandora:collectionCModel', 'islandora:compoundCModel'))) > 0) ? "sc:Collection" : "sc:Manifest";
   }
-
+  
   $label = islandora_iiif_manifests_convert_label($object);
-
+  $iiifmanifestlogourl = variable_get('islandora_iiif_manifests_logo_url');
   $scManifest = array(
     '@context' => 'http://iiif.io/api/presentation/2/context.json',
     '@id' => $id,
     '@type' => $manifest_type,
     'label' => $label,
-    "logo" => "https://f.start.me/iiif-a.issc.leidenuniv.nl",
+    "logo" => $iiifmanifestlogourl,
     'metadata' => array(),
   );
-
+  
   $metadata = islandora_iiif_manifests_get_metadata($object);
-
+  
   if (isset($metadata['manifest'])) {
-
+    
     $scManifest = array_merge_recursive($scManifest, $metadata['manifest']);
   }
-
+  
   return $scManifest;
 }
 
@@ -49,21 +49,22 @@ function islandora_iiif_manifests_create_manifest($object) {
  * Returns the appropriate manifest type for the compound.
  * If the compound only consists out of basic and large image, display the compound as a manifest.
  */
-function islandora_iiif_manifests_compound_nanifest_type($object) {
-
+function islandora_iiif_manifests_compound_nanifest_type($solrobj) {
+  
   // Get compound parts.
-  $parts = islandora_compound_object_get_parts($object->id);
-
+  $parts = islandora_compound_object_get_parts($solrobj['PID']);
+  
   $arrayPartsCModel = array();
-
+  
   foreach ($parts as $part) {
-
+    
     // Load compound part.
     $part_object = islandora_object_load($part);
     $arrayPartsCModel = array_merge($arrayPartsCModel, $part_object->models);
   }
-
+  
   $manifest_type = (count(array_intersect($arrayPartsCModel, array('islandora:bookCModel', 'islandora:newspaperCModel', 'islandora:collectionCModel', 'islandora:newspaperIssueCModel', 'islandora:compoundCModel'))) > 0) ? "sc:Collection" : "sc:Manifest";
+  
   return $manifest_type;
 }
 
@@ -71,7 +72,7 @@ function islandora_iiif_manifests_compound_nanifest_type($object) {
  * Build the default canvas object
  */
 function islandora_iiif_manifests_createDefaultCanvas($canvas_object) {
-
+  
   $CanvasArray = array(
     '@type' => 'sc:Canvas',
     '@id' => $canvas_object['id'],
@@ -90,7 +91,7 @@ function islandora_iiif_manifests_createDefaultCanvas($canvas_object) {
       array(
         '@id' => $canvas_object['service_uri'],
         '@type' => 'oa:Annotation',
-        'motivation' => 'sc:Painting',
+        'motivation' => 'sc:painting',
         'resource' => array(
           '@id' => $canvas_object['resource_uri'],
           '@type' => 'dctypes:Image',
@@ -106,7 +107,7 @@ function islandora_iiif_manifests_createDefaultCanvas($canvas_object) {
       )
     )
   );
-
+  
   return $CanvasArray;
 }
 
@@ -114,16 +115,16 @@ function islandora_iiif_manifests_createDefaultCanvas($canvas_object) {
  * Build the page specific canvas object
  */
 function islandora_iiif_manifests_get_object_canvas($object) {
-
+  
   $image_info = islandora_iiif_manifests_get_image_info($object);
-
-  $id = urldecode(url(variable_get('islandora_iiif_manifests_domain_uri', $GLOBALS['base_url'] ) . "/iiif_manifest/{$object->id}/canvas/default", array(
+  
+  $id = urldecode(url(variable_get('islandora_iiif_manifests_domain_uri', $GLOBALS['base_url']) . "/iiif_manifest/{$object->id}/canvas/default", array(
     'absolute' => TRUE,
     'language' => (object)array('language' => FALSE),
   )));
-
+  
   $label = islandora_iiif_manifests_convert_label($object);
-
+  
   $canvas_object = array();
   $canvas_object['id'] = $id;
   $canvas_object['label'] = $label;
@@ -132,60 +133,67 @@ function islandora_iiif_manifests_get_object_canvas($object) {
   $canvas_object['service_uri'] = $image_info['service_uri'];
   $canvas_object['imageWidth'] = $image_info['imageWidth'];
   $canvas_object['imageHeight'] = $image_info['imageHeight'];
-
+  
   $canvas = islandora_iiif_manifests_createDefaultCanvas($canvas_object);
-
+  
   return $canvas;
 }
 
-function islandora_iiif_manifests_get_object_collection($object) {
-
+function islandora_iiif_manifests_get_object_collection($solrobj) {
+  
   $collection_item = array();
-
-  $manifest_uri = urldecode(url("iiif_manifest/{$object->id}/manifest", array(
+  
+  $manifest_uri = urldecode(url("iiif_manifest/{$solrobj['PID']}/manifest", array(
     'absolute' => TRUE,
     'language' => (object)array('language' => FALSE),
   )));
-
-  if ((count(array_intersect($object->models, array('islandora:compoundCModel'))) > 0)) {
-
-    $manifest_type = islandora_iiif_manifests_compound_nanifest_type($object);
-
+  
+  
+  if ((count(array_intersect($solrobj['content_models'], array('info:fedora/islandora:compoundCModel'))) > 0)) {
+    
+    $manifest_type = islandora_iiif_manifests_compound_nanifest_type($solrobj);
+    
   }
   else {
     // Set manifest type.
-    $manifest_type = (count(array_intersect($object->models, array('islandora:newspaperCModel', 'islandora:collectionCModel', 'islandora:compoundCModel'))) > 0) ? "sc:Collection" : "sc:Manifest";
+    $manifest_type = (count(array_intersect($solrobj['content_models'], array('info:fedora/islandora:newspaperCModel', 'info:fedora/islandora:collectionCModel', 'info:fedora/islandora:compoundCModel'))) > 0) ? "sc:Collection" : "sc:Manifest";
   }
-
+  
   $collection_item['type'] = $manifest_type;
-  $label = islandora_iiif_manifests_convert_label($object);
-
+  $label = $solrobj['object_label'];
+  
+  if (is_numeric($label)) {
+    $label = "'" . $label . "'";
+  }
+  
   $collection_item['object'] = array(
     "@id" => $manifest_uri,
     "@type" => $manifest_type,
     "label" => $label,
   );
-
+  
   return $collection_item;
 }
 
 function islandora_iiif_manifests_allowed_cmodel($object) {
-
+  
   $cmodels = array('islandora:sp_basic_image', 'islandora:sp_large_image_cmodel', 'islandora:bookCModel', 'islandora:newspaperCModel', 'islandora:collectionCModel', 'islandora:newspaperIssueCModel', 'islandora:compoundCModel');
-
+  
   if (count(array_intersect($object->models, $cmodels)) > 0) {
     return TRUE;
   }
+  
   return FALSE;
 }
 
 function islandora_iiif_manifests_allowed_canvas_cmodel($object) {
-
+  
   $cmodels = array('islandora:sp_basic_image', 'islandora:sp_large_image_cmodel', 'islandora:pageCModel', 'islandora:newspaperIssueCModel');
-
+  
   if (count(array_intersect($object->models, $cmodels)) > 0) {
     return TRUE;
   }
+  
   return FALSE;
 }
 
@@ -193,14 +201,14 @@ function islandora_iiif_manifests_allowed_canvas_cmodel($object) {
  * Convert numeric label to a string
  */
 function islandora_iiif_manifests_convert_label($object) {
-
+  
   if (is_numeric($object->label)) {
     $label = "'" . $object->label . "'";
   }
   else {
     $label = $object->label;
   }
-
+  
   return $label;
 }
 
@@ -208,13 +216,13 @@ function islandora_iiif_manifests_convert_label($object) {
  * Retrieve object metadata
  */
 function islandora_iiif_manifests_get_metadata($object) {
-
+  
   $metadata = array();
   if (isset($object['MODS'])) {
     $modsxml = $object['MODS']->content;
     $xslpath = drupal_get_path('module', 'islandora_iiif_manifests') . '/xsl/mods2manifest.xsl';
     $xsl = new DOMDocument();
-
+    
     $xsl->load($xslpath);
     $mods = new DOMDocument();
     $mods->loadXML($modsxml);
@@ -222,8 +230,9 @@ function islandora_iiif_manifests_get_metadata($object) {
     $processor->importStylesheet($xsl);
     $manifest = $processor->transformToDoc($mods);
     $metadata = islandora_iiif_manifests_xml_to_array($manifest);
-
+    
   }
+  
   return $metadata;
 }
 
@@ -231,52 +240,55 @@ function islandora_iiif_manifests_get_metadata($object) {
  * Retrieve the image width and height
  */
 function islandora_iiif_manifests_get_image_info($object) {
-
+  
   module_load_include('inc', 'islandora_handle', 'includes/handle');
-
+  
   $handler_class = islandora_handle_retrieve_selected_handler();
   $handler = new $handler_class($object);
   $handle = $handler->getFullHandle($object);
-
+  
   $encoded_handle = urlencode('hdl:' . $handle);
-
+  
   $imageArray = array();
-
+  
   $islandora_iiif_manifest_image_uri = url(variable_get('islandora_iiif_manifests_image_uri', 'https://iiif-a.issc.leidenuniv.nl/iiif/2') . "/" . $encoded_handle,
     array(
       'absolute' => TRUE,
       'language' => (object)array('language' => FALSE),
     )
   );
-
+  
   $imageArray['thumbnail_uri'] = $islandora_iiif_manifest_image_uri . "/full/80,/0/default.jpg";
   $imageArray['resource_uri'] = $islandora_iiif_manifest_image_uri . "/full/pct:50/0/default.jpg";
   $imageArray['service_uri'] = $islandora_iiif_manifest_image_uri;
-
-
+  
+  
   if ($object['TECHMD']) {
     // Get Image info from TECHMD.
     $mods_datastream = $object['TECHMD']->content;
     $xml = simplexml_load_string($mods_datastream);
     $json = json_encode($xml);
     $tech_md = json_decode($json, TRUE);
-
+    
     if (isset($tech_md['metadata']['image']['imageWidth']) && !is_array($tech_md['metadata']['image']['imageWidth'])) {
       // Set width and height
       $imageArray['imageWidth'] = $tech_md['metadata']['image']['imageWidth'];
       $imageArray['imageHeight'] = $tech_md['metadata']['image']['imageHeight'];
     }
-
+    
   }
   if (!isset($imageArray['imageWidth'])) {
-
+    
     $temp_file = drupal_tempnam('temporary://', 'dimensions');
     $object['OBJ']->getContent($temp_file);
     list($width, $height) = getimagesize($temp_file);
-
+    
     $imageArray['imageWidth'] = $width;
     $imageArray['imageHeight'] = $height;
+    
+    @unlink($temp_file);
   }
+  
   return $imageArray;
 }
 
@@ -284,39 +296,41 @@ function islandora_iiif_manifests_get_image_info($object) {
  * Retrieve the view direction from the book
  */
 function islandora_iiif_manifests_get_viewing_direction($object) {
-
+  
   $page_progression = islandora_paged_content_get_page_progression($object);
   $viewingDirection = "";
   switch ($page_progression) {
-
+    
     case 'lr':
       $viewingDirection = "left-to-right";
       break;
-
+    
     case 'rl':
       $viewingDirection = "right-to-left";
       break;
   }
+  
   return $viewingDirection;
-
+  
 }
 
 function islandora_iiif_manifests_xml_to_array($root) {
   $result = array();
-
+  
   if ($root->hasAttributes()) {
     $attrs = $root->attributes;
     foreach ($attrs as $attr) {
       $result['@' . $attr->name] = $attr->value;
     }
   }
-
+  
   if ($root->hasChildNodes()) {
     $children = $root->childNodes;
     if ($children->length == 1) {
       $child = $children->item(0);
       if ($child->nodeType == XML_TEXT_NODE) {
         $result['_value'] = $child->textContent;
+        
         return count($result) == 1
           ? $result['_value']
           : $result;
@@ -336,8 +350,8 @@ function islandora_iiif_manifests_xml_to_array($root) {
       }
     }
   }
-
-
+  
+  
   return $result;
 }
 
@@ -364,7 +378,7 @@ function islandora_iiif_manifests_add_manifest_datastream($object, $manifest) {
   // Before we do anything, check if the datastream exists. If it does, load it; otherwise construct it.
   // The easiest way to do this, as opposed to a string of cases or if/then/elses, is the ternary operator, e.g.
   $datastream = isset($object[$dsid]) ? $object[$dsid] : $object->constructDatastream($dsid);
-
+  
   $datastream->label = 'IIIF Manifest';
   $datastream->mimeType = 'application/json';
   $datastream->setContentFromString($manifest);
