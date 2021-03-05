@@ -10,7 +10,7 @@
  */
 function islandora_iiif_manifest_create_collection_manifest(AbstractObject $object) {
   module_load_include('inc', 'islandora_solr', 'includes/utilities');
-
+  
   $qp = new IslandoraSolrQueryProcessor();
   $usedsolrfields = array('PID', 'RELS_EXT_hasModel_uri_ms', 'fgs_label_s');
   $parent_id = islandora_solr_lesser_escape($object->id);
@@ -23,29 +23,35 @@ function islandora_iiif_manifest_create_collection_manifest(AbstractObject $obje
   $qp->solrParams['facet'] = 'false';
   $qp->solrParams['fq'][] = $query;
   $qp->solrParams['fl'] = implode(',', $usedsolrfields);
-
   
   
   $qp->executeQuery();
   if (isset($qp->islandoraSolrResult['response']['numFound']) && $qp->islandoraSolrResult['response']['numFound'] > 0) {
     foreach ($qp->islandoraSolrResult['response']['objects'] as $solrobj) {
-  
-  
-      $cmodels = array('islandora:sp_basic_image', 'islandora:sp_large_image_cmodel', 'islandora:bookCModel', 'islandora:newspaperCModel', 'islandora:collectionCModel', 'islandora:newspaperIssueCModel', 'islandora:compoundCModel');
-  
+    
+      // Cmodels that are allowed in the collection manifest
+      $cmodels = array(
+        'info:fedora/islandora:sp_basic_image',
+        'info:fedora/islandora:sp_large_image_cmodel',
+        'info:fedora/islandora:bookCModel',
+        'info:fedora/islandora:newspaperCModel',
+        'info:fedora/islandora:collectionCModel',
+        'info:fedora/islandora:newspaperIssueCModel',
+        'info:fedora/islandora:compoundCModel');
+      
       if (count(array_intersect($solrobj['content_models'], $cmodels)) > 0) {
         $collection_item = islandora_iiif_manifests_get_object_collection($solrobj);
         $collection_members_members[] = $collection_item['object'];
       }
-
+      
     }
-  
+    
     if (!empty($collection_members_members)) {
       $manifest['members'] = $collection_members_members;
     }
   }
-
-
+  
+  
   return $manifest;
 }
 
