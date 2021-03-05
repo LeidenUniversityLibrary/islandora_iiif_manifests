@@ -286,3 +286,17 @@ function islandora_iiif_manifests_check_datastreams_remark($object, $dsid) {
     return t('Object is not accessible for anonymous');
   }
 }
+
+/**
+ * Implements hook_islandora_datastream_modified()
+ */
+function islandora_iiif_manifests_islandora_datastream_modified(AbstractObject $object, AbstractDatastream $datastream, array $params) {
+  if ($datastream->id === 'MODS' && isset($object[ISLANDORA_IIIF_MANIFESTS_DATASTREAM_ID])) {
+    module_load_include('inc', 'islandora_iiif_manifests', 'includes/manifest');
+
+    $manifestjson = islandora_iiif_manifests_build_manifest($object);
+    if (!empty($manifestjson) && $object[ISLANDORA_IIIF_MANIFESTS_DATASTREAM_ID]->content !== $manifestjson) {
+      $object[ISLANDORA_IIIF_MANIFESTS_DATASTREAM_ID]->content = $manifestjson;
+    }
+  }
+}
