@@ -5,8 +5,8 @@
  * Build the manifest container.
  */
 function islandora_iiif_manifests_create_manifest($object) {
-  
-  $id = urldecode(url(variable_get('islandora_iiif_manifests_domain_uri', $GLOBALS['base_url']) . "/iiif_manifest/{$object->id}/manifest",
+
+  $id = urldecode(url(variable_get('islandora_iiif_manifests_domain_uri', $GLOBALS['base_url'] ) . "/iiif_manifest/{$object->id}/manifest",
       array(
         'absolute' => TRUE,
         'language' => (object)array('language' => FALSE),
@@ -14,7 +14,15 @@ function islandora_iiif_manifests_create_manifest($object) {
     )
   );
   
-  $manifest_type = islandora_iiif_manifests_get_manifest_type($object);
+  if ((count(array_intersect($object->models, array('islandora:compoundCModel'))) > 0)) {
+    
+    $manifest_type = islandora_iiif_manifests_compound_nanifest_type($object);
+    
+  }
+  else {
+    // Set manifest type.
+    $manifest_type = (count(array_intersect($object->models, array('islandora:newspaperCModel', 'islandora:collectionCModel', 'islandora:compoundCModel'))) > 0) ? "sc:Collection" : "sc:Manifest";
+  }
   
   $label = islandora_iiif_manifests_convert_label($object);
   $iiifmanifestlogourl = variable_get('islandora_iiif_manifests_logo_url');
@@ -44,10 +52,10 @@ function islandora_iiif_manifests_create_manifest($object) {
  * Returns the appropriate manifest type for the compound.
  * If the compound only consists out of basic and large image, display the compound as a manifest.
  */
-function islandora_iiif_manifests_compound_nanifest_type($object) {
+function islandora_iiif_manifests_compound_nanifest_type($solrobj) {
   
   // Get compound parts.
-  $parts = islandora_compound_object_get_parts($object->id);
+  $parts = islandora_compound_object_get_parts($solrobj['PID']);
   
   $arrayPartsCModel = array();
   
@@ -102,7 +110,7 @@ function islandora_iiif_manifests_createDefaultCanvas($canvas_object) {
       )
     )
   );
-  
+
   return $CanvasArray;
 }
 
@@ -110,16 +118,16 @@ function islandora_iiif_manifests_createDefaultCanvas($canvas_object) {
  * Build the page specific canvas object
  */
 function islandora_iiif_manifests_get_object_canvas($object) {
-  
+
   $image_info = islandora_iiif_manifests_get_image_info($object);
-  
-  $id = urldecode(url(variable_get('islandora_iiif_manifests_domain_uri', $GLOBALS['base_url']) . "/iiif_manifest/{$object->id}/canvas/default", array(
+
+  $id = urldecode(url(variable_get('islandora_iiif_manifests_domain_uri', $GLOBALS['base_url'] ) . "/iiif_manifest/{$object->id}/canvas/default", array(
     'absolute' => TRUE,
     'language' => (object)array('language' => FALSE),
   )));
-  
+
   $label = islandora_iiif_manifests_convert_label($object);
-  
+
   $canvas_object = array();
   $canvas_object['id'] = $id;
   $canvas_object['label'] = $label;
@@ -128,36 +136,44 @@ function islandora_iiif_manifests_get_object_canvas($object) {
   $canvas_object['service_uri'] = $image_info['service_uri'];
   $canvas_object['imageWidth'] = $image_info['imageWidth'];
   $canvas_object['imageHeight'] = $image_info['imageHeight'];
-  
+
   $canvas = islandora_iiif_manifests_createDefaultCanvas($canvas_object);
-  
+
   return $canvas;
 }
 
-
-function islandora_iiif_manifests_get_object_collection($object) {
+function islandora_iiif_manifests_get_object_collection($solrobj) {
   
   $collection_item = array();
   
-  $manifest_uri = urldecode(url(variable_get('islandora_iiif_manifests_domain_uri', $GLOBALS['base_url']) . "/iiif_manifest/{$object->id}/manifest", array(
+  $manifest_uri = urldecode(url("iiif_manifest/{$solrobj['PID']}/manifest", array(
     'absolute' => TRUE,
     'language' => (object)array('language' => FALSE),
   )));
   
-  $manifest_type = islandora_iiif_manifests_get_manifest_type($object);
+  
+  if ((count(array_intersect($solrobj['content_models'], array('info:fedora/islandora:compoundCModel'))) > 0)) {
+    
+    $manifest_type = islandora_iiif_manifests_compound_nanifest_type($solrobj);
+    
+  }
+  else {
+    // Set manifest type.
+    $manifest_type = (count(array_intersect($solrobj['content_models'], array('info:fedora/islandora:newspaperCModel', 'info:fedora/islandora:collectionCModel', 'info:fedora/islandora:compoundCModel'))) > 0) ? "sc:Collection" : "sc:Manifest";
+  }
   
   $collection_item['type'] = $manifest_type;
-  $label = islandora_iiif_manifests_convert_label($object);
+  $label = $solrobj['object_label'];
+  
+  if (is_numeric($label)) {
+    $label = "'" . $label . "'";
+  }
   
   $collection_item['object'] = array(
     "@id" => $manifest_uri,
     "@type" => $manifest_type,
     "label" => $label,
   );
-  
-  if ((count(array_intersect($object->models, array('islandora:compoundCModel'))) > 0)) {
-    $collection_item['object']['viewingHint'] = "multi-part";
-  }
   
   return $collection_item;
 }
@@ -233,34 +249,6 @@ function islandora_iiif_manifests_allowed_canvas_cmodel($object) {
 }
 
 /**
- * Check if the object already has manifest or access is allowed
- * @param $object
- * @return bool
- */
-function islandora_iiif_manifests_allowed_manifest($object) {
-  
-  return isset($object[ISLANDORA_IIIF_MANIFESTS_DATASTREAM_ID]) && islandora_datastream_access(ISLANDORA_VIEW_OBJECTS, $object[ISLANDORA_IIIF_MANIFESTS_DATASTREAM_ID]);
-}
-
-/**
- * Return manifest type: Collection or Manifest
- * @param $object
- * @return string
- */
-function islandora_iiif_manifests_get_manifest_type($object) {
-  
-  if ((count(array_intersect($object->models, array('islandora:compoundCModel'))) > 0)) {
-    $manifest_type = islandora_iiif_manifests_compound_nanifest_type($object);
-  }
-  else {
-    // Set manifest type.
-    $manifest_type = (count(array_intersect($object->models, array('islandora:newspaperCModel', 'islandora:collectionCModel', 'islandora:compoundCModel'))) > 0) ? "sc:Collection" : "sc:Manifest";
-  }
-  
-  return $manifest_type;
-}
-
-/**
  * Convert numeric label to a string
  */
 function islandora_iiif_manifests_convert_label($object) {
@@ -325,8 +313,8 @@ function islandora_iiif_manifests_get_metadata($object) {
     $processor->importStylesheet($xsl);
     $manifest = $processor->transformToDoc($mods);
     $metadata = islandora_iiif_manifests_xml_to_array($manifest);
+    
   }
-  
   return $metadata;
 }
 
@@ -336,15 +324,15 @@ function islandora_iiif_manifests_get_metadata($object) {
 function islandora_iiif_manifests_get_image_info($object) {
   
   module_load_include('inc', 'islandora_handle', 'includes/handle');
-  
+
   $handler_class = islandora_handle_retrieve_selected_handler();
   $handler = new $handler_class($object);
   $handle = $handler->getFullHandle($object);
-  
-  $encoded_handle = urlencode('hdl:' . $handle);
-  
+
+  $encoded_handle = urlencode( 'hdl:'.$handle);
+
   $imageArray = array();
-  
+
   $islandora_iiif_manifest_image_uri = url(variable_get('islandora_iiif_manifests_image_uri', 'https://iiif-a.issc.leidenuniv.nl/iiif/2') . "/" . $encoded_handle,
     array(
       'absolute' => TRUE,
@@ -369,26 +357,25 @@ function islandora_iiif_manifests_get_image_info($object) {
     $xml = simplexml_load_string($mods_datastream);
     $json = json_encode($xml);
     $tech_md = json_decode($json, TRUE);
-    
+
     if (isset($tech_md['metadata']['image']['imageWidth']) && !is_array($tech_md['metadata']['image']['imageWidth'])) {
       // Set width and height
       $imageArray['imageWidth'] = $tech_md['metadata']['image']['imageWidth'];
       $imageArray['imageHeight'] = $tech_md['metadata']['image']['imageHeight'];
     }
-    
+
   }
   if (!isset($imageArray['imageWidth'])) {
-    
+
     $temp_file = drupal_tempnam('temporary://', 'dimensions');
     $object['OBJ']->getContent($temp_file);
     list($width, $height) = getimagesize($temp_file);
-    
+
     $imageArray['imageWidth'] = $width;
     $imageArray['imageHeight'] = $height;
-    
+
     @unlink($temp_file);
   }
-  
   return $imageArray;
 }
 
@@ -396,41 +383,39 @@ function islandora_iiif_manifests_get_image_info($object) {
  * Retrieve the view direction from the book
  */
 function islandora_iiif_manifests_get_viewing_direction($object) {
-  
+
   $page_progression = islandora_paged_content_get_page_progression($object);
   $viewingDirection = "";
   switch ($page_progression) {
-    
+
     case 'lr':
       $viewingDirection = "left-to-right";
       break;
-    
+
     case 'rl':
       $viewingDirection = "right-to-left";
       break;
   }
-  
   return $viewingDirection;
-  
+
 }
 
 function islandora_iiif_manifests_xml_to_array($root) {
   $result = array();
-  
+
   if ($root->hasAttributes()) {
     $attrs = $root->attributes;
     foreach ($attrs as $attr) {
       $result['@' . $attr->name] = $attr->value;
     }
   }
-  
+
   if ($root->hasChildNodes()) {
     $children = $root->childNodes;
     if ($children->length == 1) {
       $child = $children->item(0);
       if ($child->nodeType == XML_TEXT_NODE) {
         $result['_value'] = $child->textContent;
-        
         return count($result) == 1
           ? $result['_value']
           : $result;
@@ -450,8 +435,8 @@ function islandora_iiif_manifests_xml_to_array($root) {
       }
     }
   }
-  
-  
+
+
   return $result;
 }
 
@@ -462,6 +447,8 @@ function islandora_iiif_manifests_create_json_response($status, $data = NULL) {
   drupal_add_http_header('Status', $status);
   drupal_add_http_header('Content-Type', 'application/json; charset=utf-8');
   drupal_add_http_header('access-control-allow-origin', '*');
+  drupal_add_http_header('Set-Cookie: same-site-cookie=foo; SameSite=Lax', false);
+  drupal_add_http_header('Set-Cookie: cross-site-cookie=bar; SameSite=None; Secure', false);
   if ($data !== NULL) {
     echo $data;
   }
