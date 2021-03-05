@@ -49,7 +49,7 @@ function islandora_iiif_manifests_create_manifest($object) {
  * Returns the appropriate manifest type for the compound.
  * If the compound only consists out of basic and large image, display the compound as a manifest.
  */
-function islandora_iiif_manifests_compound_nanifest_type($object) {
+function islandora_iiif_manifests_compound_nanifest_type($solrobj) {
 
   // Get compound parts.
   $parts = islandora_compound_object_get_parts($object->id);
@@ -138,23 +138,25 @@ function islandora_iiif_manifests_get_object_canvas($object) {
   return $canvas;
 }
 
-function islandora_iiif_manifests_get_object_collection($object) {
+function islandora_iiif_manifests_get_object_collection($solrobj) {
 
   $collection_item = array();
 
-  $manifest_uri = urldecode(url("iiif_manifest/{$object->id}/manifest", array(
+  $manifest_uri = urldecode(url("iiif_manifest/{$solrobj['PID']}/manifest", array(
     'absolute' => TRUE,
     'language' => (object)array('language' => FALSE),
   )));
+  
+  
 
-  if ((count(array_intersect($object->models, array('islandora:compoundCModel'))) > 0)) {
+  if ((count(array_intersect($solrobj['content_models'], array('info:fedora/islandora:compoundCModel'))) > 0)) {
 
-    $manifest_type = islandora_iiif_manifests_compound_nanifest_type($object);
+    $manifest_type = islandora_iiif_manifests_compound_nanifest_type($solrobj);
 
   }
   else {
     // Set manifest type.
-    $manifest_type = (count(array_intersect($object->models, array('islandora:newspaperCModel', 'islandora:collectionCModel', 'islandora:compoundCModel'))) > 0) ? "sc:Collection" : "sc:Manifest";
+    $manifest_type = (count(array_intersect($solrobj['content_models'], array('info:fedora/islandora:newspaperCModel', 'info:fedora/islandora:collectionCModel', 'info:fedora/islandora:compoundCModel'))) > 0) ? "sc:Collection" : "sc:Manifest";
   }
 
   $collection_item['type'] = $manifest_type;

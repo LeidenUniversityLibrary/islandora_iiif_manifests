@@ -29,6 +29,9 @@ function islandora_iiif_manifest_create_collection_manifest(AbstractObject $obje
   $qp->executeQuery();
   if (isset($qp->islandoraSolrResult['response']['numFound']) && $qp->islandoraSolrResult['response']['numFound'] > 0) {
     foreach ($qp->islandoraSolrResult['response']['objects'] as $solrobj) {
+  
+      $collection_item = islandora_iiif_manifests_get_object_collection($solrobj);
+      $collection_members_members[] = $collection_item['object'];
       
       echo "Yes:<pre>";print_r($solrobj);
       // Hier moet nog iets gebeuren, maar laat hiervoor NIET het hele islandora object in met islandora_object_load, omdat dit zorgt voor slechte
@@ -37,8 +40,10 @@ function islandora_iiif_manifest_create_collection_manifest(AbstractObject $obje
     }
   }
   else{
-    echo "No <pre>";print_r($qp->islandoraSolrResult['response']['objects']);
+  
+    echo "No:<pre>";print_r($qp->islandoraSolrResult);
   }
+
 
   return $manifest;
 }
