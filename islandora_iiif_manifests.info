@@ -1,0 +1,8 @@
+name = Islandora IIIF Manifest
+description = "Generate IIIF manifests"
+package = Islandora
+dependencies[] = islandora
+dependencies[] = islandora_basic_collection
+dependencies[] = islandora_solr
+dependencies[] = islandora_solr_metadata
+core = 7.x

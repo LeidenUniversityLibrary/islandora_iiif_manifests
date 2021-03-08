@@ -1,0 +1,34 @@
+DIV.iiifbutton {
+  display: inline-block;
+  color: white;
+  background-color: #7f88ab;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
+  padding: 0.3em;
+  margin-bottom: 1em;
+}
+
+DIV.iiifbutton:hover {
+  background-color: #626c95;
+}
+
+DIV.iiifbutton IMG {
+  max-height: 2.1em;
+  margin-right: 15px;
+  float: left; 
+}
+
+DIV.iiifbutton DIV.iiiftext {
+  max-height: 2.2em;
+  width: 5em;
+  line-height: 1.2em;
+  font-family: "VestulaSemibold";
+  font-weight: normal;
+  float: right;
+  vertical-align: middle;
+}
+TD.iiifmanifest IMG {
+  max-height: 2em;
+  vertical-align: text-bottom;
+}

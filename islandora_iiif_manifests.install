@@ -1,0 +1,20 @@
+<?php
+
+/**
+ * @file
+ * Install for the islandora_iiif_manifests module.
+ */
+
+
+function islandora_iiif_manifests_uninstall() {
+
+  $variables = array(
+    'islandora_iiif_manifests_domain_uri',
+    'islandora_iiif_manifests_image_uri',
+    'islandora_iiif_manifests_presentation_uri',
+    'islandora_iiif_manifests_viewer_url',
+    'islandora_iiif_manifests_logo_url',
+  );
+  array_walk($variables, 'variable_del');
+
+}
