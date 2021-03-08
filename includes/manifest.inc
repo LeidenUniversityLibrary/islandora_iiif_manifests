@@ -25,7 +25,7 @@ function islandora_iiif_manifests_view_manifest_json(AbstractObject $object) {
     if (!isset($object[ISLANDORA_IIIF_MANIFESTS_DATASTREAM_ID])) {
       $response = array(
         "data" => "No manifest found",
-        "status" => "404 Bad request"
+        "status" => "400 Bad request"
       );
     }
     if (islandora_datastream_access(ISLANDORA_VIEW_OBJECTS, $object[ISLANDORA_IIIF_MANIFESTS_DATASTREAM_ID])) {
@@ -48,10 +48,10 @@ function islandora_iiif_manifests_create_manifest_json(AbstractObject $object) {
   
   $output = islandora_iiif_manifests_build_manifest($object);
   
-  if (isempty($output)) {
+  if (!$output) {
     $response = array(
-      "data" => "No items manifest found",
-      "status" => "404 Bad request"
+      "data" => "No manifest found in collection",
+      "status" => "400 Bad request"
     );
     islandora_iiif_manifests_create_json_response($response['status'], $response['data']);
   }
@@ -101,8 +101,8 @@ function islandora_iiif_manifests_build_manifest($object) {
     }
   }
   
-  if ($output['@type'] == "sc:Collection" && isset($output['members'])) {
-    return $output = "";
+  if ($output['@type'] == "sc:Collection" && !isset($output['members'])) {
+    return FALSE;
   }
   else
     return json_encode($output, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
