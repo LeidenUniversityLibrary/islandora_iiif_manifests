@@ -12,13 +12,13 @@ function islandora_iiif_manifests_view_manifest_json(AbstractObject $object) {
   module_load_include('inc', 'islandora_iiif_manifests', 'includes/utilities');
   module_load_include('inc', 'islandora', 'includes/datastream');
   
-
+  
   if (isset($object[ISLANDORA_IIIF_MANIFESTS_DATASTREAM_ID]) && islandora_datastream_access(ISLANDORA_VIEW_OBJECTS, $object[ISLANDORA_IIIF_MANIFESTS_DATASTREAM_ID])) {
     header('Access-Control-Allow-Origin: *');
     
     islandora_view_datastream($object[ISLANDORA_IIIF_MANIFESTS_DATASTREAM_ID]);
   }
-  elseif(in_array('islandora:collectionCModel', $object->models)){
+  elseif (in_array('islandora:collectionCModel', $object->models)) {
     islandora_iiif_manifests_create_manifest_json($object);
   }
   else {
@@ -48,11 +48,19 @@ function islandora_iiif_manifests_create_manifest_json(AbstractObject $object) {
   
   $output = islandora_iiif_manifests_build_manifest($object);
   
-  islandora_iiif_manifests_create_json_response('200 OK', $output);
+  if ($output['@type'] == "sc:Collection" && $output['members'] == '') {
+    $response = array(
+      "data" => "No items manifest found",
+      "status" => "404 Bad request"
+    );
+    islandora_iiif_manifests_create_json_response($response['status'], $response['data']);
+  }
+  else
+    islandora_iiif_manifests_create_json_response('200 OK', $output);
 }
 
 /**
- * Response in JSON for the manifest.
+ * Create JSON manifest.
  */
 function islandora_iiif_manifests_create_manifest_datastream(AbstractObject $object) {
   
