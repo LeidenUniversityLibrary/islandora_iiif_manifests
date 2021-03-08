@@ -48,7 +48,7 @@ function islandora_iiif_manifests_create_manifest_json(AbstractObject $object) {
   
   $output = islandora_iiif_manifests_build_manifest($object);
   
-  if ($output['@type'] == "sc:Collection" && $output['members'] == '') {
+  if (isempty($output)) {
     $response = array(
       "data" => "No items manifest found",
       "status" => "404 Bad request"
@@ -58,6 +58,7 @@ function islandora_iiif_manifests_create_manifest_json(AbstractObject $object) {
   else
     islandora_iiif_manifests_create_json_response('200 OK', $output);
 }
+
 
 /**
  * Create JSON manifest.
@@ -100,7 +101,11 @@ function islandora_iiif_manifests_build_manifest($object) {
     }
   }
   
-  return json_encode($output, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
+  if ($output['@type'] == "sc:Collection" && isset($output['members'])) {
+    return $output = "";
+  }
+  else
+    return json_encode($output, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
 }
 
 /**
