@@ -24,7 +24,6 @@ function islandora_iiif_manifest_create_collection_manifest(AbstractObject $obje
   $qp->solrParams['fq'][] = $query;
   $qp->solrParams['fl'] = implode(',', $usedsolrfields);
   
-  
   $qp->executeQuery();
   if (isset($qp->islandoraSolrResult['response']['numFound']) && $qp->islandoraSolrResult['response']['numFound'] > 0) {
     foreach ($qp->islandoraSolrResult['response']['objects'] as $solrobj) {
@@ -43,7 +42,6 @@ function islandora_iiif_manifest_create_collection_manifest(AbstractObject $obje
         $collection_item = islandora_iiif_manifests_get_object_collection($solrobj);
         $collection_members_members[] = $collection_item['object'];
       }
-      
     }
     
     if (!empty($collection_members_members)) {

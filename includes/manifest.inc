@@ -18,6 +18,7 @@ function islandora_iiif_manifests_view_manifest_json(AbstractObject $object) {
     
     islandora_view_datastream($object[ISLANDORA_IIIF_MANIFESTS_DATASTREAM_ID]);
   }
+  // If object is a collection, dynamically create collection manifest
   elseif (in_array('islandora:collectionCModel', $object->models)) {
     islandora_iiif_manifests_create_manifest_json($object);
   }
@@ -100,7 +101,7 @@ function islandora_iiif_manifests_build_manifest($object) {
       $output = array_merge_recursive($output, $temp);
     }
   }
-  
+  // When non of the objects with a collection do not have a manifest, the collection manifest is invalid
   if ($output['@type'] == "sc:Collection" && !isset($output['members'])) {
     return FALSE;
   }
