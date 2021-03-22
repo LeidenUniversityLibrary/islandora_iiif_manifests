@@ -187,7 +187,7 @@ function islandora_iiif_manifests_get_newspaper_member_collection($issue) {
             
             $issue_object = islandora_object_load($issue_data['pid']);
             
-            $manifest_type = islandora_iiif_manifests_get_manifest_type($issue_object);
+            $manifest_type = (count(array_intersect($issue_object->models, array( 'islandora:newspaperCModel', 'islandora:collectionCModel', 'islandora:compoundCModel'))) > 0) ? "sc:Collection" : "sc:Manifest";
             
             $manifest_uri = urldecode(url(variable_get('islandora_iiif_manifests_domain_uri', $GLOBALS['base_url']) . "/iiif_manifest/{$issue_data['pid']}/manifest/", array(
               'absolute' => TRUE,
