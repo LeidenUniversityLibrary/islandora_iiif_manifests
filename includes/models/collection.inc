@@ -4,49 +4,50 @@
 /**
  * @file
  */
-
-/**
- * This is the actual manifest building function.
- */
 function islandora_iiif_manifest_create_collection_manifest(AbstractObject $object) {
-  module_load_include('inc', 'islandora', 'includes/utilities');
-  module_load_include('inc', 'islandora_iiif_manifests', 'includes/utilities');
-  module_load_include('module', 'islandora_basic_collection');
-
-  // Manifest array.
-  $manifest = array();
-
-  // Get collection members.
-  $collection_members = islandora_basic_collection_get_member_objects($object,0,1);
-  $collection_objects_total = $collection_members[0];
-  $limit = 20;
-  $pages = ceil($collection_objects_total / $limit);
+  module_load_include('inc', 'islandora_solr', 'includes/utilities');
   
-
-  // collection of the manifests.
-  $collection_members_members = array();
+  $limit = 500;
+  $numfound = 1;
+  $current = 0;
+  $iteration = 0;
   
- for($i = 0;$i <= $pages;$i++){
-   
-   list($count,$members) = islandora_basic_collection_get_member_objects($object,$i,$limit);
-
-   foreach ($members as $member) {
-     
-     // Load collection object.
-     $fedora_collection_object = islandora_object_load($member['object']['value']);
+  while ($current < $numfound) {
     
-     if (islandora_iiif_manifests_allowed_cmodel($fedora_collection_object) &&  islandora_iiif_manifests_allowed_manifest($fedora_collection_object)) {
-       $collection_item = islandora_iiif_manifests_get_object_collection($fedora_collection_object);
-       $collection_members_members[] = $collection_item['object'];
-     }
-   }
- }
-
-
-  if (!empty($collection_members_members)) {
-    $manifest['members'] = $collection_members_members;
+    $qp = new IslandoraSolrQueryProcessor();
+    $usedsolrfields = array('PID', 'RELS_EXT_hasModel_uri_ms', 'fgs_label_s', 'json_MANIFEST_json_type_ms');
+    $parent_id = islandora_solr_lesser_escape($object->id);
+    $relcomp = variable_get('islandora_solr_member_of_collection_field', 'RELS_EXT_isMemberOfCollection_uri_ms');
+    $query = "($relcomp:($parent_id) OR $relcomp:(" . islandora_solr_lesser_escape('info:fedora/') . "$parent_id))";
+    $query .= ' AND (fedora_datastreams_ms:' . islandora_solr_lesser_escape(ISLANDORA_IIIF_MANIFESTS_DATASTREAM_ID) . ')';
+    $qp->buildQuery("*:*");
+    $qp->solrStart = $current;
+    $qp->solrLimit = $limit;
+    $qp->solrParams['facet'] = 'false';
+    $qp->solrParams['fq'][] = $query;
+    $qp->solrParams['fl'] = implode(',', $usedsolrfields);
+    
+    $qp->executeQuery(FALSE);
+    
+    $numfound = isset($qp->islandoraSolrResult['response']['numFound']) ? $qp->islandoraSolrResult['response']['numFound'] : 0;
+    
+    if ($numfound > 0) {
+      
+      foreach ($qp->islandoraSolrResult['response']['objects'] as $solrobj) {
+        
+        $current++;
+        $collection_item = islandora_iiif_manifests_get_object_collection($solrobj);
+        $collection_members_members[] = $collection_item['object'];
+      }
+      
+      if (!empty($collection_members_members)) {
+        $manifest['members'] = $collection_members_members;
+      }
+      
+    }
+    
+    $iteration++;
   }
-
+  
   return $manifest;
-
 }
