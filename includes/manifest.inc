@@ -7,19 +7,22 @@
 
 /**
  * Response in JSON for the manifest.
+ * Creates collection manifests dynamically if no statict manifest is present
+ * Creates newspaper volumes manifest dynamically
  */
-function islandora_iiif_manifests_view_manifest_json(AbstractObject $object) {
+function islandora_iiif_manifests_view_manifest_json(AbstractObject $object, $collection = NULL) {
   module_load_include('inc', 'islandora_iiif_manifests', 'includes/utilities');
   module_load_include('inc', 'islandora', 'includes/datastream');
   
   
-  if (isset($object[ISLANDORA_IIIF_MANIFESTS_DATASTREAM_ID]) && islandora_datastream_access(ISLANDORA_VIEW_OBJECTS, $object[ISLANDORA_IIIF_MANIFESTS_DATASTREAM_ID])) {
+  if (isset($object[ISLANDORA_IIIF_MANIFESTS_DATASTREAM_ID]) && islandora_datastream_access(ISLANDORA_VIEW_OBJECTS, $object[ISLANDORA_IIIF_MANIFESTS_DATASTREAM_ID]) && is_null($collection)) {
     header('Access-Control-Allow-Origin: *');
     
     islandora_view_datastream($object[ISLANDORA_IIIF_MANIFESTS_DATASTREAM_ID]);
   }
-  elseif (in_array('islandora:collectionCModel', $object->models)) {
-    islandora_iiif_manifests_create_manifest_json($object);
+  // Dynamically create collection manifest
+  elseif (in_array('islandora:collectionCModel', $object->models) || !is_null($collection)) {
+    islandora_iiif_manifests_create_manifest_json($object,$collection);
   }
   else {
     if (!isset($object[ISLANDORA_IIIF_MANIFESTS_DATASTREAM_ID])) {
@@ -42,11 +45,11 @@ function islandora_iiif_manifests_view_manifest_json(AbstractObject $object) {
 /**
  * Response in JSON for the manifest.
  */
-function islandora_iiif_manifests_create_manifest_json(AbstractObject $object) {
+function islandora_iiif_manifests_create_manifest_json(AbstractObject $object, $collection = NULL) {
   
   module_load_include('inc', 'islandora', 'includes/utilities');
   
-  $output = islandora_iiif_manifests_build_manifest($object);
+  $output = islandora_iiif_manifests_build_manifest($object,$collection);
   
   if (!$output) {
     $response = array(
@@ -87,19 +90,21 @@ function islandora_iiif_manifests_create_canvas_json(AbstractObject $object) {
 /**
  * Build manifest array.
  */
-function islandora_iiif_manifests_build_manifest($object) {
+function islandora_iiif_manifests_build_manifest($object, $collection = NULL ) {
   
   $output = array();
   
   $hooks = islandora_build_hook_list(ISLANDORA_IIIF_MANIFESTS_ISLANDORA_IIIF_MANIFEST_HOOK, $object->models);
+  
   foreach ($hooks as $hook) {
-    $temp = module_invoke_all($hook, $object);
+    $temp = module_invoke_all($hook, $object, $collection);
+    
     if (!empty($temp)) {
       $output = array_merge_recursive($output, $temp);
     }
   }
   
-  if ($output['@type'] == "sc:Collection" && !isset($output['members'])) {
+  if ($output['@type'] == "sc:Collection" && !isset($output['members']) && !isset($output['collections'])) {
     return FALSE;
   }
   else

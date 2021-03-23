@@ -17,7 +17,7 @@ function islandora_iiif_manifest_create_newspaper_manifest(AbstractObject $objec
   module_load_include('inc', 'islandora_newspaper', 'includes/utilities');
   module_load_include('inc', 'islandora', 'includes/datastream');
   
-  if (empty($selected_collection)) {
+  if (is_null($selected_collection)) {
     $manifest = islandora_iiif_manifest_get_newspaper_manifest($object);
   }
   else {
