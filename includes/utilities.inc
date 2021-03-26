@@ -44,6 +44,9 @@ function islandora_iiif_manifests_create_manifest($object) {
     
     $sc_manifest = array_merge_recursive($sc_manifest, $metadata['manifest']);
   }
+  else {
+    unset($sc_manifest['metadata']);
+  }
   
   return $sc_manifest;
 }
@@ -169,6 +172,9 @@ function islandora_iiif_manifests_get_object_collection($solrobj) {
   return $collection_item;
 }
 
+/**
+ * Loop through newspaper volumes. Get issue data for each day with the volumes.
+ */
 function islandora_iiif_manifests_get_newspaper_member_collection($issue) {
   
   $i = 0;
@@ -176,24 +182,28 @@ function islandora_iiif_manifests_get_newspaper_member_collection($issue) {
   
   foreach ($issue as $key_month => $value_month) {
     
-    // Level 0
+    // Check if there are issues in this month
     if (is_array($value_month)) {
       
+      // Loop through available days
       foreach ($value_month as $key_day => $value_day) {
         
+        // Check if there are issues.
         if (is_array($value_day)) {
           
+          // Get values for each value on this day
           foreach ($value_day as $issue_data) {
             
             $issue_object = islandora_object_load($issue_data['pid']);
             
-            $manifest_type = (count(array_intersect($issue_object->models, array( 'islandora:newspaperCModel', 'islandora:collectionCModel', 'islandora:compoundCModel'))) > 0) ? "sc:Collection" : "sc:Manifest";
+            $manifest_type = (count(array_intersect($issue_object->models, array('islandora:newspaperCModel', 'islandora:collectionCModel', 'islandora:compoundCModel'))) > 0) ? "sc:Collection" : "sc:Manifest";
             
             $manifest_uri = urldecode(url(variable_get('islandora_iiif_manifests_domain_uri', $GLOBALS['base_url']) . "/iiif_manifest/{$issue_data['pid']}/manifest/", array(
               'absolute' => TRUE,
               'language' => (object)array('language' => FALSE),
             )));
             
+            // Set issue manifest data
             $volume_issues[$i] = array(
               "@id" => $manifest_uri,
               "@type" => $manifest_type,
