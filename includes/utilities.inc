@@ -147,8 +147,6 @@ function islandora_iiif_manifests_get_object_canvas($object) {
 
 function islandora_iiif_manifests_get_object_collection($solrobj) {
   
-  $collection_item = array();
-  
   $manifest_uri = urldecode(url("iiif_manifest/{$solrobj['PID']}/manifest", array(
     'absolute' => TRUE,
     'language' => (object)array('language' => FALSE),
@@ -156,20 +154,19 @@ function islandora_iiif_manifests_get_object_collection($solrobj) {
   
   $manifest_type = $solrobj['solr_doc']['json_MANIFEST_json_type_ms'][0];
   
-  $collection_item['type'] = $manifest_type;
   $label = $solrobj['object_label'];
   
   if (is_numeric($label)) {
     $label = "'" . $label . "'";
   }
   
-  $collection_item['object'] = array(
+  $collection_member = array(
     "@id" => $manifest_uri,
     "@type" => $manifest_type,
     "label" => $label,
   );
   
-  return $collection_item;
+  return $collection_member;
 }
 
 /**
