@@ -39,9 +39,7 @@ function islandora_iiif_manifest_create_compound_manifest(AbstractObject $object
       // Add page to canvases.
       $canvases[] = islandora_iiif_manifests_get_object_canvas($part_object);
     }
-    
-    // Add page to canvases.
-    $canvases[] = islandora_iiif_manifests_get_object_canvas($part_object);
+
   }
   
   if ($manifest_type == "sc:Collection") {

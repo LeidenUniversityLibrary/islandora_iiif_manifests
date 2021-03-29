@@ -10,7 +10,6 @@ function islandora_iiif_manifest_create_collection_manifest(AbstractObject $obje
   $limit = 500;
   $num_found = 1;
   $current = 0;
-  $iteration = 0;
   
   while ($current < $num_found) {
     
@@ -42,7 +41,6 @@ function islandora_iiif_manifest_create_collection_manifest(AbstractObject $obje
  
     }
     
-    $iteration++;
   }
   
   return $manifest;
