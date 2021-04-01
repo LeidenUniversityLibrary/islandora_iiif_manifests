@@ -24,13 +24,13 @@
 
 jQuery(document).ready(function() {
   var $iiifbutton = jQuery('DIV.iiifbutton');
-  var $metadataTable = jQuery('.dc-box .dc-metadata .islandora-metadata-fields');
-  if ($metadataTable.size() > 0 && $iiifbutton.size() > 0) {
+  var $metadata_table = jQuery('.dc-box .dc-metadata .islandora-metadata-fields');
+  if ($metadata_table.size() > 0 && $iiifbutton.size() > 0) {
     var iiifManifest = $iiifbutton.data('manifest');
     var iiifUrl = $iiifbutton.find('IMG').attr('src');
 
     if (typeof iiifUrl === 'string' && iiifUrl.length > 0 && typeof iiifManifest === 'string' && iiifManifest.length > 0) {
-      $metadataTable.find('TBODY').append('<TR><TH>IIIF manifest</TH><TD class="iiifmanifest"><A href="' + iiifManifest + '" target="_blank"><IMG src="' + iiifUrl + '"/> manifest</A></TD></TR>');
+      $metadata_table.find('TBODY').append('<TR><TH>IIIF manifest</TH><TD class="iiifmanifest"><A href="' + iiifManifest + '" target="_blank"><IMG src="' + iiifUrl + '"/> manifest</A></TD></TR>');
     }
   }
 })
