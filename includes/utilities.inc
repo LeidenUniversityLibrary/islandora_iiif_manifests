@@ -192,6 +192,7 @@ function islandora_iiif_manifests_get_newspaper_member_collection($issue) {
           foreach ($value_day as $issue_data) {
             
             $issue_object = islandora_object_load($issue_data['pid']);
+            
             if (isset($issue_object[ISLANDORA_IIIF_MANIFESTS_DATASTREAM_ID])) {
               
               $manifest_type = (count(array_intersect($issue_object->models, array('islandora:newspaperCModel', 'islandora:collectionCModel', 'islandora:compoundCModel'))) > 0) ? "sc:Collection" : "sc:Manifest";
