@@ -8,11 +8,10 @@ function islandora_iiif_manifest_create_collection_manifest(AbstractObject $obje
   module_load_include('inc', 'islandora_solr', 'includes/utilities');
   
   $limit = 500;
-  $numfound = 1;
+  $num_found = 1;
   $current = 0;
-  $iteration = 0;
   
-  while ($current < $numfound) {
+  while ($current < $num_found) {
     
     $qp = new IslandoraSolrQueryProcessor();
     $usedsolrfields = array('PID', 'RELS_EXT_hasModel_uri_ms', 'fgs_label_s', 'json_MANIFEST_json_type_ms');
@@ -29,24 +28,19 @@ function islandora_iiif_manifest_create_collection_manifest(AbstractObject $obje
     
     $qp->executeQuery(FALSE);
     
-    $numfound = isset($qp->islandoraSolrResult['response']['numFound']) ? $qp->islandoraSolrResult['response']['numFound'] : 0;
+    $num_found = isset($qp->islandoraSolrResult['response']['numFound']) ? $qp->islandoraSolrResult['response']['numFound'] : 0;
     
-    if ($numfound > 0) {
+    if ($num_found > 0) {
       
       foreach ($qp->islandoraSolrResult['response']['objects'] as $solrobj) {
         
         $current++;
-        $collection_item = islandora_iiif_manifests_get_object_collection($solrobj);
-        $collection_members_members[] = $collection_item['object'];
+        $manifest['members'][] = islandora_iiif_manifests_get_object_collection($solrobj);
+        
       }
-      
-      if (!empty($collection_members_members)) {
-        $manifest['members'] = $collection_members_members;
-      }
-      
+ 
     }
     
-    $iteration++;
   }
   
   return $manifest;

@@ -44,6 +44,9 @@ function islandora_iiif_manifests_create_manifest($object) {
     
     $sc_manifest = array_merge_recursive($sc_manifest, $metadata['manifest']);
   }
+  else {
+    unset($sc_manifest['metadata']);
+  }
   
   return $sc_manifest;
 }
@@ -144,8 +147,6 @@ function islandora_iiif_manifests_get_object_canvas($object) {
 
 function islandora_iiif_manifests_get_object_collection($solrobj) {
   
-  $collection_item = array();
-  
   $manifest_uri = urldecode(url("iiif_manifest/{$solrobj['PID']}/manifest", array(
     'absolute' => TRUE,
     'language' => (object)array('language' => FALSE),
@@ -153,22 +154,24 @@ function islandora_iiif_manifests_get_object_collection($solrobj) {
   
   $manifest_type = $solrobj['solr_doc']['json_MANIFEST_json_type_ms'][0];
   
-  $collection_item['type'] = $manifest_type;
   $label = $solrobj['object_label'];
   
   if (is_numeric($label)) {
     $label = "'" . $label . "'";
   }
   
-  $collection_item['object'] = array(
+  $collection_member = array(
     "@id" => $manifest_uri,
     "@type" => $manifest_type,
     "label" => $label,
   );
   
-  return $collection_item;
+  return $collection_member;
 }
 
+/**
+ * Loop through newspaper volumes. Get issue data for each day with the volumes.
+ */
 function islandora_iiif_manifests_get_newspaper_member_collection($issue) {
   
   $i = 0;
@@ -176,31 +179,38 @@ function islandora_iiif_manifests_get_newspaper_member_collection($issue) {
   
   foreach ($issue as $key_month => $value_month) {
     
-    // Level 0
+    // Check if there are issues in this month
     if (is_array($value_month)) {
       
+      // Loop through available days
       foreach ($value_month as $key_day => $value_day) {
         
+        // Check if there are issues.
         if (is_array($value_day)) {
           
+          // Get values for each value on this day
           foreach ($value_day as $issue_data) {
             
             $issue_object = islandora_object_load($issue_data['pid']);
             
-            $manifest_type = islandora_iiif_manifests_get_manifest_type($issue_object);
-            
-            $manifest_uri = urldecode(url(variable_get('islandora_iiif_manifests_domain_uri', $GLOBALS['base_url']) . "/iiif_manifest/{$issue_data['pid']}/manifest/", array(
-              'absolute' => TRUE,
-              'language' => (object)array('language' => FALSE),
-            )));
-            
-            $volume_issues[$i] = array(
-              "@id" => $manifest_uri,
-              "@type" => $manifest_type,
-              "label" => islandora_iiif_manifests_convert_label($issue_object),
-              "navDate" => $issue_data['issued']->format('Y-m-d\TH:i:s\Z\''),
-            );
-            $i++;
+            if (isset($issue_object[ISLANDORA_IIIF_MANIFESTS_DATASTREAM_ID])) {
+              
+              $manifest_type = (count(array_intersect($issue_object->models, array('islandora:newspaperCModel', 'islandora:collectionCModel', 'islandora:compoundCModel'))) > 0) ? "sc:Collection" : "sc:Manifest";
+              
+              $manifest_uri = urldecode(url(variable_get('islandora_iiif_manifests_domain_uri', $GLOBALS['base_url']) . "/iiif_manifest/{$issue_data['pid']}/manifest/", array(
+                'absolute' => TRUE,
+                'language' => (object)array('language' => FALSE),
+              )));
+              
+              // Set issue manifest data
+              $volume_issues[$i] = array(
+                "@id" => $manifest_uri,
+                "@type" => $manifest_type,
+                "label" => islandora_iiif_manifests_convert_label($issue_object),
+                "navDate" => $issue_data['issued']->format('Y-m-d\TH:i:s\Z\''),
+              );
+              $i++;
+            }
             
           }
         }
