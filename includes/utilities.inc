@@ -358,8 +358,8 @@ function islandora_iiif_manifests_get_image_info($object) {
       echo "<pre>";print_r($tech_md);
     if (isset($tech_md['metadata']['image']['imageWidth']) && !is_array($tech_md['metadata']['image']['imageWidth'])) {
       // Set width and height
-      $image_array['imageWidth'] = isset($tech_md['metadata']['image']['imageWidth'][0])?$tech_md['metadata']['image']['imageWidth'][0] : $tech_md['metadata']['image']['imageWidth'];
-      $image_array['imageHeight'] = isset($tech_md['metadata']['image']['imageHeight'][0])?$tech_md['metadata']['image']['imageHeight'][0] : $tech_md['metadata']['image']['imageHeight'];
+      $image_array['imageWidth'] = is_array($tech_md['metadata']['image']['imageWidth']) ?$tech_md['metadata']['image']['imageWidth'][0] : $tech_md['metadata']['image']['imageWidth'];
+      $image_array['imageHeight'] =is_array($tech_md['metadata']['image']['imageHeight']) ?$tech_md['metadata']['image']['imageHeight'][0] : $tech_md['metadata']['image']['imageHeight'];
     }
     
   }
