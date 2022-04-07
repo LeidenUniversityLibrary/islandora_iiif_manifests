@@ -355,7 +355,6 @@ function islandora_iiif_manifests_get_image_info($object) {
     $xml = simplexml_load_string($mods_datastream);
     $json = json_encode($xml);
     $tech_md = json_decode($json, TRUE);
-      echo "<pre>";print_r($tech_md);
     if (isset($tech_md['metadata']['image']['imageWidth']) && !is_array($tech_md['metadata']['image']['imageWidth'])) {
       // Set width and height
       $image_array['imageWidth'] = is_array($tech_md['metadata']['image']['imageWidth']) ?$tech_md['metadata']['image']['imageWidth'][0] : $tech_md['metadata']['image']['imageWidth'];
@@ -374,7 +373,7 @@ function islandora_iiif_manifests_get_image_info($object) {
     
     @unlink($temp_file);
   }
-  echo "<pre>";print_r($image_array);die;
+
   return $image_array;
 }
 
