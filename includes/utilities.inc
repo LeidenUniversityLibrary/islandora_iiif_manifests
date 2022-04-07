@@ -374,7 +374,7 @@ function islandora_iiif_manifests_get_image_info($object) {
     
     @unlink($temp_file);
   }
-  
+  echo "<pre>";print_r($image_array);die;
   return $image_array;
 }
 
