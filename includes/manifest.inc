@@ -53,19 +53,6 @@ function islandora_iiif_manifests_create_manifest_json(AbstractObject $object, $
   islandora_iiif_manifests_create_json_response('200 OK', $output);
 }
 
-
-/**
- * Create JSON manifest.
- */
-function islandora_iiif_manifests_create_manifest_datastream(AbstractObject $object) {
-  
-  module_load_include('inc', 'islandora', 'includes/utilities');
-  
-  $output = islandora_iiif_manifests_build_manifest($object);
-  
-  islandora_iiif_manifests_add_manifest_datastream($object, $output);
-}
-
 /**
  * Response in JSON for the canvas.
  */
