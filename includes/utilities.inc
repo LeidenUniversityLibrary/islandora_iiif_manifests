@@ -9,11 +9,12 @@
  */
 function islandora_iiif_manifests_create_manifest($object) {
   
-  $id = urldecode(url(variable_get('islandora_iiif_manifests_domain_uri', $GLOBALS['base_url']) . "/iiif_manifest/{$object->id}/manifest",
-      array(
-        'absolute' => TRUE,
-        'language' => (object)array('language' => FALSE),
-      )
+  $object_id_encoded = urlencode($object->id);
+  
+  $id = url(variable_get('islandora_iiif_manifests_domain_uri', $GLOBALS['base_url']) . "/iiif_manifest/{$object_id_encoded}/manifest",
+    array(
+      'absolute' => TRUE,
+      'language' => (object)array('language' => FALSE),
     )
   );
   if (islandora_iiif_manifests_in_multiarray('islandora:compoundCModel', $object->models)) {
@@ -124,10 +125,12 @@ function islandora_iiif_manifests_get_object_canvas($object) {
   
   $image_info = islandora_iiif_manifests_get_image_info($object);
   
-  $id = urldecode(url(variable_get('islandora_iiif_manifests_domain_uri', $GLOBALS['base_url']) . "/iiif_manifest/{$object->id}/canvas/default", array(
+  $object_id_encoded = urlencode($object->id);
+  
+  $id = url(variable_get('islandora_iiif_manifests_domain_uri', $GLOBALS['base_url']) . "/iiif_manifest/{$object_id_encoded}/canvas/default", array(
     'absolute' => TRUE,
     'language' => (object)array('language' => FALSE),
-  )));
+  ));
   
   $label = islandora_iiif_manifests_convert_label($object);
   
@@ -328,6 +331,7 @@ function islandora_iiif_manifests_get_image_info($object) {
   $handle = $handler->getFullHandle($object);
   
   $encoded_handle = urlencode('hdl:' . $handle);
+  $object_id_encoded = urlencode($object->id);
   
   $image_array = array();
   
@@ -338,10 +342,10 @@ function islandora_iiif_manifests_get_image_info($object) {
     )
   );
   
-  $id_uri = urldecode(url(variable_get('islandora_iiif_manifests_domain_uri', $GLOBALS['base_url']) . "/iiif_manifest/{$object->id}/annotation/{$object->label}", array(
+  $id_uri = url(variable_get('islandora_iiif_manifests_domain_uri', $GLOBALS['base_url']) . "/iiif_manifest/{$object_id_encoded}/annotation/{$object->label}", array(
     'absolute' => TRUE,
     'language' => (object)array('language' => FALSE),
-  )));
+  ));
   
   $image_array['thumbnail_uri'] = $islandora_iiif_manifest_image_uri . "/full/80,/0/default.jpg";
   $image_array['resource_uri'] = $islandora_iiif_manifest_image_uri . "/full/pct:50/0/default.jpg";
@@ -355,11 +359,11 @@ function islandora_iiif_manifests_get_image_info($object) {
     $xml = simplexml_load_string($mods_datastream);
     $json = json_encode($xml);
     $tech_md = json_decode($json, TRUE);
-    
     if (isset($tech_md['metadata']['image']['imageWidth']) && !is_array($tech_md['metadata']['image']['imageWidth'])) {
+      
       // Set width and height
-      $image_array['imageWidth'] = $tech_md['metadata']['image']['imageWidth'];
-      $image_array['imageHeight'] = $tech_md['metadata']['image']['imageHeight'];
+      $image_array['imageWidth'] = is_array($tech_md['metadata']['image']['imageWidth']) ? $tech_md['metadata']['image']['imageWidth'][0] : $tech_md['metadata']['image']['imageWidth'];
+      $image_array['imageHeight'] = is_array($tech_md['metadata']['image']['imageHeight']) ? $tech_md['metadata']['image']['imageHeight'][0] : $tech_md['metadata']['image']['imageHeight'];
     }
     
   }
