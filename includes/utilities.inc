@@ -11,11 +11,10 @@ function islandora_iiif_manifests_create_manifest($object) {
   
   $object_id_encoded = urlencode($object->id);
   
-  $id = urldecode(url(variable_get('islandora_iiif_manifests_domain_uri', $GLOBALS['base_url']) . "/iiif_manifest/{$object_id_encoded}/manifest",
-      array(
-        'absolute' => TRUE,
-        'language' => (object)array('language' => FALSE),
-      )
+  $id = url(variable_get('islandora_iiif_manifests_domain_uri', $GLOBALS['base_url']) . "/iiif_manifest/{$object_id_encoded}/manifest",
+    array(
+      'absolute' => TRUE,
+      'language' => (object)array('language' => FALSE),
     )
   );
   if (islandora_iiif_manifests_in_multiarray('islandora:compoundCModel', $object->models)) {
@@ -361,10 +360,10 @@ function islandora_iiif_manifests_get_image_info($object) {
     $json = json_encode($xml);
     $tech_md = json_decode($json, TRUE);
     if (isset($tech_md['metadata']['image']['imageWidth']) && !is_array($tech_md['metadata']['image']['imageWidth'])) {
-
+      
       // Set width and height
       $image_array['imageWidth'] = is_array($tech_md['metadata']['image']['imageWidth']) ? $tech_md['metadata']['image']['imageWidth'][0] : $tech_md['metadata']['image']['imageWidth'];
-      $image_array['imageHeight'] = is_array($tech_md['metadata']['image']['imageHeight']) ?$tech_md['metadata']['image']['imageHeight'][0] : $tech_md['metadata']['image']['imageHeight'];
+      $image_array['imageHeight'] = is_array($tech_md['metadata']['image']['imageHeight']) ? $tech_md['metadata']['image']['imageHeight'][0] : $tech_md['metadata']['image']['imageHeight'];
     }
     
   }
@@ -379,7 +378,7 @@ function islandora_iiif_manifests_get_image_info($object) {
     
     @unlink($temp_file);
   }
-
+  
   return $image_array;
 }
 
