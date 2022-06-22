@@ -9,9 +9,7 @@
  */
 function islandora_iiif_manifests_create_manifest($object) {
   
-  $object_id_encoded = urlencode($object->id);
-  
-  $id = url(variable_get('islandora_iiif_manifests_domain_uri', $GLOBALS['base_url']) . "/iiif_manifest/{$object_id_encoded}/manifest",
+  $id = url(variable_get('islandora_iiif_manifests_domain_uri', $GLOBALS['base_url']) . "/iiif_manifest/{$object->id}/manifest",
     array(
       'absolute' => TRUE,
       'language' => (object)array('language' => FALSE),
@@ -125,9 +123,7 @@ function islandora_iiif_manifests_get_object_canvas($object) {
   
   $image_info = islandora_iiif_manifests_get_image_info($object);
   
-  $object_id_encoded = urlencode($object->id);
-  
-  $id = url(variable_get('islandora_iiif_manifests_domain_uri', $GLOBALS['base_url']) . "/iiif_manifest/{$object_id_encoded}/canvas/default", array(
+  $id = url(variable_get('islandora_iiif_manifests_domain_uri', $GLOBALS['base_url']) . "/iiif_manifest/{$object->id}/canvas/default", array(
     'absolute' => TRUE,
     'language' => (object)array('language' => FALSE),
   ));
@@ -342,7 +338,7 @@ function islandora_iiif_manifests_get_image_info($object) {
     )
   );
   
-  $id_uri = url(variable_get('islandora_iiif_manifests_domain_uri', $GLOBALS['base_url']) . "/iiif_manifest/{$object_id_encoded}/annotation/{$object->label}", array(
+  $id_uri = url(variable_get('islandora_iiif_manifests_domain_uri', $GLOBALS['base_url']) . "/iiif_manifest/{$object->id}/annotation/{$object->id}", array(
     'absolute' => TRUE,
     'language' => (object)array('language' => FALSE),
   ));
