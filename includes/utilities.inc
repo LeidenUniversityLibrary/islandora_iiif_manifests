@@ -327,11 +327,13 @@ function islandora_iiif_manifests_get_image_info($object) {
   $handle = $handler->getFullHandle($object);
   
   $encoded_handle = urlencode('hdl:' . $handle);
-  $object_id_encoded = urlencode($object->id);
+  $handle_pieces = explode("/",$handle);
+  
+  $new_handle = "hdl:".$handle_pieces[0]."%252F".$handle_pieces[1];
   
   $image_array = array();
   
-  $islandora_iiif_manifest_image_uri = url(variable_get('islandora_iiif_manifests_image_uri', 'https://iiif-a.issc.leidenuniv.nl/iiif/2') . "/" . $encoded_handle,
+  $islandora_iiif_manifest_image_uri = url(variable_get('islandora_iiif_manifests_image_uri', 'https://iiif-a.issc.leidenuniv.nl/iiif/2') . "/" . $new_handle,
     array(
       'absolute' => TRUE,
       'language' => (object)array('language' => FALSE),
