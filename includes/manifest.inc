@@ -26,8 +26,8 @@ function islandora_iiif_manifests_view_manifest_json(AbstractObject $object, $pa
   else {
     if (!isset($object[ISLANDORA_IIIF_MANIFESTS_DATASTREAM_ID])) {
       $response = array(
-        "data" => "No manifest found",
-        "status" => "400 Bad request"
+        "data" => '{"error": "No manifest available"}',
+        "status" => "404 Not Found"
       );
     }
     elseif (islandora_datastream_access(ISLANDORA_VIEW_OBJECTS, $object[ISLANDORA_IIIF_MANIFESTS_DATASTREAM_ID])) {
