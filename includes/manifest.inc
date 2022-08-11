@@ -32,7 +32,7 @@ function islandora_iiif_manifests_view_manifest_json(AbstractObject $object, $pa
     }
     elseif (islandora_datastream_access(ISLANDORA_VIEW_OBJECTS, $object[ISLANDORA_IIIF_MANIFESTS_DATASTREAM_ID])) {
       $response = array(
-        "data" => "Forbidden",
+        "data" => '{"error": "Access to this resource was denied"}',
         "status" => "403 Forbidden"
       );
     }
