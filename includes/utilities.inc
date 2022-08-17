@@ -341,7 +341,7 @@ function islandora_iiif_manifests_get_image_info($object) {
     )
   );
   
-  $id_uri = url(variable_get('islandora_iiif_manifests_domain_uri', $GLOBALS['base_url']) . "/iiif_manifest/{$object->id}/annotation/{$object->label}", array(
+  $id_uri = url(variable_get('islandora_iiif_manifests_domain_uri', $GLOBALS['base_url']) . "/iiif_manifest/{$object->id}/annotation/image", array(
     'absolute' => TRUE,
     'language' => (object)array('language' => FALSE),
   ));
