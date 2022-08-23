@@ -48,7 +48,7 @@ function islandora_iiif_manifests_view_manifest_json(AbstractObject $object, $pa
  */
 function islandora_iiif_manifests_create_manifest_json(AbstractObject $object, $part = NULL) {
   
-  module_load_include('inc', 'islandora_iiif_manifests', 'includes/utilities');
+  module_load_include('inc', 'islandora', 'includes/utilities');
   
   $output = islandora_iiif_manifests_build_manifest($object, $part);
   
@@ -81,12 +81,13 @@ function islandora_iiif_manifests_create_annotation_json(AbstractObject $object)
   $output = islandora_iiif_manifests_build_canvas($object);
   $annotation = $output['images'][0];
   $annotation['@context'] = 'http://iiif.io/api/presentation/2/context.json';
+  
   islandora_iiif_manifests_create_json_response('200 OK', $annotation);
 }
 
 /**
  * Build Manifest JSON representation using appropriate hooks for the object's model(s).
- * @return string JSON-encoded string
+ * @return array
  */
 function islandora_iiif_manifests_build_manifest($object, $part = NULL) {
   
@@ -102,7 +103,7 @@ function islandora_iiif_manifests_build_manifest($object, $part = NULL) {
     }
   }
   
-  return json_encode($output, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
+  return $output;
 }
 
 /**

@@ -342,9 +342,9 @@ function islandora_iiif_manifests_get_image_info($object) {
   $handle = $handler->getFullHandle($object);
   
   $encoded_handle = urlencode('hdl:' . $handle);
-  $handle_pieces = explode("/",$handle);
+  $handle_pieces = explode("/", $handle);
   
-  $new_handle = "hdl:".$handle_pieces[0]."%252F".$handle_pieces[1];
+  $new_handle = "hdl:" . $handle_pieces[0] . "%252F" . $handle_pieces[1];
   
   $image_array = array();
   
@@ -480,13 +480,15 @@ function islandora_iiif_manifests_xml_to_array($root) {
  * @return void
  */
 function islandora_iiif_manifests_create_json_response($status, $data = NULL) {
+  
   drupal_add_http_header('Status', $status);
   drupal_add_http_header('Content-Type', 'application/json; charset=utf-8');
   drupal_add_http_header('access-control-allow-origin', '*');
   drupal_add_http_header('Set-Cookie: same-site-cookie=foo; SameSite=Lax', FALSE);
   drupal_add_http_header('Set-Cookie: cross-site-cookie=bar; SameSite=None; Secure', FALSE);
+  
   if ($data !== NULL) {
-    echo $data;
+    echo json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
   }
   exit();
 }
