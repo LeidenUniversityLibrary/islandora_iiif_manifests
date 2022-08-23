@@ -361,7 +361,7 @@ function islandora_iiif_manifests_get_image_info($object) {
   ));
   
   $image_array['thumbnail_uri'] = $islandora_iiif_manifest_image_uri . "/full/80,/0/default.jpg";
-  $image_array['resource_uri'] = $islandora_iiif_manifest_image_uri . "/full/pct:50/0/default.jpg";
+  $image_array['resource_uri'] = $islandora_iiif_manifest_image_uri . "/full/full/0/default.jpg";
   $image_array['service_uri'] = $islandora_iiif_manifest_image_uri;
   $image_array['id_uri'] = $id_uri;
   
