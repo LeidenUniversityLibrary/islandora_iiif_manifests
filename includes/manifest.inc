@@ -66,6 +66,22 @@ function islandora_iiif_manifests_create_canvas_json(AbstractObject $object) {
 }
 
 /**
+ * Send a JSON-encoded response for the image-painting annotation.
+ * There should be exactly one such annotation in our Canvas, allowing us
+ * to build the Canvas and taking the image annotation from it.
+ * @return void
+ */
+function islandora_iiif_manifests_create_annotation_json(AbstractObject $object) {
+  
+  module_load_include('inc', 'islandora_iiif_manifests', 'includes/utilities');
+  
+  $output = islandora_iiif_manifests_build_canvas($object);
+  $annotation = $output['images'][0];
+  $annotation['@context'] = 'http://iiif.io/api/presentation/2/context.json';
+  islandora_iiif_manifests_create_json_response('200 OK', $annotation);
+}
+
+/**
  * Build manifest array.
  */
 function islandora_iiif_manifests_build_manifest($object, $part = NULL) {
