@@ -9,6 +9,7 @@
  * Response in JSON for the manifest.
  * Creates collection manifests dynamically if no statict manifest is present
  * Creates newspaper volumes manifest dynamically based on the selected part in the URL
+ * @return void
  */
 function islandora_iiif_manifests_view_manifest_json(AbstractObject $object, $part = NULL) {
   module_load_include('inc', 'islandora_iiif_manifests', 'includes/utilities');
@@ -43,6 +44,7 @@ function islandora_iiif_manifests_view_manifest_json(AbstractObject $object, $pa
 
 /**
  * Response in JSON for the manifest.
+ * @return void
  */
 function islandora_iiif_manifests_create_manifest_json(AbstractObject $object, $part = NULL) {
   
@@ -55,6 +57,7 @@ function islandora_iiif_manifests_create_manifest_json(AbstractObject $object, $
 
 /**
  * Response in JSON for the canvas.
+ * @return void
  */
 function islandora_iiif_manifests_create_canvas_json(AbstractObject $object) {
   
@@ -82,7 +85,8 @@ function islandora_iiif_manifests_create_annotation_json(AbstractObject $object)
 }
 
 /**
- * Build manifest array.
+ * Build Manifest JSON representation using appropriate hooks for the object's model(s).
+ * @return string JSON-encoded string
  */
 function islandora_iiif_manifests_build_manifest($object, $part = NULL) {
   
@@ -102,7 +106,8 @@ function islandora_iiif_manifests_build_manifest($object, $part = NULL) {
 }
 
 /**
- * Build canvas array.
+ * Build Canvas JSON representation using appropriate hooks for the object's model(s).
+ * @return string JSON-encoded string
  */
 function islandora_iiif_manifests_build_canvas($object) {
   

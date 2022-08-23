@@ -6,6 +6,7 @@
 
 /**
  * Build the manifest container.
+ * @return array Manifest as an array
  */
 function islandora_iiif_manifests_create_manifest($object) {
   
@@ -53,6 +54,7 @@ function islandora_iiif_manifests_create_manifest($object) {
 /**
  * Returns the appropriate manifest type for the compound.
  * If the compound only consists out of basic and large image, display the compound as a manifest.
+ * @return string
  */
 function islandora_iiif_manifests_compound_manifest_type($object) {
   
@@ -75,6 +77,7 @@ function islandora_iiif_manifests_compound_manifest_type($object) {
 
 /**
  * Build the default canvas object
+ * @return array Array representation of a Canvas
  */
 function islandora_iiif_manifests_createDefaultCanvas($canvas_object) {
   
@@ -118,6 +121,7 @@ function islandora_iiif_manifests_createDefaultCanvas($canvas_object) {
 
 /**
  * Build the page specific canvas object
+ * @return array Array representation of a Canvas
  */
 function islandora_iiif_manifests_get_object_canvas($object) {
   
@@ -222,7 +226,10 @@ function islandora_iiif_manifests_get_newspaper_member_collection($issue) {
   return $volume_issues;
 }
 
-
+/**
+ * Determines if a Manifest can be created for the object's CModel(s)
+ * @return bool
+ */
 function islandora_iiif_manifests_allowed_cmodel($object) {
   
   $cmodels = array('islandora:sp_basic_image', 'islandora:sp_large_image_cmodel', 'islandora:bookCModel', 'islandora:newspaperCModel', 'islandora:collectionCModel', 'islandora:newspaperIssueCModel', 'islandora:compoundCModel');
@@ -234,6 +241,10 @@ function islandora_iiif_manifests_allowed_cmodel($object) {
   return FALSE;
 }
 
+/**
+ * Determines if a Canvas can be created for the object's CModel(s)
+ * @return bool
+ */
 function islandora_iiif_manifests_allowed_canvas_cmodel($object) {
   
   $cmodels = array('islandora:sp_basic_image', 'islandora:sp_large_image_cmodel', 'islandora:pageCModel', 'islandora:newspaperIssueCModel');
@@ -247,6 +258,7 @@ function islandora_iiif_manifests_allowed_canvas_cmodel($object) {
 
 /**
  * Convert numeric label to a string
+ * @return string
  */
 function islandora_iiif_manifests_convert_label($object) {
   
@@ -293,7 +305,8 @@ function islandora_iiif_manifests_add_issued_date($object, $metadata) {
 }
 
 /**
- * Retrieve object metadata.
+ * Retrieve object metadata from MODS.
+ * @return array
  */
 function islandora_iiif_manifests_get_metadata($object) {
   
@@ -317,7 +330,8 @@ function islandora_iiif_manifests_get_metadata($object) {
 }
 
 /**
- * Retrieve the image width and height
+ * Retrieve the image width and height, and URIs
+ * @return array Array of (technical) image information
  */
 function islandora_iiif_manifests_get_image_info($object) {
   
@@ -463,6 +477,7 @@ function islandora_iiif_manifests_xml_to_array($root) {
 
 /**
  * Helper function to write out a JSON response.
+ * @return void
  */
 function islandora_iiif_manifests_create_json_response($status, $data = NULL) {
   drupal_add_http_header('Status', $status);
