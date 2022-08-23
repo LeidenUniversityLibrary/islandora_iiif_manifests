@@ -94,11 +94,11 @@ function islandora_iiif_manifests_createDefaultCanvas($canvas_object) {
     ),
     'images' => array(
       array(
-        '@id' => $canvas_object['service_uri'],
+        '@id' => $canvas_object['id_uri'],
         '@type' => 'oa:Annotation',
         'motivation' => 'sc:painting',
         'resource' => array(
-          '@id' => $canvas_object['id_uri'],
+          '@id' => $canvas_object['resource_uri'],
           '@type' => 'dctypes:Image',
           'height' => $canvas_object['imageHeight'],
           'width' => $canvas_object['imageWidth'],
