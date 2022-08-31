@@ -64,6 +64,8 @@ function islandora_iiif_manifests_create_canvas_json(AbstractObject $object) {
   module_load_include('inc', 'islandora', 'includes/utilities');
   
   $output = islandora_iiif_manifests_build_canvas($object);
+  
+  // Check if canvas is available
   if(!empty($output)){
     $output['@context'] = 'http://iiif.io/api/presentation/2/context.json';
   }else{
