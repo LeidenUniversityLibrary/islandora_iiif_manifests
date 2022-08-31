@@ -127,25 +127,30 @@ function islandora_iiif_manifests_get_object_canvas($object) {
   
   $image_info = islandora_iiif_manifests_get_image_info($object);
   
-  $id = url(variable_get('islandora_iiif_manifests_domain_uri', $GLOBALS['base_url']) . "/iiif_manifest/{$object->id}/canvas/default", array(
-    'absolute' => TRUE,
-    'language' => (object)array('language' => FALSE),
-  ));
-  
-  $label = islandora_iiif_manifests_convert_label($object);
-  
   $canvas_object = array();
-  $canvas_object['id'] = $id;
-  $canvas_object['label'] = $label;
-  $canvas_object['thumbnail_uri'] = $image_info['thumbnail_uri'];
-  $canvas_object['resource_uri'] = $image_info['resource_uri'];
-  $canvas_object['service_uri'] = $image_info['service_uri'];
-  $canvas_object['id_uri'] = $image_info['id_uri'];
-  $canvas_object['imageWidth'] = $image_info['imageWidth'];
-  $canvas_object['imageHeight'] = $image_info['imageHeight'];
   
-  $canvas = islandora_iiif_manifests_createDefaultCanvas($canvas_object);
+  // If imageWidth is not set, then the image file is incorrect. Return an empty canvas array
+  if(!isset($image_info['imageWidth'])){
   
+    $id = url(variable_get('islandora_iiif_manifests_domain_uri', $GLOBALS['base_url']) . "/iiif_manifest/{$object->id}/canvas/default", array(
+      'absolute' => TRUE,
+      'language' => (object)array('language' => FALSE),
+    ));
+  
+  
+    $label = islandora_iiif_manifests_convert_label($object);
+    $canvas_object['id'] = $id;
+    $canvas_object['label'] = $label;
+    $canvas_object['thumbnail_uri'] = $image_info['thumbnail_uri'];
+    $canvas_object['resource_uri'] = $image_info['resource_uri'];
+    $canvas_object['service_uri'] = $image_info['service_uri'];
+    $canvas_object['id_uri'] = $image_info['id_uri'];
+    $canvas_object['imageWidth'] = $image_info['imageWidth'];
+    $canvas_object['imageHeight'] = $image_info['imageHeight'];
+  
+    $canvas = islandora_iiif_manifests_createDefaultCanvas($canvas_object);
+  }
+ 
   return $canvas;
 }
 
@@ -341,7 +346,6 @@ function islandora_iiif_manifests_get_image_info($object) {
   $handler = new $handler_class($object);
   $handle = $handler->getFullHandle($object);
   
-  $encoded_handle = urlencode('hdl:' . $handle);
   $handle_pieces = explode("/", $handle);
   
   $new_handle = "hdl:" . $handle_pieces[0] . "%252F" . $handle_pieces[1];
