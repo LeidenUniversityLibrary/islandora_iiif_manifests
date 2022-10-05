@@ -309,6 +309,15 @@ function islandora_iiif_manifests_get_metadata($object) {
     $processor->importStylesheet($xsl);
     $manifest = $processor->transformToDoc($mods);
     $metadata = islandora_iiif_manifests_xml_to_array($manifest);
+  
+    $i = 0;
+    foreach ($metadata['manifest']['metadata'] as $metadata_part) {
+  
+      if (is_numeric($metadata_part['value'])) {
+        $metadata['manifest']['metadata'][$i]['value'] = "'" . $metadata_part['value'] . "'";
+      }
+      $i++;
+    }
     
   }
   
