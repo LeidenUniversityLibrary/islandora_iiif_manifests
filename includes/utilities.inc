@@ -136,8 +136,8 @@ function islandora_iiif_manifests_get_object_canvas($object) {
   $canvas_object['thumbnail_uri'] = $image_info['thumbnail_uri'];
   $canvas_object['resource_uri'] = $image_info['resource_uri'];
   $canvas_object['service_uri'] = $image_info['service_uri'];
-  $canvas_object['imageWidth'] = $image_info['imageWidth'];
-  $canvas_object['imageHeight'] = $image_info['imageHeight'];
+  $canvas_object['imageWidth'] = intval($image_info['imageWidth']);
+  $canvas_object['imageHeight'] = intval($image_info['imageHeight']);
   
   $canvas = islandora_iiif_manifests_createDefaultCanvas($canvas_object);
   
@@ -309,15 +309,6 @@ function islandora_iiif_manifests_get_metadata($object) {
     $processor->importStylesheet($xsl);
     $manifest = $processor->transformToDoc($mods);
     $metadata = islandora_iiif_manifests_xml_to_array($manifest);
-  
-    $i = 0;
-    foreach ($metadata['manifest']['metadata'] as $metadata_part) {
-  
-      if (is_numeric($metadata_part['value'])) {
-        $metadata['manifest']['metadata'][$i]['value'] = "'" . $metadata_part['value'] . "'";
-      }
-      $i++;
-    }
     
   }
   
