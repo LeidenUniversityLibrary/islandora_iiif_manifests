@@ -136,8 +136,8 @@ function islandora_iiif_manifests_get_object_canvas($object) {
   $canvas_object['thumbnail_uri'] = $image_info['thumbnail_uri'];
   $canvas_object['resource_uri'] = $image_info['resource_uri'];
   $canvas_object['service_uri'] = $image_info['service_uri'];
-  $canvas_object['imageWidth'] = $image_info['imageWidth'];
-  $canvas_object['imageHeight'] = $image_info['imageHeight'];
+  $canvas_object['imageWidth'] = intval($image_info['imageWidth']);
+  $canvas_object['imageHeight'] = intval($image_info['imageHeight']);
   
   $canvas = islandora_iiif_manifests_createDefaultCanvas($canvas_object);
   
@@ -154,10 +154,6 @@ function islandora_iiif_manifests_get_object_collection($solrobj) {
   $manifest_type = $solrobj['solr_doc']['json_MANIFEST_json_type_ms'][0];
   
   $label = $solrobj['object_label'];
-  
-  if (is_numeric($label)) {
-    $label = "'" . $label . "'";
-  }
   
   $collection_member = array(
     "@id" => $manifest_uri,
@@ -249,12 +245,7 @@ function islandora_iiif_manifests_allowed_canvas_cmodel($object) {
  */
 function islandora_iiif_manifests_convert_label($object) {
   
-  if (is_numeric($object->label)) {
-    $label = "'" . $object->label . "'";
-  }
-  else {
-    $label = $object->label;
-  }
+  $label = $object->label;
   
   // Check if cmodels is a newspaper issue.
   if (count(array_intersect($object->models, array('islandora:newspaperIssueCModel'))) > 0) {
