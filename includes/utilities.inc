@@ -155,10 +155,6 @@ function islandora_iiif_manifests_get_object_collection($solrobj) {
   
   $label = $solrobj['object_label'];
   
-  if (is_numeric($label)) {
-    $label = "'" . $label . "'";
-  }
-  
   $collection_member = array(
     "@id" => $manifest_uri,
     "@type" => $manifest_type,
@@ -249,12 +245,7 @@ function islandora_iiif_manifests_allowed_canvas_cmodel($object) {
  */
 function islandora_iiif_manifests_convert_label($object) {
   
-  if (is_numeric($object->label)) {
-    $label = "'" . $object->label . "'";
-  }
-  else {
-    $label = $object->label;
-  }
+  $label = $object->label;
   
   // Check if cmodels is a newspaper issue.
   if (count(array_intersect($object->models, array('islandora:newspaperIssueCModel'))) > 0) {

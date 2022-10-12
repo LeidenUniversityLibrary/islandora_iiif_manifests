@@ -55,11 +55,7 @@ function islandora_iiif_manifest_get_newspaper_manifest($object) {
         'absolute' => TRUE,
         'language' => (object)array('language' => FALSE),
       )));
-      
-      if (is_numeric($part_label)) {
-        $part_label = "'" . $part_label . "'";
-      }
-      
+
       // Create newspaper collection
       $newspaper_collection = array(
         "@id" => $manifest_uri,
