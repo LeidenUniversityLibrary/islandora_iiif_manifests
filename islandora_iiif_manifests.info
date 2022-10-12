@@ -5,7 +5,4 @@ dependencies[] = islandora
 dependencies[] = islandora_basic_collection
 dependencies[] = islandora_solr
 dependencies[] = islandora_solr_metadata
-dependencies[] = islandora_handle
-dependencies[] = islandora_paged_content
-dependencies[] = islandora_newspaper
 core = 7.x
