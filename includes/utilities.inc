@@ -131,7 +131,7 @@ function islandora_iiif_manifests_get_object_canvas($object) {
   $canvas = array();
   
   // If imageWidth is not set, then the image file is incorrect. Return an empty canvas array
-  if(!isset($image_info['imageWidth'])) {
+  if(isset($image_info['imageWidth'])) {
   
     $id = url(variable_get('islandora_iiif_manifests_domain_uri', $GLOBALS['base_url']) . "/iiif_manifest/{$object->id}/canvas/default", array(
       'absolute' => TRUE,
