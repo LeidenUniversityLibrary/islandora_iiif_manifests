@@ -6,6 +6,7 @@
 
 /**
  * Build the manifest container.
+ * @return array Manifest as an array
  */
 function islandora_iiif_manifests_create_manifest($object) {
   
@@ -53,6 +54,7 @@ function islandora_iiif_manifests_create_manifest($object) {
 /**
  * Returns the appropriate manifest type for the compound.
  * If the compound only consists out of basic and large image, display the compound as a manifest.
+ * @return string
  */
 function islandora_iiif_manifests_compound_manifest_type($object) {
   
@@ -75,6 +77,7 @@ function islandora_iiif_manifests_compound_manifest_type($object) {
 
 /**
  * Build the default canvas object
+ * @return array Array representation of a Canvas
  */
 function islandora_iiif_manifests_createDefaultCanvas($canvas_object) {
   
@@ -94,7 +97,7 @@ function islandora_iiif_manifests_createDefaultCanvas($canvas_object) {
     ),
     'images' => array(
       array(
-        '@id' => $canvas_object['service_uri'],
+        '@id' => $canvas_object['id_uri'],
         '@type' => 'oa:Annotation',
         'motivation' => 'sc:painting',
         'resource' => array(
@@ -118,28 +121,36 @@ function islandora_iiif_manifests_createDefaultCanvas($canvas_object) {
 
 /**
  * Build the page specific canvas object
+ * @return array Array representation of a Canvas
  */
 function islandora_iiif_manifests_get_object_canvas($object) {
   
   $image_info = islandora_iiif_manifests_get_image_info($object);
   
-  $id = url(variable_get('islandora_iiif_manifests_domain_uri', $GLOBALS['base_url']) . "/iiif_manifest/{$object->id}/canvas/default", array(
-    'absolute' => TRUE,
-    'language' => (object)array('language' => FALSE),
-  ));
+ 
+  $canvas = array();
   
-  $label = islandora_iiif_manifests_convert_label($object);
+  // If imageWidth is not set, then the image file is incorrect. Return an empty canvas array
+  if(!isset($image_info['imageWidth'])) {
   
-  $canvas_object = array();
-  $canvas_object['id'] = $id;
-  $canvas_object['label'] = $label;
-  $canvas_object['thumbnail_uri'] = $image_info['thumbnail_uri'];
-  $canvas_object['resource_uri'] = $image_info['resource_uri'];
-  $canvas_object['service_uri'] = $image_info['service_uri'];
-  $canvas_object['imageWidth'] = intval($image_info['imageWidth']);
-  $canvas_object['imageHeight'] = intval($image_info['imageHeight']);
+    $id = url(variable_get('islandora_iiif_manifests_domain_uri', $GLOBALS['base_url']) . "/iiif_manifest/{$object->id}/canvas/default", array(
+      'absolute' => TRUE,
+      'language' => (object)array('language' => FALSE),
+    ));
+
+    $label = islandora_iiif_manifests_convert_label($object);
   
-  $canvas = islandora_iiif_manifests_createDefaultCanvas($canvas_object);
+    $canvas_object = array();
+    $canvas_object['id'] = $id;
+    $canvas_object['label'] = $label;
+    $canvas_object['thumbnail_uri'] = $image_info['thumbnail_uri'];
+    $canvas_object['resource_uri'] = $image_info['resource_uri'];
+    $canvas_object['service_uri'] = $image_info['id_uri'];
+    $canvas_object['imageWidth'] = intval($image_info['imageWidth']);
+    $canvas_object['imageHeight'] = intval($image_info['imageHeight']);
+  
+    $canvas = islandora_iiif_manifests_createDefaultCanvas($canvas_object);
+  }
   
   return $canvas;
 }
@@ -217,7 +228,10 @@ function islandora_iiif_manifests_get_newspaper_member_collection($issue) {
   return $volume_issues;
 }
 
-
+/**
+ * Determines if a Manifest can be created for the object's CModel(s)
+ * @return bool
+ */
 function islandora_iiif_manifests_allowed_cmodel($object) {
   
   $cmodels = array('islandora:sp_basic_image', 'islandora:sp_large_image_cmodel', 'islandora:bookCModel', 'islandora:newspaperCModel', 'islandora:collectionCModel', 'islandora:newspaperIssueCModel', 'islandora:compoundCModel');
@@ -229,6 +243,10 @@ function islandora_iiif_manifests_allowed_cmodel($object) {
   return FALSE;
 }
 
+/**
+ * Determines if a Canvas can be created for the object's CModel(s)
+ * @return bool
+ */
 function islandora_iiif_manifests_allowed_canvas_cmodel($object) {
   
   $cmodels = array('islandora:sp_basic_image', 'islandora:sp_large_image_cmodel', 'islandora:pageCModel', 'islandora:newspaperIssueCModel');
@@ -242,6 +260,7 @@ function islandora_iiif_manifests_allowed_canvas_cmodel($object) {
 
 /**
  * Convert numeric label to a string
+ * @return string
  */
 function islandora_iiif_manifests_convert_label($object) {
   
@@ -283,7 +302,8 @@ function islandora_iiif_manifests_add_issued_date($object, $metadata) {
 }
 
 /**
- * Retrieve object metadata.
+ * Retrieve object metadata from MODS.
+ * @return array
  */
 function islandora_iiif_manifests_get_metadata($object) {
   
@@ -307,7 +327,8 @@ function islandora_iiif_manifests_get_metadata($object) {
 }
 
 /**
- * Retrieve the image width and height
+ * Retrieve the image width and height, and URIs
+ * @return array Array of (technical) image information
  */
 function islandora_iiif_manifests_get_image_info($object) {
   
@@ -317,10 +338,9 @@ function islandora_iiif_manifests_get_image_info($object) {
   $handler = new $handler_class($object);
   $handle = $handler->getFullHandle($object);
   
-  $encoded_handle = urlencode('hdl:' . $handle);
-  $handle_pieces = explode("/",$handle);
+  $handle_pieces = explode("/", $handle);
   
-  $new_handle = "hdl:".$handle_pieces[0]."%252F".$handle_pieces[1];
+  $new_handle = "hdl:" . $handle_pieces[0] . "%252F" . $handle_pieces[1];
   
   $image_array = array();
   
@@ -331,13 +351,13 @@ function islandora_iiif_manifests_get_image_info($object) {
     )
   );
   
-  $id_uri = url(variable_get('islandora_iiif_manifests_domain_uri', $GLOBALS['base_url']) . "/iiif_manifest/{$object->id}/annotation/{$object->id}", array(
+  $id_uri = url(variable_get('islandora_iiif_manifests_domain_uri', $GLOBALS['base_url']) . "/iiif_manifest/{$object->id}/annotation/image", array(
     'absolute' => TRUE,
     'language' => (object)array('language' => FALSE),
   ));
   
   $image_array['thumbnail_uri'] = $islandora_iiif_manifest_image_uri . "/full/80,/0/default.jpg";
-  $image_array['resource_uri'] = $islandora_iiif_manifest_image_uri . "/full/pct:50/0/default.jpg";
+  $image_array['resource_uri'] = $islandora_iiif_manifest_image_uri . "/full/full/0/default.jpg";
   $image_array['service_uri'] = $islandora_iiif_manifest_image_uri;
   $image_array['id_uri'] = $id_uri;
   
@@ -453,15 +473,18 @@ function islandora_iiif_manifests_xml_to_array($root) {
 
 /**
  * Helper function to write out a JSON response.
+ * @return void
  */
 function islandora_iiif_manifests_create_json_response($status, $data = NULL) {
+  
   drupal_add_http_header('Status', $status);
   drupal_add_http_header('Content-Type', 'application/json; charset=utf-8');
   drupal_add_http_header('access-control-allow-origin', '*');
   drupal_add_http_header('Set-Cookie: same-site-cookie=foo; SameSite=Lax', FALSE);
   drupal_add_http_header('Set-Cookie: cross-site-cookie=bar; SameSite=None; Secure', FALSE);
+  
   if ($data !== NULL) {
-    echo $data;
+    echo json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
   }
   exit();
 }

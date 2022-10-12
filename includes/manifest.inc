@@ -9,6 +9,7 @@
  * Response in JSON for the manifest.
  * Creates collection manifests dynamically if no statict manifest is present
  * Creates newspaper volumes manifest dynamically based on the selected part in the URL
+ * @return void
  */
 function islandora_iiif_manifests_view_manifest_json(AbstractObject $object, $part = NULL) {
   module_load_include('inc', 'islandora_iiif_manifests', 'includes/utilities');
@@ -43,6 +44,7 @@ function islandora_iiif_manifests_view_manifest_json(AbstractObject $object, $pa
 
 /**
  * Response in JSON for the manifest.
+ * @return void
  */
 function islandora_iiif_manifests_create_manifest_json(AbstractObject $object, $part = NULL) {
   
@@ -55,6 +57,7 @@ function islandora_iiif_manifests_create_manifest_json(AbstractObject $object, $
 
 /**
  * Response in JSON for the canvas.
+ * @return void
  */
 function islandora_iiif_manifests_create_canvas_json(AbstractObject $object) {
   
@@ -62,11 +65,50 @@ function islandora_iiif_manifests_create_canvas_json(AbstractObject $object) {
   
   $output = islandora_iiif_manifests_build_canvas($object);
   
+  // Check if canvas is available
+  if(!empty($output)){
+    $output['@context'] = 'http://iiif.io/api/presentation/2/context.json';
+  }else{
+    $output = array(
+      "data" => '{"error": "No canvas available"}',
+      "status" => "404 Not Found"
+    );
+  }
+  
+  
   islandora_iiif_manifests_create_json_response('200 OK', $output);
 }
 
 /**
- * Build manifest array.
+ * Send a JSON-encoded response for the image-painting annotation.
+ * There should be exactly one such annotation in our Canvas, allowing us
+ * to build the Canvas and taking the image annotation from it.
+ * @return void
+ */
+function islandora_iiif_manifests_create_annotation_json(AbstractObject $object) {
+  
+  module_load_include('inc', 'islandora', 'includes/utilities');
+  
+  $output = islandora_iiif_manifests_build_canvas($object);
+  
+  // Check if an image is available
+  if (isset($output['images'][0])) {
+    $annotation = $output['images'][0];
+    $annotation['@context'] = 'http://iiif.io/api/presentation/2/context.json';
+  }
+  else {
+    $annotation = array(
+      "data" => '{"error": "No manifest available"}',
+      "status" => "404 Not Found"
+    );
+  }
+  
+  islandora_iiif_manifests_create_json_response('200 OK', $annotation);
+}
+
+/**
+ * Build Manifest JSON representation using appropriate hooks for the object's model(s).
+ * @return array
  */
 function islandora_iiif_manifests_build_manifest($object, $part = NULL) {
   
@@ -82,11 +124,12 @@ function islandora_iiif_manifests_build_manifest($object, $part = NULL) {
     }
   }
   
-  return json_encode($output, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE );
+  return $output;
 }
 
 /**
- * Build canvas array.
+ * Build Canvas JSON representation using appropriate hooks for the object's model(s).
+ * @return array
  */
 function islandora_iiif_manifests_build_canvas($object) {
   
@@ -107,5 +150,5 @@ function islandora_iiif_manifests_build_canvas($object) {
     }
   }
   
-  return json_encode($output, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE );
+  return $output;
 }
