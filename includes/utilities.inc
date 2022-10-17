@@ -97,7 +97,7 @@ function islandora_iiif_manifests_createDefaultCanvas($canvas_object) {
     ),
     'images' => array(
       array(
-        '@id' => $canvas_object['id_uri'],
+        '@id' => $canvas_object['image_id_uri'],
         '@type' => 'oa:Annotation',
         'motivation' => 'sc:painting',
         'resource' => array(
@@ -145,7 +145,7 @@ function islandora_iiif_manifests_get_object_canvas($object) {
     $canvas_object['label'] = $label;
     $canvas_object['thumbnail_uri'] = $image_info['thumbnail_uri'];
     $canvas_object['resource_uri'] = $image_info['resource_uri'];
-    $canvas_object['service_uri'] = $image_info['id_uri'];
+    $canvas_object['image_id_uri'] = $image_info['image_id_uri'];
     $canvas_object['imageWidth'] = intval($image_info['imageWidth']);
     $canvas_object['imageHeight'] = intval($image_info['imageHeight']);
   
@@ -351,7 +351,7 @@ function islandora_iiif_manifests_get_image_info($object) {
     )
   );
   
-  $id_uri = url(variable_get('islandora_iiif_manifests_domain_uri', $GLOBALS['base_url']) . "/iiif_manifest/{$object->id}/annotation/image", array(
+  $image_id_uri = url(variable_get('islandora_iiif_manifests_domain_uri', $GLOBALS['base_url']) . "/iiif_manifest/{$object->id}/annotation/image", array(
     'absolute' => TRUE,
     'language' => (object)array('language' => FALSE),
   ));
@@ -359,7 +359,7 @@ function islandora_iiif_manifests_get_image_info($object) {
   $image_array['thumbnail_uri'] = $islandora_iiif_manifest_image_uri . "/full/80,/0/default.jpg";
   $image_array['resource_uri'] = $islandora_iiif_manifest_image_uri . "/full/full/0/default.jpg";
   $image_array['service_uri'] = $islandora_iiif_manifest_image_uri;
-  $image_array['id_uri'] = $id_uri;
+  $image_array['image_id_uri'] = $image_id_uri;
   
   
   if ($object['TECHMD']) {
