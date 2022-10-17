@@ -148,6 +148,7 @@ function islandora_iiif_manifests_get_object_canvas($object) {
     $canvas_object['image_id_uri'] = $image_info['image_id_uri'];
     $canvas_object['imageWidth'] = intval($image_info['imageWidth']);
     $canvas_object['imageHeight'] = intval($image_info['imageHeight']);
+    $canvas_object['service_uri'] =$image_info['service_uri'];
   
     $canvas = islandora_iiif_manifests_createDefaultCanvas($canvas_object);
   }
