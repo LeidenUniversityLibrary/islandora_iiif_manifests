@@ -127,19 +127,19 @@ function islandora_iiif_manifests_get_object_canvas($object) {
   
   $image_info = islandora_iiif_manifests_get_image_info($object);
   
- 
+  
   $canvas = array();
   
   // If imageWidth is not set, then the image file is incorrect. Return an empty canvas array
-  if(isset($image_info['imageWidth'])) {
-  
+  if (isset($image_info['imageWidth'])) {
+    
     $id = url(variable_get('islandora_iiif_manifests_domain_uri', $GLOBALS['base_url']) . "/iiif_manifest/{$object->id}/canvas/default", array(
       'absolute' => TRUE,
       'language' => (object)array('language' => FALSE),
     ));
-
+    
     $label = islandora_iiif_manifests_convert_label($object);
-  
+    
     $canvas_object = array();
     $canvas_object['id'] = $id;
     $canvas_object['label'] = $label;
@@ -148,7 +148,7 @@ function islandora_iiif_manifests_get_object_canvas($object) {
     $canvas_object['service_uri'] = $image_info['id_uri'];
     $canvas_object['imageWidth'] = intval($image_info['imageWidth']);
     $canvas_object['imageHeight'] = intval($image_info['imageHeight']);
-  
+    
     $canvas = islandora_iiif_manifests_createDefaultCanvas($canvas_object);
   }
   
@@ -162,7 +162,11 @@ function islandora_iiif_manifests_get_object_collection($solrobj) {
     'language' => (object)array('language' => FALSE),
   )));
   
-  $manifest_type = $solrobj['solr_doc']['json_MANIFEST_json_type_ms'][0];
+  $collection_member_model = $solrobj['solr_doc']['RELS_EXT_hasModel_uri_ms'][0];
+  
+  $explode_collection_model = explode('/',$collection_member_model);
+  
+  $manifest_type = islandora_iiif_manifests_collection_member($explode_collection_model[1]);
   
   $label = $solrobj['object_label'];
   
@@ -428,6 +432,18 @@ function islandora_iiif_manifests_in_multiarray($elem, $array) {
   }
   
   return FALSE;
+}
+
+function islandora_iiif_manifests_collection_member($collection_member_model) {
+  
+  $collection_models_array = array('islandora:newspaperCModel', 'islandora:collectionCModel', 'islandora:compoundCModel');
+  $manifest_type = "sc:Manifest";
+  
+  if (array_key_exists($collection_member_model, $collection_models_array)) {
+    $manifest_type = "sc:Collection";
+  }
+  
+  return $manifest_type;
 }
 
 function islandora_iiif_manifests_xml_to_array($root) {
