@@ -277,7 +277,8 @@ function islandora_iiif_manifests_generate_extra_derivatives($object, $what, $op
   if ($what === ISLANDORA_IIIF_MANIFESTS_DATASTREAM_ID) {
     module_load_include('inc', 'islandora_iiif_manifests', 'includes/manifest');
     
-    $manifestjson = islandora_iiif_manifests_build_manifest($object);
+  
+    $manifestjson = json_encode(islandora_iiif_manifests_build_manifest($object), JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
     if (empty($manifestjson)) {
       return array(array('success' => FALSE, 'message' => t('Cannot generate IIIF manifest')));
     }
@@ -318,7 +319,7 @@ function islandora_iiif_manifests_islandora_datastream_modified(AbstractObject $
   if ($datastream->id === 'MODS' && isset($object[ISLANDORA_IIIF_MANIFESTS_DATASTREAM_ID])) {
     module_load_include('inc', 'islandora_iiif_manifests', 'includes/manifest');
 
-    $manifestjson = islandora_iiif_manifests_build_manifest($object);
+    $manifestjson = json_encode(islandora_iiif_manifests_build_manifest($object), JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
     if (!empty($manifestjson) && $object[ISLANDORA_IIIF_MANIFESTS_DATASTREAM_ID]->content !== $manifestjson) {
       $object[ISLANDORA_IIIF_MANIFESTS_DATASTREAM_ID]->content = $manifestjson;
     }

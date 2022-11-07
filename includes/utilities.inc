@@ -127,28 +127,29 @@ function islandora_iiif_manifests_get_object_canvas($object) {
   
   $image_info = islandora_iiif_manifests_get_image_info($object);
   
-  
+ 
   $canvas = array();
   
   // If imageWidth is not set, then the image file is incorrect. Return an empty canvas array
-  if (isset($image_info['imageWidth'])) {
-    
+  if(isset($image_info['imageWidth'])) {
+  
     $id = url(variable_get('islandora_iiif_manifests_domain_uri', $GLOBALS['base_url']) . "/iiif_manifest/{$object->id}/canvas/default", array(
       'absolute' => TRUE,
       'language' => (object)array('language' => FALSE),
     ));
-    
+
     $label = islandora_iiif_manifests_convert_label($object);
-    
+  
     $canvas_object = array();
     $canvas_object['id'] = $id;
     $canvas_object['label'] = $label;
     $canvas_object['thumbnail_uri'] = $image_info['thumbnail_uri'];
     $canvas_object['resource_uri'] = $image_info['resource_uri'];
-    $canvas_object['service_uri'] = $image_info['id_uri'];
+    $canvas_object['image_id_uri'] = $image_info['image_id_uri'];
     $canvas_object['imageWidth'] = intval($image_info['imageWidth']);
     $canvas_object['imageHeight'] = intval($image_info['imageHeight']);
-    
+    $canvas_object['service_uri'] =$image_info['service_uri'];
+  
     $canvas = islandora_iiif_manifests_createDefaultCanvas($canvas_object);
   }
   
@@ -355,7 +356,7 @@ function islandora_iiif_manifests_get_image_info($object) {
     )
   );
   
-  $id_uri = url(variable_get('islandora_iiif_manifests_domain_uri', $GLOBALS['base_url']) . "/iiif_manifest/{$object->id}/annotation/image", array(
+  $image_id_uri = url(variable_get('islandora_iiif_manifests_domain_uri', $GLOBALS['base_url']) . "/iiif_manifest/{$object->id}/annotation/image", array(
     'absolute' => TRUE,
     'language' => (object)array('language' => FALSE),
   ));
@@ -363,7 +364,7 @@ function islandora_iiif_manifests_get_image_info($object) {
   $image_array['thumbnail_uri'] = $islandora_iiif_manifest_image_uri . "/full/80,/0/default.jpg";
   $image_array['resource_uri'] = $islandora_iiif_manifest_image_uri . "/full/full/0/default.jpg";
   $image_array['service_uri'] = $islandora_iiif_manifest_image_uri;
-  $image_array['id_uri'] = $id_uri;
+  $image_array['image_id_uri'] = $image_id_uri;
   
   
   if ($object['TECHMD']) {
