@@ -1,17 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0"
-	xmlns:xlink="http://www.w3.org/1999/xlink"
-	xmlns:mods="http://www.loc.gov/mods/v3"	
-	xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-	exclude-result-prefixes="mods xlink">
+                xmlns:xlink="http://www.w3.org/1999/xlink"
+                xmlns:mods="http://www.loc.gov/mods/v3"
+                xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                exclude-result-prefixes="mods xlink">
   <xsl:output method="xml" indent="yes" encoding="UTF-8"/>
 
   <xsl:template match="/">
     <manifest>
       <xsl:apply-templates/>
-      <attribution>
-        <xsl:text> &lt;a href='</xsl:text><xsl:value-of select="../mods:accessCondition[@type='use and reproduction']/@xlink:href"/><xsl:text>'></xsl:text><xsl:value-of select="../mods:accessCondition[@type='use and reproduction']/text()"/><xsl:text>&lt;/a&gt;</xsl:text>
-      </attribution>
     </manifest>
   </xsl:template>
 
@@ -261,10 +258,12 @@
   </xsl:template>
 
   <xsl:template match="/mods:mods/mods:accessCondition[@type='restriction on access']">
-    <license>
+    <attribution>
       <xsl:value-of select="text()"/>
-    </license>
+      <xsl:text>&lt;br&gt;&lt;a href='</xsl:text><xsl:value-of select="../mods:accessCondition[@type='use and reproduction']/@xlink:href"/><xsl:text>'></xsl:text><xsl:value-of select="../mods:accessCondition[@type='use and reproduction']/text()"/><xsl:text>&lt;/a&gt;</xsl:text>
+    </attribution>
   </xsl:template>
+
 
   <xsl:template match="text()|@*">
     <xsl:apply-templates/>
@@ -324,12 +323,12 @@
                 </value>
               </xsl:when>
               <xsl:otherwise>
-                 <value>
-                    <xsl:call-template name="mdvalue">
-                      <xsl:with-param name="value" select="$firstvalue"/>
-                      <xsl:with-param name="type" select="$type"/>
-                    </xsl:call-template>
-                 </value>
+                <value>
+                  <xsl:call-template name="mdvalue">
+                    <xsl:with-param name="value" select="$firstvalue"/>
+                    <xsl:with-param name="type" select="$type"/>
+                  </xsl:call-template>
+                </value>
               </xsl:otherwise>
             </xsl:choose>
           </xsl:otherwise>
