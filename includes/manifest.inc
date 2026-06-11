@@ -7,7 +7,7 @@
 
 /**
  * Response in JSON for the manifest.
- * Creates collection manifests dynamically if no statict manifest is present
+ * Creates collection manifests dynamically if no static manifest is present
  * Creates newspaper volumes manifest dynamically based on the selected part in the URL
  * @return void
  */
