@@ -14,7 +14,7 @@ function islandora_iiif_manifest_create_collection_manifest(AbstractObject $obje
   while ($current < $num_found) {
     
     $qp = new IslandoraSolrQueryProcessor();
-    $usedsolrfields = array('PID', 'RELS_EXT_hasModel_uri_ms', 'fgs_label_s', 'json_MANIFEST_json_type_ms');
+    $usedsolrfields = array('PID', 'RELS_EXT_hasModel_uri_ms', 'fgs_label_s');
     $parent_id = islandora_solr_lesser_escape($object->id);
     $relcomp = variable_get('islandora_solr_member_of_collection_field', 'RELS_EXT_isMemberOfCollection_uri_ms');
     $query = "($relcomp:($parent_id) OR $relcomp:(" . islandora_solr_lesser_escape('info:fedora/') . "$parent_id))";
